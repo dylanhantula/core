@@ -81,10 +81,6 @@ jobs:
         project_id: ${{ secrets.PROJECT_ID }}
         # An optional variables parameter can be used
         # gae_variables: ${{ secrets.GAE_VARIABLES }}
- 
-    - uses: actions/gcloud/cli@master
-      with:
-        args: "app deploy --project=${{ secrets.PROJECT_ID }}"
 
     - name: Publish app to Google App Engine
       run: |
