@@ -1,52 +1,82 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+# name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     strategy:
+#       matrix:
+#         node-version: [12.x]
+
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - run: cd front-end && npm install
+#     - run: cd front-end && npm run build
+  
+#   build2:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Initialize Google Cloud SDK
+#       uses: zxyle/publish-gae-action@master
+#       with:
+#         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+#         service_account_key: ${{ secrets.GCP_SA_KEY }}
+#         project_id: ${{ secrets.PROJECT_ID }}
+#         # An optional variables parameter can be used
+#         gae_variables: ${{ secrets.GAE_VARIABLES }}
+
+#     - name: Publish app to Google App Engine
+#       run: |
+#         # This client-secret.json is converted by GCP_SA_KEY.
+#         gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
+#         gcloud config set project ${{ secrets.PROJECT_ID }}
+#         gcloud -q app deploy app.yaml --promote --stop-previous-version
+    
+#         # Suppose you need a cron task.
+
+name: CI
+ 
+on: [push]
+ 
 jobs:
   build:
-
+ 
     runs-on: ubuntu-latest
 
     strategy:
-      matrix:
-        node-version: [12.x]
-
+       matrix:
+         node-version: [12.x]
+     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
+ 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - run: cd front-end && npm install
     - run: cd front-end && npm run build
-  
-  build2:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Initialize Google Cloud SDK
-      uses: zxyle/publish-gae-action@master
+ 
+    - uses: actions/gcloud/auth@master
+      env:
+        GCLOUD_AUTH: ${{ secrets.GCP_SA_KEY }}
+ 
+    - uses: actions/gcloud/cli@master
       with:
-        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: ${{ secrets.PROJECT_ID }}
-        # An optional variables parameter can be used
-        gae_variables: ${{ secrets.GAE_VARIABLES }}
-
-    - name: Publish app to Google App Engine
-      run: |
-        # This client-secret.json is converted by GCP_SA_KEY.
-        gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
-        gcloud config set project ${{ secrets.PROJECT_ID }}
-        gcloud -q app deploy app.yaml --promote --stop-previous-version
-    
-        # Suppose you need a cron task.
-    
+        args: "app deploy --project=${{ secrets.PROJECT_ID }}"
