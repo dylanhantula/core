@@ -28,12 +28,6 @@ jobs:
     - run: cd front-end && npm run build --if-present
   
   build2:
-    
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
 
     steps:
     - name: Initialize Google Cloud SDK
