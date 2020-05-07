@@ -7,7 +7,7 @@ app = Flask(__name__, static_folder="../front-end/build/static", template_folder
 def index():
     return render_template("index.html")
 
-@app.route
+@app.route("/hello")
 def hello():
     return "Hello World"
 
@@ -16,5 +16,5 @@ def get_current_time():
     return {'time': time.time()}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
 

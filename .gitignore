@@ -24,3 +24,5 @@ yarn-error.log*
 
 back-end/venv
 front-end/build
+
+*.pyc
