@@ -28,10 +28,10 @@ jobs:
     - run: cd front-end && npm run build --if-present
   
   build2:
-
+    runs-on: ubuntu-latest
     steps:
     - name: Initialize Google Cloud SDK
-    - uses: zxyle/publish-gae-action@master
+      uses: zxyle/publish-gae-action@master
       with:
         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
