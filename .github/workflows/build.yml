@@ -25,7 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: cd front-end && npm install
-    - run: cd front-end && npm run build --if-present
+    - run: cd front-end && npm run build
   
   build2:
     needs: build
