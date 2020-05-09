@@ -10,10 +10,6 @@ app = Flask(__name__, static_folder="../front-end/build/static", template_folder
 cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
 @app.route("/hello")
 def hello():
     return "Hello World"
@@ -30,6 +26,11 @@ def get_current_time():
 def get_protected():
     print("TEST TEST TEST")
     return {'test': 'test'}
+
+# Catches all other routes that are not specified above and lets React handle it
+@app.route('/<path:path>')
+def fallback(path):
+    return render_template("index.html")
 
 def verify_token_header(headers):
     auth_header = headers.get('Authorization')
