@@ -10,7 +10,6 @@ import firebase from "firebase/app";
 import ProtectedRouteHoc from './ProtectedRouteHoc'
 import { config } from './firebase_config.json';
 
-console.log(config)
 firebase.initializeApp(config);
 
 export const AuthContext = React.createContext(null);
@@ -19,8 +18,9 @@ export const AuthContext = React.createContext(null);
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  //TODO: uncomment and use this function to speed up page load time. This
+
+
+  //TODO: uncomment/modify and use this function to speed up page load time. This
   // reads the user from the session storage but does not return the Firebase
   // auth object. Reading from local storage can be used in conjunction with
   // the current system of calling Firebase for each page load by holding both
@@ -42,30 +42,20 @@ function App() {
   //   setLoading(false)
   // }
 
-  const checkActiveUser = (sessionChecks) => {
-
-    // Check for logged in user from Firebase
-    const user = firebase.auth().currentUser;
-
-    // If no user is found, try 3 times 100ms apart
-    if ( !user && sessionChecks < 3 ) {
-      setTimeout(
-        () => {
-          checkActiveUser(sessionChecks+1);
-        },
-        100
-      );
-    } else if ( user || sessionChecks >= 3){
-      
-      // Set this user after the max number of checks have completed or
-      // if a user is found (no user found will set loggedInUser to null)
-      setLoggedInUser(user)
-      setLoading(false)
-    } 
-  };
-
   useEffect(() => {
-    checkActiveUser(0) 
+
+    // Show the loading screen for 300ms to give Firebase time to find
+    // the current user 
+    if (!loggedInUser) {
+      setTimeout(() => {
+        setLoading(false)
+        setLoggedInUser(firebase.auth().currentUser)
+        },
+        300
+      );
+    } else {
+      setLoading(false)
+    }
 
     // For signing in/out per https://stackoverflow.com/a/61026772
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listen
@@ -77,8 +67,9 @@ function App() {
           setLoggedInUser(null) 
       }
     });
+
    return () => unsubscribe(); 
-  }, [])
+  }, [loggedInUser])
 
   if (loading) {
     // This can be changed to a blank screen, spinner, etc..
