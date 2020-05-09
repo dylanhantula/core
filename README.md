@@ -4,4 +4,4 @@ When you first clone the repo:
 3. `gunicorn --chdir back-end -b :8080 wsgi:app`
 
 
-test2
+requirements.txt needs to be at the top level of the repo otherwise Google App Engine doesn't find Flask properly
