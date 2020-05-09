@@ -1,2 +1,3 @@
 Flask==1.1.2
-gunicorn==20.0.4
+gunicorn==20.0.4 # we need this so that the app will run on GCP
+firebase_admin==4.2.0
