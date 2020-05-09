@@ -6,12 +6,12 @@ import "./styles.css";
 
 import protectedRoutes from './protectedRoutes'
 import firebase from "firebase/app";
-import firebaseConfig from "./firebase.config";
 
 import ProtectedRouteHoc from './ProtectedRouteHoc'
+import { config } from './firebase_config.json';
 
-firebase.initializeApp(firebaseConfig);
-
+console.log(config)
+firebase.initializeApp(config);
 
 export const AuthContext = React.createContext(null);
 
@@ -76,8 +76,6 @@ function App() {
           // No user is signed in...code to handle unauthenticated users.
           setLoggedInUser(null) 
       }
-
-      console.log(firebase.auth().currentUser)
     });
    return () => unsubscribe(); 
   }, [])

@@ -46,10 +46,6 @@ export default (props) => {
         // Handle error
         alert(error)
       });
-
-      //loggedInUser.current
-      //onsole.log('Bearer ' + loggedInUser.stsTokenManager.accessToken)
-
     }
   }, [loggedInUser]);
 
@@ -60,6 +56,7 @@ export default (props) => {
       </div>
     )
   } else {
+    // This can be changed to a blank screen, spinner, etc..
     return <div></div>
   }
   

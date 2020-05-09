@@ -1,0 +1,12 @@
+{
+    "config": {
+        "apiKey": "AIzaSyAntlu6uuczlNegljJ3zmDNrQbBW7uEBMI",
+        "authDomain": "pet-store-883aa.firebaseapp.com",
+        "databaseURL": "https://pet-store-883aa.firebaseio.com",
+        "projectId": "pet-store-883aa",
+        "storageBucket": "pet-store-883aa.appspot.com",
+        "messagingSenderId": "865211866349",
+        "appId": "1:865211866349:web:2a664084433de5865ec0e4",
+        "measurementId": "G-Y0LDGKGBWS"
+    }
+}

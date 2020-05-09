@@ -14,15 +14,12 @@ const Join = ({history}) => {
 
     firebase
     .auth()
-    .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(res => {
-          console.log(res)
-          
-          console.log(history)
           if (res.user) Auth.setLoggedInUser(res);
           history.push('/reports')
         })
@@ -32,26 +29,6 @@ const Join = ({history}) => {
       })
 
   };
-
-  const handleGoogleLogin = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    firebase
-    .auth()
-    .setPersistence(firebase.auth.Auth.Persistence.SESSION)
-      .then(() => {
-        firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then(result => {
-          console.log(result)
-          history.push('/reports')
-          Auth.setLoggedInUser(result)
-        })
-        .catch(e => setErrors(e.message))
-      })
- 
-  }
 
   return (
     <div>
@@ -72,16 +49,7 @@ const Join = ({history}) => {
           placeholder="password"
         />
         <hr />
-        <button onClick={() => handleGoogleLogin()} className="googleBtn" type="button">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-            alt="logo"
-          />
-          Join With Google
-        </button>
-
         <button type="submit">Login</button>
-
         <span>{error}</span>
       </form>
     </div>

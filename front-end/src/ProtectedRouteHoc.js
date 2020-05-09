@@ -16,8 +16,6 @@ const ProtectedRouteHoc = ({ component: Component, loggedInUser, ...rest }) => {
 		);
 	}
 
-	console.log("LOGGED IN USER")
-	console.log(loggedInUser)
 	return <Redirect to={{ pathname: '/' }} />;
 };
 
