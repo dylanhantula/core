@@ -24,7 +24,7 @@ jobs:
     - run: 'echo "$FIREBASE_KEY" > back-end/firebase_key.json'
       shell: bash
       env:
-        FIREBASE_CONFIG: ${{secrets.FIREBASE_KEY}}
+        FIREBASE_KEY: ${{secrets.FIREBASE_KEY}}
     
     # Download npm dependencies and create front-end/build/
     - name: Use Node.js ${{ matrix.node-version }}
