@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
-import routes from "./routes.js";
-import Header from "./Header";
-import "./styles.css";
+import "./App.css";
 
-import protectedRoutes from './protectedRoutes'
-import firebase from "firebase/app";
+import * as firebase from "firebase/app";
 
-import ProtectedRouteHoc from './ProtectedRouteHoc'
-import { config } from './firebase_config.json';
+import { config } from '../../firebase_config.json';
+import Nav from "../Nav/Nav";
 
 firebase.initializeApp(config);
 
+// AuthContext to be used throughout components to get the currently logged
+// in user
 export const AuthContext = React.createContext(null);
 
 
@@ -47,6 +45,7 @@ function App() {
 
     // Show the loading screen for 300ms to give Firebase time to find
     // the current user 
+    //TODO: remove this when the above commented out functionality works
     if (!loggedInUser) {
       setTimeout(() => {
         setLoading(false)
@@ -59,6 +58,8 @@ function App() {
     }
 
     // For signing in/out per https://stackoverflow.com/a/61026772
+    // TODO: potentially remove this as well when above commented functionality
+    // works
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listen
       if (user) {
           // ...your code to handle authenticated users. 
@@ -81,31 +82,7 @@ function App() {
       <AuthContext.Provider value={{ loggedInUser, setLoggedInUser }}>
         Is logged in? {loggedInUser && JSON.stringify(loggedInUser.email)}
         <div className="App">
-          <Router>
-            <Header loggedInUser={loggedInUser}/>
-  
-            <Switch>
-              {protectedRoutes.map(route => (
-                <ProtectedRouteHoc
-                  key={route.path}
-                  loggedInUser={loggedInUser}
-                  path={route.path}
-                  component={route.main}
-                  exact={route.exact}
-                  public={route.public}
-                />
-              ))}
-  
-              {routes.map(route => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.main}
-                />
-              ))}
-            </Switch>
-          </Router>
+            <Nav></Nav>
         </div>
       </AuthContext.Provider>
     );

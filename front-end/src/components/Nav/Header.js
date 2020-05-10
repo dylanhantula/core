@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import routes from "./routes";
 import { Link } from "react-router-dom";
-import { AuthContext } from "./App";
+import { AuthContext } from "../App/App";
 
 const Header = () => {
   const {loggedInUser} = useContext(AuthContext);

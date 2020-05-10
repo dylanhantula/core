@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { AuthContext } from "./App";
-import * as firebase from 'firebase'
+import { AuthContext } from "../App/App";
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
 import { withRouter } from 'react-router-dom';
 
 const SignOut = ({history}) => {

@@ -1,26 +1,26 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "./App";
-import * as firebase from 'firebase'
-import { withRouter } from 'react-router-dom'
+import { AuthContext } from "../App/App";
+import * as firebase from 'firebase/app'
+import { withRouter } from 'react-router-dom';
 
-const Login = ({history}) => {
+const Join = ({history}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrors] = useState("");
-
+  
   const Auth = useContext(AuthContext);
   const handleForm = e => {
-
     e.preventDefault();
+
     firebase
     .auth()
     .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .createUserWithEmailAndPassword(email, password)
         .then(res => {
-          if (res.user) Auth.setLoggedInUser(res.user);
+          if (res.user) Auth.setLoggedInUser(res);
           history.push('/reports')
         })
         .catch(e => {
@@ -31,7 +31,7 @@ const Login = ({history}) => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Join</h1>
       <form onSubmit={e => handleForm(e)}>
         <input
           value={email}
@@ -48,7 +48,6 @@ const Login = ({history}) => {
           placeholder="password"
         />
         <hr />
-
         <button type="submit">Login</button>
         <span>{error}</span>
       </form>
@@ -56,4 +55,4 @@ const Login = ({history}) => {
   );
 };
 
-export default withRouter(Login);
+export default withRouter(Join);

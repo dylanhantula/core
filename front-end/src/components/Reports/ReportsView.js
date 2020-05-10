@@ -1,6 +1,6 @@
 import React, { useEffect, useContext,useState } from "react";
 
-import { AuthContext } from "./App";
+import { AuthContext } from "../App/App";
 
 export default (props) => {
   const {loggedInUser} = useContext(AuthContext);
@@ -30,7 +30,6 @@ export default (props) => {
         .then(
           (result) => {
             setIsLoaded(true)
-            console.log(result)
             setTime(result.time)
           },
 

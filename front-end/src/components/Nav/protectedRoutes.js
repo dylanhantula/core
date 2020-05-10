@@ -1,6 +1,6 @@
 import React from 'react';
-import ReportsView from './ReportsView';
-import SignOut from './SignOut';
+import ReportsView from '../Reports/ReportsView';
+import SignOut from '../SignOut/SignOut';
 
 const protectedRoutes = [
 	{

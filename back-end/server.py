@@ -10,6 +10,23 @@ app = Flask(__name__, static_folder="../front-end/build/static", template_folder
 cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
 
+@app.route("/hello")
+def hello():
+    return "Hello World"
+
+@app.route('/time')
+def get_current_time():
+
+    err = verify_token_header(request.headers)
+    if err != "":
+        return err, 401
+    return {'time': time.time()}, 200
+
+@app.route('/protected')
+def get_protected():
+    return {'test': 'test'}
+
+# Routes for serving React content
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -26,23 +43,6 @@ def favicon():
 @app.route('/logo192.png')
 def logo192():
     return send_from_directory('../front-end/build/', 'logo192.png')
-
-@app.route("/hello")
-def hello():
-    return "Hello World"
-
-@app.route('/time')
-def get_current_time():
-
-    err = verify_token_header(request.headers)
-    if err != "":
-        return err, 401
-    return {'time': time.time()}, 200
-
-@app.route('/protected')
-def get_protected():
-    print("TEST TEST TEST")
-    return {'test': 'test'}
 
 # Catches all other routes that are not specified and lets React handle it
 @app.route('/<path:path>')

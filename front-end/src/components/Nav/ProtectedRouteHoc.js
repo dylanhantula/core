@@ -4,7 +4,6 @@ import {  any, object } from 'prop-types';
 
 const ProtectedRouteHoc = ({ component: Component, loggedInUser, ...rest }) => {
 	if (loggedInUser || rest.public) {
-		console.log(loggedInUser)
 		return (
 			<Route
 				{...rest}
@@ -12,7 +11,6 @@ const ProtectedRouteHoc = ({ component: Component, loggedInUser, ...rest }) => {
 					return <Component {...props}></Component>;
 				}}
 			/>
-
 		);
 	}
 
