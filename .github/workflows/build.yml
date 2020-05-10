@@ -15,7 +15,17 @@ jobs:
     # Checkout code
     steps:
     - uses: actions/checkout@v2
- 
+    
+    # Add firebase configuration files
+    - run: 'echo "$FIREBASE_CONFIG" > front-end/src/firebase_config.json'
+      shell: bash
+      env:
+        FIREBASE_CONFIG: ${{secrets.FIREBASE_CONFIG}}
+    - run: 'echo "$FIREBASE_KEY" > back-end/firebase_config.json'
+      shell: bash
+      env:
+        FIREBASE_CONFIG: ${{secrets.FIREBASE_KEY}}
+    
     # Download npm dependencies and create front-end/build/
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -33,16 +43,6 @@ jobs:
         project_id: ${{ secrets.PROJECT_ID }}
         # An optional variables parameter can be used
         # gae_variables: ${{ secrets.GAE_VARIABLES }}
-    
-    # Add firebase configuration files
-    - run: 'echo "$FIREBASE_CONFIG" > front-end/src/firebase_config.json'
-      shell: bash
-      env:
-        FIREBASE_CONFIG: ${{secrets.FIREBASE_CONFIG}}
-    - run: 'echo "$FIREBASE_KEY" > back-end/firebase_config.json'
-      shell: bash
-      env:
-        FIREBASE_CONFIG: ${{secrets.FIREBASE_KEY}}
 
     # Publish to GAE
     - name: Publish app to Google App Engine
