@@ -13,3 +13,4 @@ TODO:
 4. Add publically available sign up for new members
 5. Delete unnecessary code
 6. Error handling (i.e. what happens if Firebase is unreachable?)
+7. Allow two profiles for signing up: coach and athelete
