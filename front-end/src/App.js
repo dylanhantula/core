@@ -27,6 +27,7 @@ function App() {
   // the local storage object and the Firebase auth object when it is ready.
   // This way, you only need to make sure you have the Firebase auth object
   // when you need to use it, not when you load any page
+  // This can be seen here: https://stackoverflow.com/a/51856627
 
   //  function readSession() {
   //   const user = window.sessionStorage.getItem(

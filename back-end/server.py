@@ -1,5 +1,5 @@
 import time
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from firebase_admin import auth, credentials
 import firebase_admin
 #from flask_api import status
@@ -9,6 +9,23 @@ app = Flask(__name__, static_folder="../front-end/build/static", template_folder
 # Need an env var set per: https://firebase.google.com/docs/admin/setup
 cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory('../front-end/build/', 'manifest.json')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('../front-end/build/', 'favicon.ico')
+
+@app.route('/logo192.png')
+def logo192():
+    return send_from_directory('../front-end/build/', 'logo192.png')
 
 @app.route("/hello")
 def hello():
@@ -27,7 +44,7 @@ def get_protected():
     print("TEST TEST TEST")
     return {'test': 'test'}
 
-# Catches all other routes that are not specified above and lets React handle it
+# Catches all other routes that are not specified and lets React handle it
 @app.route('/<path:path>')
 def fallback(path):
     return render_template("index.html")
