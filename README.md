@@ -55,5 +55,6 @@ TODO:
 1a. Get sensitive files out of VCS
 2. Reconfigure navigation bar and router
 3. Add publically available sign up for new members
+4. Add 
 4. Error handling (i.e. what happens if Firebase is unreachable?)
 5. Allow two profiles for signing up: coach and athelete

@@ -28,5 +28,5 @@ front-end/build
 *.pyc
 
 # Sensitive Firebase files
-back-end/firebase-key.json
-front-end/src/firebase-config.json
+back-end/firebase_key.json
+front-end/src/firebase_config.json
