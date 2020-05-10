@@ -26,3 +26,7 @@ back-end/venv
 front-end/build
 
 *.pyc
+
+# Sensitive Firebase files
+back-end/firebase-key.json
+front-end/src/firebase-config.json
