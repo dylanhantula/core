@@ -21,7 +21,7 @@ jobs:
       shell: bash
       env:
         FIREBASE_CONFIG: ${{secrets.FIREBASE_CONFIG}}
-    - run: 'echo "$FIREBASE_KEY" > back-end/firebase_config.json'
+    - run: 'echo "$FIREBASE_KEY" > back-end/firebase_key.json'
       shell: bash
       env:
         FIREBASE_CONFIG: ${{secrets.FIREBASE_KEY}}
