@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../App/App";
+import React, { useState } from "react";
 import * as firebase from 'firebase/app'
 import { withRouter } from 'react-router-dom'
 
@@ -8,25 +7,24 @@ const Login = ({history}) => {
   const [password, setPassword] = useState("");
   const [error, setErrors] = useState("");
 
-  const Auth = useContext(AuthContext);
   const handleForm = e => {
 
     e.preventDefault();
-    firebase
-    .auth()
-    .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .then(() => {
-        firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(res => {
-          if (res.user) Auth.setLoggedInUser(res.user);
-          history.push('/reports')
-        })
-        .catch(e => {
-          setErrors(e.message);
-        });
-      })
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+        return firebase.auth().signInWithEmailAndPassword(email, password)
+    })
+    .then(res => {
+      // Login successful - do any login logic here
+
+      // Note: we don't need to manually change the URL path here because onAuthStateChange
+      // in App.js will get triggered asynchronously by Firebase as the user just logged in. 
+      // When it does, the App component will re-render and display the athlete or coach app
+    })
+    .catch(e => {
+      setErrors(e.message);
+    });
   };
 
   return (

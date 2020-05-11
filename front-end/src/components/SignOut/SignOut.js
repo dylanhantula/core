@@ -6,12 +6,13 @@ import { withRouter } from 'react-router-dom';
 
 const SignOut = ({history}) => {
 
-  const Auth = useContext(AuthContext);
+  const { setUser} = useContext(AuthContext);
+
   const handleSignOut = () => {
 
     firebase.auth().signOut()
     .then(res => {
-      Auth.setLoggedInUser(null);
+      setUser(null);
       history.push('/')
     })
     .catch(e => {

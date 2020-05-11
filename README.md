@@ -51,10 +51,9 @@
 - requirements.txt needs to be at the top level of the repo otherwise Google App Engine doesn't find Flask properly
 
 TODO: 
-1. Figure out how to safely get Firebase config for front and back end
-1a. Get sensitive files out of VCS
-2. Reconfigure navigation bar and router
-3. Add publically available sign up for new members
-4. Add 
+1. Reconfigure navigation bar and router
+2. Show profile when user is signed in
+3. Integrate with a Material UI component
+3. Get server port from env var
 4. Error handling (i.e. what happens if Firebase is unreachable?)
 5. Allow two profiles for signing up: coach and athelete

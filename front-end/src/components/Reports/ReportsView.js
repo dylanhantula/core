@@ -3,7 +3,7 @@ import React, { useEffect, useContext,useState } from "react";
 import { AuthContext } from "../App/App";
 
 export default (props) => {
-  const {loggedInUser} = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
   const [time, setTime] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -12,10 +12,10 @@ export default (props) => {
 
     // React might load the component without loggedInUser set - ensure we 
     // don't execute the call without the user
-    if (loggedInUser) {
+    if (user) {
       
       // Get new token from Firebase
-      loggedInUser.getIdToken(true)
+      user.firebaseUser.getIdToken(true)
 
       .then(function(idToken) {
         fetch("/time",{
@@ -45,13 +45,17 @@ export default (props) => {
         // Handle error
         alert(error)
       });
+    } else {
+        //TODO: handle this case
+        console.log('No user found')
     }
-  }, [loggedInUser]);
+  }, [user]);
 
   if (isLoaded) {
     return (
       <div>  
         The current time is: {time}
+        <h1>{user.profile.sport}</h1>
       </div>
     )
   } else {
