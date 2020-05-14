@@ -4,9 +4,10 @@ import "./App.css";
 import * as firebase from "firebase/app";
 
 import { config } from '../../firebase_config.json';
-import Nav from "../Nav/Nav";
 import {getProfile} from '../../api/api'
 import AthleteApp from "../AthleteApp/AthleteApp";
+import CoachApp from "../CoachApp/CoachApp";
+import HomeNav from "../HomeNav/HomeNav";
 
 firebase.initializeApp(config);
 
@@ -66,25 +67,35 @@ function App() {
   } 
   
   if (user && user.profile && user.profile.profileType === 'athlete') {
+
     return (
-      
       <AuthContext.Provider value={{ user, setUser }}>
-        Is logged in? {user && user.firebaseUser && JSON.stringify(user.firebaseUser.email)}
         <div className="App">
             <AthleteApp></AthleteApp>
         </div>
       </AuthContext.Provider>
     );
-  }
-  else {
+
+  } else if (user && user.profile && user.profile.profileType === 'coach') {
+
     return (
       <AuthContext.Provider value={{ user, setUser }}>
-        Is logged in? {user && user.firebaseUser && JSON.stringify(user.firebaseUser.email)}
+          <div className="App">
+              <CoachApp></CoachApp>
+          </div>
+      </AuthContext.Provider>
+    );
+
+  } else {
+
+    return (
+      <AuthContext.Provider value={{ user, setUser }}>
         <div className="App">
-            <Nav></Nav>
+            <HomeNav></HomeNav>
         </div>
       </AuthContext.Provider>
     );
+
   }
 }
 

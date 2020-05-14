@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Switch, BrowserRouter as Router, Route, Redirect, Link } from "react-router-dom";
 import SignOut from "../SignOut/SignOut.js";
-import ReportsView from '../Reports/ReportsView';
+import AthleteHome from '../AthleteHome/AthleteHome';
+import AthleteProfile from '../AthleteProfile/AthleteProfile';
+import { AuthContext } from "../App/App";
+
 export default (props) => {
+    const {user} = useContext(AuthContext);
+
     return (
         <Router>
             <ul className="nav">
                 <li>
-                    <Link to="/reports">Reports2</Link>
+                    Current User: {user.profile.firstName} {user.profile.lastName}
+                </li>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+                <li>
+                    <Link to="/profile">Profile</Link>
                 </li>
                 <li>
                     <Link to="/signout">Sign Out</Link>
@@ -16,9 +27,14 @@ export default (props) => {
             <Switch>
       
                 <Route
-                    path={["/reports", "/"]}
+                    path={[ "/"]}
                     exact
-                    render={(props) => <ReportsView {...props} />}
+                    render={(props) => <AthleteHome {...props} />}
+                /> 
+                <Route
+                    path="/profile"
+                    exact
+                    render={(props) => <AthleteProfile {...props} />}
                 /> 
                 <Route
                     path="/signout"

@@ -51,9 +51,7 @@
 - requirements.txt needs to be at the top level of the repo otherwise Google App Engine doesn't find Flask properly
 
 TODO: 
-1. Reconfigure navigation bar and router
-2. Show profile when user is signed in
-3. Integrate with a Material UI component
-3. Get server port from env var
-4. Error handling (i.e. what happens if Firebase is unreachable?)
-5. Allow two profiles for signing up: coach and athelete
+1. Integrate with a Material UI component
+2. Get server port from env var
+3. Error handling (i.e. what happens if Firebase is unreachable?)
+4. Restyle

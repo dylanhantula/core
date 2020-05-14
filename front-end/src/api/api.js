@@ -4,7 +4,6 @@ export const createUser = (vals)=>{
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
-            //"Authorization":'Bearer ' + idToken 
         },
         body: JSON.stringify(vals)
     };
@@ -17,11 +16,10 @@ export const createUser = (vals)=>{
                 // Get error message from body or default to response status
                 const error = (data && data.message) || response.status;
                 
-                // Rejecting the promise will force the "catch" block to hit
+                // Rejecting the promise will force the catch block to hit
                 return Promise.reject(error);
             }
             
-            return {}
         })
         .catch(error => {
             throw error

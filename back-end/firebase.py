@@ -26,7 +26,7 @@ class Firebase:
         
         self.db.collection('users').document(user_id).set(user)
 
-        return {'test': 'test'}, 200
+        #return {'test': 'test'}, 200
     
     def get_profile(self, id):
         

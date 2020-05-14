@@ -10,22 +10,22 @@ from validate import *
 app = Flask(__name__, static_folder="../front-end/build/static", template_folder="../front-end/build")
 database = Firebase()
 
-@app.route("/hello")
+@app.route("/ping")
 def hello():
-    return "Hello World"
+    return "pong"
 
 @app.route("/api/v1/join", methods = ['POST'])
 def create_user():
     user = request.json
     try:
         validate_create_user(user)
-        user_id = database.save_new_user(user)
+        database.save_new_user(user)
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
 
-
-    return {'test': 'test'}, 200
+    # No body needs to be returned
+    return {}, 200
 
 @app.route("/api/v1/profile/<id>", methods = ['GET'])
 def get_profile(id):
@@ -39,21 +39,6 @@ def get_profile(id):
         return {"message":str(e)}, 400
 
     return profile, 200
-
-@app.route('/time')
-def get_current_time():
-
-    try:
-        user_id = database.verify_token_header(request.headers)
-    except Exception as e:
-        print(e)
-        return {'message':'Error verifying token: ' + str(e)}, 401
-
-    return {'time': user_id}, 200
-
-@app.route('/protected')
-def get_protected():
-    return {'test': 'test'}
 
 # Routes for serving React content
 @app.route("/")
