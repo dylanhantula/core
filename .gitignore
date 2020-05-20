@@ -27,6 +27,11 @@ front-end/build
 
 *.pyc
 
+.vscode
+
 # Sensitive Firebase files
 back-end/firebase_key.json
 front-end/src/firebase_config.json
+
+# Sensitive Zip Code API file
+back-end/zip_code_api_key

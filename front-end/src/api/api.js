@@ -54,3 +54,35 @@ export const getProfile = (token, id)=>{
             throw error
         }); 
 }
+
+export const getCoaches = (zipCode, radius, sport)=>{
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+    };
+
+    let url = sport ? `/api/v1/coaches?zip=${zipCode}&radius=${radius}&sport=${sport}` :
+    `/api/v1/coaches?zip=${zipCode}&radius=${radius}`
+
+    return fetch(url, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}

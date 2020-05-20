@@ -166,7 +166,7 @@ const AthleteJoin = (props) => {
           placeholder="password"
         />
         <hr />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
@@ -276,7 +276,7 @@ const CoachJoin = (props) => {
           key="i"
         />
         <hr />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );

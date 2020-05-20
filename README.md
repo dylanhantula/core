@@ -35,6 +35,8 @@
     - Go to Firebase Project Settings site and click on the "Service accounts" tab 
     - Click "Generate new private key" to download a new service account file
     - Rename the file `firebase_key.json` and put it in `back-end`
+5. Add the ZipCodeAPI.com API key in a file called `zip_code_api_key` in `back-end/`
+    - This is only given the first time the application is registred with ZipCodeAPI.com (someone will have to give this to you)
 
 ## To run the application in "development" mode
 1. Open a terminal session

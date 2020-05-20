@@ -4,21 +4,51 @@ from firebase_admin import auth, credentials, firestore
 import firebase_admin
 import sys
 from firebase import Firebase
+from zip_code_api import ZipCodes
 from validate import *
 #from flask_api import status
 
 app = Flask(__name__, static_folder="../front-end/build/static", template_folder="../front-end/build")
 database = Firebase()
+zip_codes_api = ZipCodes()
 
 @app.route("/ping")
 def hello():
     return "pong"
+
+# Get coaches with filters in query parameters
+# Available parameters: zip, radius (in miles), and sport
+# Radius and sport are optional
+@app.route("/api/v1/coaches", methods = ['GET'])
+def get_coaches():
+
+    zip_code = request.args.get('zip')
+    radius = request.args.get('radius')
+    sport = request.args.get('sport').lower()
+
+    try:
+
+        # Validate the input
+        validate_coach_filters(zip_code, radius, sport)
+       
+        # Get the zip codes in the given radius from the Zip Codes API
+        zip_codes_in_radius = zip_codes_api.get_zip_codes_in_radius(zip_code, radius)
+
+        # Get the coaches in the given zip codes with the given sport from the database 
+        coaches = database.get_coaches(zip_codes_in_radius, sport)
+
+        return {'coaches':coaches}, 200
+        
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
 
 @app.route("/api/v1/join", methods = ['POST'])
 def create_user():
     user = request.json
     try:
         validate_create_user(user)
+
         database.save_new_user(user)
     except Exception as e:
         print(e)
@@ -29,10 +59,10 @@ def create_user():
 
 @app.route("/api/v1/profile/<id>", methods = ['GET'])
 def get_profile(id):
-    database.verify_token_header(request.headers)
     
     id = request.view_args['id']
     try:
+        database.verify_token_header(request.headers)
         profile = database.get_profile(id)
     except Exception as e:
         print(e)

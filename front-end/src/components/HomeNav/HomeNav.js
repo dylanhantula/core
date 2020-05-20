@@ -4,6 +4,7 @@ import OurStory from "../OurStory/OurStory.js";
 import Landing from '../Landing/Landing';
 import Login from '../Login/Login';
 import Join from '../Join/Join';
+import CoachList from '../CoachList/CoachList';
 
 export default (props) => {
 
@@ -44,6 +45,12 @@ export default (props) => {
                     path="/join"
                     exact
                     render={(props) => <Join {...props} />}
+                /> 
+
+                <Route
+                    path="/coaches"
+                    exact
+                    render={(props) => <CoachList {...props} />}
                 /> 
 
                 {/* Catch all for paths that don't match one of our routes  */}

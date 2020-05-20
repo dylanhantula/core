@@ -1,5 +1,6 @@
 from firebase_admin import auth, credentials, firestore
 import firebase_admin
+from operator import itemgetter
 
 class Firebase:
     def __init__(self):
@@ -16,21 +17,69 @@ class Firebase:
             password=user['password'],
             display_name=user['firstName'],
             #phone_number='+15555550100',
-            #ttp://www.example.com/12345678/photo.png',
+            #http://www.example.com/12345678/photo.png',
             disabled=False)
         
         user_id = firebase_user.uid
 
         # Remove password because users table is stored in plain text
         del user['password']
-        
-        self.db.collection('users').document(user_id).set(user)
 
-        #return {'test': 'test'}, 200
+        # Force certain fields to lower case for easier comparison and uniformity
+        user['email'] = user['email'].lower()
+        user['sport'] = user['sport'].lower()
+        user['profileType'] = user['profileType'].lower()
+        
+        self.db.collection('users').document(user_id).set(user)    
+
+    #TODO: this is a slow operation, probably because of the chunking. could possibly
+    # be made faster by chaining a new "where" clause for each chunk or for each zip code
+    # so only one query needs to be executed
+    def get_coaches(self, zip_code_objs, sport):
+        """Returns a list of coaches that are in the given zip codes sorted by distance
+
+        Args:
+            zip_code_objs: List of zip code dictionaries of the form {'zip_code': 'XXXXX',
+            'distance':YY.YY, city:'ZZZZ', state:'SS'}
+            sport: Sport
+
+        Returns:
+            coach_list: The user's ID
+
+        Raises:
+            Error: If a Firebase error occurs
+        """
+        
+        # Create a dictionary that maps the zip code to the distance, city, and state
+        zip_codes_dict={z['zip_code'] : {'distance': z['distance'], 'city': z['city'], 'state': z['state']} for z in zip_code_objs}
+
+        # Get list of the zip codes from dictionary keys
+        zip_codes_list = list(zip_codes_dict.keys())
+
+        # Break list of zip codes into indiviudal lists of 10 because Firebase's "in"
+        # operator only supports up to 10 values per query
+        list_chunks = list(chunks(zip_codes_list, 10))
+
+        # Query to find coaches with a zip code in any of the list chunks  
+        coach_list = []
+        for l in list_chunks:
+            coaches = self.db.collection('users').where('profileType','==','coach').where('zipCode', 'in', l)
+            if sport is not None:
+                coaches = coaches.where('sport', '==', sport)
+            for document in coaches.stream():
+
+                # Add distance, city, and state to coach object
+                coach = document.to_dict()
+                coach['distance'] = zip_codes_dict[coach['zipCode']]['distance']
+                coach['city'] = zip_codes_dict[coach['zipCode']]['city']
+                coach['state'] = zip_codes_dict[coach['zipCode']]['state']
+                coach_list.append(coach)
+
+        # Sort list of coaches by distance
+        return sorted(coach_list, key=itemgetter('distance')) 
     
     def get_profile(self, id):
         
-        print(id)
         doc_ref = self.db.collection('users').document(id)
         doc = doc_ref.get()
         if doc.exists:
@@ -72,3 +121,8 @@ class Firebase:
             raise ValueError("unknown error validating token")
         
         return decoded_token['user_id']
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
