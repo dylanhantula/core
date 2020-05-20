@@ -27,7 +27,7 @@ jobs:
         FIREBASE_KEY: ${{secrets.FIREBASE_KEY}}
     
     # Add zipcodeapi.com key
-    - run: 'echo "$ZIP_CODE_API_KEY" > back-end/zip_code_api_key'
+    - run: 'echo -n "$ZIP_CODE_API_KEY" > back-end/zip_code_api_key'
       shell: bash
       env:
         ZIP_CODE_API_KEY: ${{secrets.ZIP_CODE_API_KEY}}
