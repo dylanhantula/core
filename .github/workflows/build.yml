@@ -30,7 +30,7 @@ jobs:
     - run: 'echo "$ZIP_CODE_API_KEY" > back-end/zip_code_api_key'
       shell: bash
       env:
-        FIREBASE_CONFIG: ${{secrets.ZIP_CODE_API_KEY}}
+        ZIP_CODE_API_KEY: ${{secrets.ZIP_CODE_API_KEY}}
     
     # Download npm dependencies and create front-end/build/
     - name: Use Node.js ${{ matrix.node-version }}
