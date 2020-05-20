@@ -32,11 +32,6 @@ jobs:
       env:
         ZIP_CODE_API_KEY: ${{secrets.ZIP_CODE_API_KEY}}
     
-    - run: 'echo "$ZIP_CODE_API_KEY"'
-      shell: bash
-      env:
-        ZIP_CODE_API_KEY: ${{secrets.ZIP_CODE_API_KEY}}
-    
     # Download npm dependencies and create front-end/build/
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
