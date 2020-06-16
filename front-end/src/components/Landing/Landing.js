@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import { green } from '@material-ui/core/colors';
 import { Button } from '@material-ui/core'
+import './Landing.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +65,7 @@ const Landing = ({history}) => {
   });
   };
 
-  const classes = useStyles();
+  const MUIclasses = useStyles();
 
 
   return (
@@ -72,9 +73,9 @@ const Landing = ({history}) => {
       <h1>Athletes Untapped</h1>
       <h2>We are a one stop shop for all of your sports training needs</h2>
       <h3>Ready to train?</h3>
-      <form onSubmit={e => handleForm(e)} className={classes.root}>
+      <form onSubmit={e => handleForm(e)} className={MUIclasses.root}>
         <SportZipCodeInput
-          className={classes.textField}
+          className={MUIclasses.textField}
           value={sport}
           onChange={e => setSport(e.target.value)}
           name="sport"
@@ -83,7 +84,7 @@ const Landing = ({history}) => {
           variant="outlined"
         />
         <SportZipCodeInput
-          className={classes.textField}
+          className={MUIclasses.textField}
           onChange={e => setZip(e.target.value)}
           name="zip"
           value={zip}
@@ -91,7 +92,7 @@ const Landing = ({history}) => {
           label="Zip Code"
           variant="outlined"
         />
-        <button className={classes.findCoach} type="submit">Find Your Coach</button>
+        <button className="findCoachButton" type="submit">Find Your Coach</button>
       </form>
     </div>
   );

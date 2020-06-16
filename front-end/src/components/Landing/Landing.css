@@ -1,0 +1,15 @@
+.findCoachButton {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 0px 50px auto;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.findCoachDiv {
+    display: flex;
+}
