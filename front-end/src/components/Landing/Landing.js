@@ -16,7 +16,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textField: {
-    margin: '0px 0px 10px 2px',
+    margin: '0px 0px 10px 0px',
+    display: 'block',
+    width: '100%',
   },
 
 }));
@@ -63,32 +65,37 @@ const Landing = ({history}) => {
 
 
   return (
-    <div>
-      <h1>Athletes Untapped</h1>
-      <h2>We are a one stop shop for all of your sports training needs</h2>
-      <h3>Ready to train?</h3>
-      <form onSubmit={e => handleForm(e)} className={MUIclasses.root}>
-        <SportZipCodeInput
-          className={MUIclasses.textField}
-          value={sport}
-          onChange={e => setSport(e.target.value)}
-          name="sport"
-          type="sport"
-          label="Sport"
-          variant="outlined"
-        />
-        <SportZipCodeInput
-          className={MUIclasses.textField}
-          onChange={e => setZip(e.target.value)}
-          name="zip"
-          value={zip}
-          type="zip"
-          label="Zip Code"
-          variant="outlined"
-        />
-        <button className="findCoachButton" type="submit">Find Your Coach</button>
-      </form>
-    </div>
+    <ul className="panelList">    
+          <li>
+            <div>
+              Find a top-level private coach and take your game to the next level.
+            </div>
+          </li>
+          <li>
+            <div className="formControl">
+            <label className="readyToTrain">Ready to Train?</label>
+              <SportZipCodeInput
+                className={MUIclasses.textField}
+                value={sport}
+                onChange={e => setSport(e.target.value)}
+                name="sport"
+                type="sport"
+                label="Sport"
+                variant="outlined"
+              />
+              <SportZipCodeInput
+                className={MUIclasses.textField}
+                onChange={e => setZip(e.target.value)}
+                name="zip"
+                value={zip}
+                type="zip"
+                label="Zip Code"
+                variant="outlined"
+              />
+              <button className="findCoachButton" onClick={e => handleForm(e)}>Find Your Coach</button>
+            </div>
+          </li>
+        </ul>
   );
 };
 

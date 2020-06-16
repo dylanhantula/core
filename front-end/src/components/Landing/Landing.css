@@ -1,15 +1,49 @@
+
+
+.panelList {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    border: 15px solid green;
+    margin: 0 auto;
+}
+
+.panelList li:first-child div {
+    font-size: x-large;
+    max-width: 500px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+.panelList li:first-child {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.formControl {
+    display: inline;
+}
+
 .findCoachButton {
     background-color: darkgreen; 
     border: none;
     color: white;
+    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    font-size: 14px;
-    margin: 0px 50px auto;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
-    justify-content: center;
-}
+  }
 
-.findCoachDiv {
-    display: flex;
+
+.readyToTrain {
+    display: block;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 100%;
+    padding:5px 5px;
+    text-align: center;
 }
