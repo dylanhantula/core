@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textField: {
-    margin: '0px 0px 10px 0px',
+    margin: '0px 0px 10px 2px',
     display: 'block',
-    width: '100%',
+    width: '100%'
   },
 
 }));
@@ -66,36 +66,38 @@ const Landing = ({history}) => {
 
   return (
     <ul className="panelList">    
-          <li>
-            <div>
-              Find a top-level private coach and take your game to the next level.
+      <li>
+        <div>
+          Find a top-level private coach and take your game to the next level.
+        </div>
+      </li>
+      <li>
+        <form onSubmit={e => handleForm(e)} className="formControl">
+          <label className="readyToTrain">Ready to Train?</label>
+            <SportZipCodeInput
+              className={MUIclasses.textField}
+              value={sport}
+              onChange={e => setSport(e.target.value)}
+              name="sport"
+              type="sport"
+              label="Sport"
+              variant="outlined"
+            />
+            <SportZipCodeInput
+              className={MUIclasses.textField}
+              onChange={e => setZip(e.target.value)}
+              name="zip"
+              value={zip}
+              type="zip"
+              label="Zip Code"
+              variant="outlined"
+            />
+            <div className="findCoachButton">
+            <button  type="submit">Find Your Coach</button>
             </div>
-          </li>
-          <li>
-            <div className="formControl">
-            <label className="readyToTrain">Ready to Train?</label>
-              <SportZipCodeInput
-                className={MUIclasses.textField}
-                value={sport}
-                onChange={e => setSport(e.target.value)}
-                name="sport"
-                type="sport"
-                label="Sport"
-                variant="outlined"
-              />
-              <SportZipCodeInput
-                className={MUIclasses.textField}
-                onChange={e => setZip(e.target.value)}
-                name="zip"
-                value={zip}
-                type="zip"
-                label="Zip Code"
-                variant="outlined"
-              />
-              <button className="findCoachButton" onClick={e => handleForm(e)}>Find Your Coach</button>
-            </div>
-          </li>
-        </ul>
+        </form>
+      </li>
+    </ul>
   );
 };
 
