@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
 import {
-  fade,
-  ThemeProvider,
   withStyles,
-  makeStyles,
-  createMuiTheme,
+  makeStyles
 } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import { green } from '@material-ui/core/colors';
-import { Button } from '@material-ui/core'
+
 import './Landing.css'
 
 const useStyles = makeStyles((theme) => ({
