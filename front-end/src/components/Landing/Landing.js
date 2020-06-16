@@ -1,5 +1,53 @@
 import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
+import {
+  fade,
+  ThemeProvider,
+  withStyles,
+  makeStyles,
+  createMuiTheme,
+} from '@material-ui/core/styles';
+import InputBase from '@material-ui/core/InputBase';
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import { green } from '@material-ui/core/colors';
+import { Button } from '@material-ui/core'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      width: '25ch',
+    },
+  },
+  textField: {
+    margin: '0px 0px 10px 2px',
+  },
+
+}));
+
+const SportZipCodeInput = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: 'green',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'green',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'black',
+      },
+      '&:hover fieldset': {
+        borderColor: 'green',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'green',
+      },
+    },
+  },
+})(TextField);
+
 
 const Landing = ({history}) => {
 
@@ -16,29 +64,34 @@ const Landing = ({history}) => {
   });
   };
 
+  const classes = useStyles();
+
+
   return (
     <div>
       <h1>Athletes Untapped</h1>
       <h2>We are a one stop shop for all of your sports training needs</h2>
       <h3>Ready to train?</h3>
-      <form onSubmit={e => handleForm(e)}>
-        <input
+      <form onSubmit={e => handleForm(e)} className={classes.root}>
+        <SportZipCodeInput
+          className={classes.textField}
           value={sport}
           onChange={e => setSport(e.target.value)}
           name="sport"
           type="sport"
-          placeholder="Sport"
+          label="Sport"
+          variant="outlined"
         />
-        <input
+        <SportZipCodeInput
+          className={classes.textField}
           onChange={e => setZip(e.target.value)}
           name="zip"
           value={zip}
           type="zip"
-          placeholder="Zip Code"
+          label="Zip Code"
+          variant="outlined"
         />
-        <hr />
-
-        <button type="submit">Find Your Coach</button>
+        <button className={classes.findCoach} type="submit">Find Your Coach</button>
       </form>
     </div>
   );
