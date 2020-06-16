@@ -29,7 +29,7 @@ const Login = ({history}) => {
 
   return (
     <div>
-      <h1>Login Dylan</h1>
+      <h1>Login Dylan Gene</h1>
       <form onSubmit={e => handleForm(e)}>
         <input
           value={email}
