@@ -5,25 +5,37 @@ import Landing from '../Landing/Landing';
 import Login from '../Login/Login';
 import Join from '../Join/Join';
 import CoachList from '../CoachList/CoachList';
+import DedicatedCoaches from '../DedicatedCoaches/DedicatedCoaches';
+import AthletesAndParents from "../AthletesAndParents/AthletesAndParents";
+import './HomeNav.css';
 
 export default (props) => {
 
     return (
         <Router>
-            <ul className="nav">
-                <li>
-                    <Link to="/">Home</Link>
-                </li>
-                <li>
-                    <Link to="/ourstory">Our story</Link>
-                </li>
-                <li>
-                    <Link to="/login">Login</Link>
-                </li>
-                <li>
-                    <Link to="/join">Sign Up</Link>
-                </li>
-            </ul>
+            <header className="homeNavHeader">
+                <Link to="/" className="AULogo">Athletes Untapped</Link>
+                    <nav>
+                        <ul className="homeNavBar">
+                            <li>
+                                <Link to="/dedicatedcoaches">Dedicated Coaches</Link>
+                            </li>
+                            <li>
+                                <Link to="/athletesandparents">Athletes & Parents</Link>
+                            </li>
+                            <li>
+                                <Link to="/ourstory">Our Difference</Link>
+                            </li>
+                            <li>
+                                <Link to="/login">Login</Link>
+                            </li>
+                            <li>
+                                <Link to="/join">Sign Up</Link>
+                            </li>
+                        </ul>
+                        </nav>
+            </header>
+            
             <Switch>
       
                 <Route
@@ -51,6 +63,16 @@ export default (props) => {
                     path="/coaches"
                     exact
                     render={(props) => <CoachList {...props} />}
+                /> 
+                <Route
+                    path="/dedicatedcoaches"
+                    exact
+                    render={(props) => <DedicatedCoaches {...props} />}
+                /> 
+                <Route
+                    path="/athletesandparents"
+                    exact
+                    render={(props) => <AthletesAndParents {...props} />}
                 /> 
 
                 {/* Catch all for paths that don't match one of our routes  */}
