@@ -40,15 +40,15 @@ const HomeRealResults = ({history}) => {
                 <div className="HomeRealResultsPanels">
                     <div style={{display: 'inline-block'}}>
                         <div className={classes.root}>
-                            <Paper elevation={5}  variant='outlined'> 
+                            <Paper elevation={15}  variant='outlined'> 
                                 <AccountCircleIcon fontSize="large" className="RRHeader" /> 
                                 <p className="RRCaption"> Example Parent </p>
                             </Paper>
-                            <Paper elevation={5} variant='outlined'> 
+                            <Paper elevation={15} variant='outlined'> 
                                 <AccountCircleIcon fontSize="large" className="RRHeader" />
                                 <p className="RRCaption"> Example Coach</p>
                             </Paper>
-                            <Paper elevation={5} variant='outlined'> 
+                            <Paper elevation={15} variant='outlined'> 
                                 <AccountCircleIcon fontSize="large" className="RRHeader"/>
                                 <p className="RRCaption"> Example Athlete </p>
                             </Paper>

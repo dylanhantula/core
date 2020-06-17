@@ -21,19 +21,19 @@ export default (props) => {
                     <nav>
                         <ul className="homeNavBar">
                             <li>
-                                <Link to="/dedicatedcoaches">Dedicated Coaches</Link>
+                                <Link to="/athletesandparents" className="homeNavTab">Athletes & Parents</Link>
                             </li>
                             <li>
-                                <Link to="/athletesandparents">Athletes & Parents</Link>
+                                <Link to="/dedicatedcoaches" className="homeNavTab">Dedicated Coaches</Link>
                             </li>
                             <li>
-                                <Link to="/ourstory">Our Difference</Link>
+                                <Link to="/ourstory" className="homeNavTab">Our Difference</Link>
                             </li>
                             <li>
-                                <Link to="/login">Login</Link>
+                                <Link to="/login" className="homeNavTab">Login</Link>
                             </li>
                             <li>
-                                <Link to="/join">Sign Up</Link>
+                                <Link to="/join" className="homeNavTab">Sign Up</Link>
                             </li>
                         </ul>
                         </nav>

@@ -4,23 +4,41 @@
 
 .homeNavBar li {
     display: inline-block;
-    color: black;
-    text-align: center;
-    padding: 8px 20px;
-    text-decoration: none;
-    font-size: large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    
 }
 
 .AULogo {
-    display: inline;
     text-align: center;
     padding: 8px 20px;
-    width: 450px;
+    width: 350px;
 }
 
 .homeNavHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.homeNavTab {
+    color: black;
+    text-align: center;
+    padding: 20px 25px;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 25px;
+}
+
+.homeNavTab:link {
+    color: black;
+}
+
+.homeNavTab:visited {
+    color: black;
+}
+
+
+.homeNavTab:hover {
+    background-color: whitesmoke;
 }
