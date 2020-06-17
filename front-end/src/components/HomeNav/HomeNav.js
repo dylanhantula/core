@@ -16,7 +16,7 @@ export default (props) => {
         <Router>
             <header className="homeNavHeader">
                 <Link to="/" >
-                    <img src={logo} className="AULogo" />
+                    <img src={logo} className="AULogo" alt="Athletes Untapped"/>
                 </Link>
                     <nav>
                         <ul className="homeNavBar">
