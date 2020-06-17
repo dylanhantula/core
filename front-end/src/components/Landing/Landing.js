@@ -6,6 +6,7 @@ import './Landing.css';
 import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks';
 import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction';
 import HomeRealResults from '../HomeRealResults/HomeRealResults';
+import HomeWhatsYourSport from '../HomeWhatsYourSport/HomeWhatsYourSport';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textField: {
-    margin: '0px 0px 10px 0px',
+    margin: '0px 0px 15px 0px',
     display: 'block',
     width: '100%'
   },
@@ -86,6 +87,7 @@ const Landing = ({history}) => {
               className={MUIclasses.textField}
               onChange={e => setZip(e.target.value)}
               name="zip"
+              
               value={zip}
               type="zip"
               label="Zip Code"
@@ -101,6 +103,7 @@ const Landing = ({history}) => {
     <HomeHowItWorks/>
     <HomeSeeItInAction />
     <HomeRealResults/>
+    <HomeWhatsYourSport/>
     </div>
   );
 };
