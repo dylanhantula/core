@@ -1,0 +1,22 @@
+.HowItWorks {
+    text-align: center;
+    margin: 75px;
+    border-bottom: 2px solid darkgreen;
+    padding-bottom: 50px;
+}
+
+.HowItWorksPanels {
+    text-align: center;    
+}
+
+.HIWHeader {
+    font-size: large;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.HIWCaption {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

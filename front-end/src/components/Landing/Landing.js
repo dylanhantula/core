@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
-import {
-  withStyles,
-  makeStyles
-} from '@material-ui/core/styles';
-
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
 import './Landing.css'
+import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +61,7 @@ const Landing = ({history}) => {
 
 
   return (
+    <div>
     <ul className="panelList">    
       <li>
         <div>
@@ -98,6 +95,9 @@ const Landing = ({history}) => {
         </form>
       </li>
     </ul>
+
+    <HomeHowItWorks/>
+    </div>
   );
 };
 
