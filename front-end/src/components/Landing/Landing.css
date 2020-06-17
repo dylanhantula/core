@@ -4,8 +4,9 @@
     list-style: none;
     display: flex;
     justify-content: space-evenly;
-    border: 15px solid green;
+    border: 40px solid darkseagreen;
     margin: 0 auto;
+    padding: 30px;
 }
 
 .panelList li:first-child div {
@@ -20,6 +21,12 @@
     justify-content: center;
     align-items: center;
     display: flex;
+}
+
+.panelList li:last-child {
+    background-color: ghostwhite;
+    padding: 15px 20px;
+    border: 2px solid lightgray;
 }
 
 .formControl {

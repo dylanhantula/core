@@ -4,7 +4,8 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import './Landing.css';
 import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks';
-import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction'
+import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction';
+import HomeRealResults from '../HomeRealResults/HomeRealResults';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,6 +100,7 @@ const Landing = ({history}) => {
 
     <HomeHowItWorks/>
     <HomeSeeItInAction />
+    <HomeRealResults/>
     </div>
   );
 };
