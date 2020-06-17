@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import './Landing.css'
-import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks'
+import './Landing.css';
+import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks';
+import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +98,7 @@ const Landing = ({history}) => {
     </ul>
 
     <HomeHowItWorks/>
+    <HomeSeeItInAction />
     </div>
   );
 };
