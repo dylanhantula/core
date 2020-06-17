@@ -7,6 +7,7 @@ import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks';
 import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction';
 import HomeRealResults from '../HomeRealResults/HomeRealResults';
 import HomeWhatsYourSport from '../HomeWhatsYourSport/HomeWhatsYourSport';
+import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +66,7 @@ const Landing = ({history}) => {
 
   return (
     <div>
+      <Paper elevation={10} >
     <ul className="panelList">    
       <li>
         <div>
@@ -99,7 +101,7 @@ const Landing = ({history}) => {
         </form>
       </li>
     </ul>
-
+    </Paper>
     <HomeHowItWorks/>
     <HomeSeeItInAction />
     <HomeRealResults/>

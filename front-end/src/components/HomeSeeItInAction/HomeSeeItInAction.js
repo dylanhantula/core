@@ -10,9 +10,12 @@ const HomeSeeItInAction = () => {
                     See It In Action
                 </p>
             </div>
+            
             <div className="SeeItInActionVideo">
-                <ReactPlayer controls='true' style={{display: 'inline-block'}} url='https://www.youtube.com/watch?v=13YeR5zIGbo' />
+
+                <ReactPlayer controls='true' style={{display: 'inline-block'}} url='https://www.youtube.com/watch?v=9h0T2jzvMVk' />
             </div>
+            
         </div>
     );
 }

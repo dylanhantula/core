@@ -31,6 +31,7 @@ const HomeRealResults = ({history}) => {
     };
 
     return (
+        <Paper elevation={10}>
         <div style={{backgroundColor: 'darkseagreen'}}>
             <div className="HomeRealResults">
                 <p style={{color: 'darkgreen', fontSize: 'x-large', fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'}}>
@@ -40,15 +41,15 @@ const HomeRealResults = ({history}) => {
                 <div className="HomeRealResultsPanels">
                     <div style={{display: 'inline-block'}}>
                         <div className={classes.root}>
-                            <Paper elevation={15}  variant='outlined'> 
+                            <Paper elevation={5} variant="outlined"> 
                                 <AccountCircleIcon fontSize="large" className="RRHeader" /> 
                                 <p className="RRCaption"> Example Parent </p>
                             </Paper>
-                            <Paper elevation={15} variant='outlined'> 
+                            <Paper elevation={5} variant="outlined" > 
                                 <AccountCircleIcon fontSize="large" className="RRHeader" />
                                 <p className="RRCaption"> Example Coach</p>
                             </Paper>
-                            <Paper elevation={15} variant='outlined'> 
+                            <Paper elevation={5} variant="outlined"> 
                                 <AccountCircleIcon fontSize="large" className="RRHeader"/>
                                 <p className="RRCaption"> Example Athlete </p>
                             </Paper>
@@ -69,7 +70,7 @@ const HomeRealResults = ({history}) => {
                 </nav>
             </div>
         </div>
-        
+        </Paper>
     );
 }
 
