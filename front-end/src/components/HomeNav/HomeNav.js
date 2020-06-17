@@ -7,6 +7,7 @@ import Join from '../Join/Join';
 import CoachList from '../CoachList/CoachList';
 import DedicatedCoaches from '../DedicatedCoaches/DedicatedCoaches';
 import AthletesAndParents from "../AthletesAndParents/AthletesAndParents";
+import logo from './Athletes-Untapped-Logo-Rectangle.png'
 import './HomeNav.css';
 
 export default (props) => {
@@ -14,7 +15,9 @@ export default (props) => {
     return (
         <Router>
             <header className="homeNavHeader">
-                <Link to="/" className="AULogo">Athletes Untapped</Link>
+                <Link to="/" >
+                    <img src={logo} className="AULogo" />
+                </Link>
                     <nav>
                         <ul className="homeNavBar">
                             <li>

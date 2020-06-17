@@ -7,7 +7,7 @@ const Join = ({history}) => {
 
   const [isLoaded, setIsLoaded] = useState(true);
   const [error, setErrors] = useState("");
-  const [athleteView, setAthleteView] = useState(true);
+  const [athleteView, setAthleteView] = useState(false);
   
   // General function for submitting both new coaches and new athletes to backend
   const submit = (vals) => {

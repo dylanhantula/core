@@ -92,7 +92,7 @@ const Landing = ({history}) => {
               variant="outlined"
             />
             <div className="findCoachButton">
-            <button  type="submit">Find Your Coach</button>
+            <button type="submit">Find Your Coach</button>
             </div>
         </form>
       </li>

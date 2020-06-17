@@ -1,10 +1,11 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import './HomeRealResults.css';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-const HomeRealResults = () => {
+const HomeRealResults = ({history}) => {
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -18,9 +19,16 @@ const HomeRealResults = () => {
             height: theme.spacing(20),
           },
         },
-      }));
+    }));
     
     const classes = useStyles();
+
+    const takeToBecomeCoach = (e) => {
+        e.preventDefault();
+        history.push({
+        pathname: '/join',
+        });
+    };
 
     return (
         <div style={{backgroundColor: 'darkseagreen'}}>
@@ -47,8 +55,22 @@ const HomeRealResults = () => {
                         </div>
                     </div>
             </div>
+            
+            <div style={{paddingBottom: '20px'}}>
+                <nav>
+                <ul className="RealResultsButtons">
+                    <li>
+                        <button onClick={(e) => (takeToBecomeCoach(e))}> Become A Coach</button>
+                    </li>
+                    <li>
+                        <button> Find Your Coach</button>
+                    </li>
+                </ul>
+                </nav>
+            </div>
         </div>
+        
     );
 }
 
-export default HomeRealResults;
+export default withRouter(HomeRealResults);
