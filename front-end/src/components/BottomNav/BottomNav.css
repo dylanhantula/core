@@ -1,0 +1,71 @@
+.listOfLinksBottom {
+    text-align: left;
+    list-style-type: none;
+    padding-top: 30px;
+}
+
+.listOfLinksBottom li {
+    padding: 5px 0px;
+}
+
+.bottomNavTab {
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.bottomNavTab:link {
+    color: black;
+}
+
+.bottomNavTab:visited {
+    color: black;
+}
+
+
+.bottomNavTab:hover {
+    color: darkgreen;
+}
+
+.findUs {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0px 0px 0px 0px;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.findUs:hover {
+    background-color: #004d00;  
+    
+}
+
+.SocialMediaLinks {
+    padding-top: 50px;
+}
+
+a:link {
+    color: black;
+}
+
+a:visited {
+    color: black;
+}
+
+a:active {
+    color: black;
+}
+
+a:hover {
+    color:darkgreen;
+}
