@@ -1,0 +1,37 @@
+.formControl {
+    display: inline;
+}
+
+.findCoachButton {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.findCoachButton button {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0px 0px 0px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+  }
+
+.findCoachButton button:hover {
+    background-color: #004d00;  
+}
+
+
+.readyToTrain {
+    display: block;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 100%;
+    padding:5px 5px;
+    text-align: center;
+    margin: 4px 0px 10px 0px;
+}

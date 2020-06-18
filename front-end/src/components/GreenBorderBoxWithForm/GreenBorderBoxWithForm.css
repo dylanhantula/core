@@ -1,0 +1,28 @@
+.panelList {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    border: 40px solid darkseagreen;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.panelList li:first-child div {
+    font-size: x-large;
+    max-width: 450px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+.panelList li:first-child {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.panelList li:last-child {
+    background-color: ghostwhite;
+    padding: 15px 20px;
+    border: 2px solid lightgray;
+}

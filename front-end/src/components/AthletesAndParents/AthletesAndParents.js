@@ -1,9 +1,10 @@
 import React from "react";
+import GreenBorderBoxWithForm from '../GreenBorderBoxWithForm/GreenBorderBoxWithForm';
 
 const AthletesAndParents = () => {
   return (
     <div>
-      <h1>Athletes & Parents</h1>
+      <GreenBorderBoxWithForm header="Start training with an AU Coach." readyToTrain="Ready To Train?" buttonText="Find Your Coach"/>
     </div>
   );
 };
