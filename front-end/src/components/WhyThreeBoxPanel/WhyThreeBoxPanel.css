@@ -1,0 +1,25 @@
+.ThreeBoxTitle {
+    text-align: center;
+    margin: 75px 400px 5px;
+    border-bottom: 3px solid lightgray;
+    padding-bottom: 20px;
+}
+
+.ThreeBoxPanels {
+    text-align: center;    
+}
+
+.HIWHeader {
+    font-size: large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 20px;
+    padding-bottom: 2px;
+    color: gray;
+    font-weight: lighter;
+}
+
+.HIWCaption {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: gray;
+    font-weight: lighter;
+}

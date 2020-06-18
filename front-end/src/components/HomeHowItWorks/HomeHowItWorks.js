@@ -34,7 +34,7 @@ const HomeHowItWorks = () => {
                                 <p className="HIWHeader"> Pick Your Coach </p> 
                                 <p className="HIWCaption"> Decide which AU coach will help you attain your athletic goals. </p>
                             </Paper>
-                            <ArrowForwardIcon style={{ color: 'darkslategray'}}/>
+                            <ArrowForwardIcon fontSize="small" style={{ color: 'darkslategray'}}/>
                             <Paper elevation={5}> 
                                 <p className="HIWHeader"> Put In The Work </p> 
                                 <p className="HIWCaption"> Train with your AU coach and capture areas of improvement through our mobile app. </p>
