@@ -32,7 +32,7 @@ const HomeWhatsYourSport = () => {
                         }}> Coming Soon
                 </p>              
             </div>
-            <div style={{textAlign: 'center'}}>
+            <div style={{textAlign: 'center', marginBottom: '100px'}}>
                 <p style={{display:'inline-block', 
                             paddingRight: '100px', 
                             fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'

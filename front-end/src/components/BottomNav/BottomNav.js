@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -34,7 +35,8 @@ const BottomNav = ({history}) => {
     };
 
       return (
-        <div className='footer' style={{textAlign: 'center', backgroundColor: 'navajowhite', marginTop: '200px', marginBottom: '0px', paddingBottom: '0px'}}>
+          <Paper elevation={10}>
+        <div className='footer' style={{textAlign: 'center', backgroundColor: 'navajowhite', marginTop: '0px', marginBottom: '0px', paddingBottom: '0px'}}>
             <div style={{display: 'inline-block'}}>
                 <div className={classes.root}>
                     <img src={logo} alt="Athletes Untapped" />
@@ -82,6 +84,7 @@ const BottomNav = ({history}) => {
                 </div>
             </div>
         </div>
+        </Paper>
       );
 }
 

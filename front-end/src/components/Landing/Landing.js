@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './Landing.css';
 import HomeHowItWorks from '../HomeHowItWorks/HomeHowItWorks';
 import HomeSeeItInAction from '../HomeSeeItInAction/HomeSeeItInAction';
@@ -10,7 +10,9 @@ import GreenBorderBoxWithForm from "../GreenBorderBoxWithForm/GreenBorderBoxWith
 
 
 const Landing = () => {
-
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div>

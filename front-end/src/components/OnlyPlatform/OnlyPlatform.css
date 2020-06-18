@@ -1,0 +1,36 @@
+.paragraphReason {
+    max-width: 600px;
+    margin-right: 300px;
+    margin-left: 150px;
+    margin-top: 50px;
+    font-size: large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.listOfReasons li {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+.listOfReasons {
+    list-style-type: none;
+}
+
+.LearnMore {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0px 30px 0px 0px;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.LearnMore:hover {
+    background-color: #004d00;  
+}
