@@ -17,7 +17,8 @@ const OnlyPlatform = props => {
     return (
         <Paper elevation={10}>
         <div style={{border: '40px solid darkseagreen', marginTop: '40px', padding: '30px'}}>
-            <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: 'x-large', fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'}}>{props.title}</p>
+            <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: 'x-large', 
+            fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'}}>{props.title}</p>
             <div style={{display: 'flex'}}>
                 <p className="paragraphReason">{props.reasonParagraph1} <br></br> <br></br> {props.reasonParagraph2}</p>
                 <ul className="listOfReasons"> 

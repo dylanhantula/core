@@ -1,0 +1,73 @@
+.greenBox {
+    border-top: 100px solid darkseagreen;
+    border-bottom: 100px solid darkseagreen;
+    border-left: 200px solid darkseagreen;
+    border-right: 200px solid darkseagreen;
+    text-align: center;
+}
+
+.panelList li:first-child {
+    font-size: x-large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.greenBoxItems {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.panelList li:first-child {
+    text-align: center;
+
+}
+
+.OnePlace {
+    text-align: center;
+    margin: 100px 400px 65px;
+    border-bottom: 3px solid lightgray;
+    padding-bottom: 20px; 
+}
+
+.ReadyToGetStarted {
+    text-align: center;
+    margin: 100px 400px 65px;
+    padding-bottom: 20px; 
+}
+
+.greenBoxBottom {
+    border: 40px solid darkseagreen;
+    text-align: center;
+}
+
+.GreenBoxBottomButtons {
+    list-style-type: none;
+    text-align: center;
+    padding: 0px;
+    margin: 20px 0px;
+}
+
+.GreenBoxBottomButtons li {
+    display: inline-block;
+    text-align: center;
+}
+
+.GreenBoxBottomButtons li button {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0px 30px 0px;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.GreenBoxBottomButtons li button:hover {
+    background-color: #004d00;  
+    
+}
