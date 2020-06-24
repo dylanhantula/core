@@ -45,20 +45,11 @@
     font-size: small;
 }
 
-.loginButton p a:link {
-    color: darkgreen
-}
-.loginButton p a:visited {
-    color: darkgreen
-}
-.loginButton p a:hover {
+.loginButton p:first-child:hover {
     color: darkgreen;
     text-decoration: underline;
 }
-.loginButton p a:active {
-    color: darkgreen
-}
 
-.loginButton p a {
+.loginButton p:only-child {
     color: darkgreen
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as firebase from 'firebase/app';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import './Login.css';
@@ -106,8 +106,8 @@ const Login = ({history}) => {
         />
         <div className="loginButton">
           <button type="submit">Login</button>
-          <p >Forgot password? <a >Reset Here</a></p>
-          <p >Don't have an account? <a >Sign Up</a></p>
+          <p >Forgot password? <Link>Reset Here</Link></p>
+          <p >Don't have an account? <Link>Sign Up</Link></p>
         </div>
         <span>{error}</span>
       </form>
