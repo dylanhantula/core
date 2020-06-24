@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, BrowserRouter as Router, Route, Redirect, Link } from "react-router-dom";
 import OurStory from "../OurStory/OurStory.js";
 import Landing from '../Landing/Landing';
@@ -9,8 +9,23 @@ import DedicatedCoaches from '../DedicatedCoaches/DedicatedCoaches';
 import AthletesAndParents from "../AthletesAndParents/AthletesAndParents";
 import logo from './Athletes-Untapped-Logo-Rectangle.png'
 import './HomeNav.css';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Typography from '@material-ui/core/Typography';
 
 export default (props) => {
+
+    const [open, setOpen] = useState(false);
+
+    const openLoginHandler = () => {
+        setOpen(true);
+    }
+
+    const closeLoginHandler = () => {
+        setOpen(false);
+    }
 
     return (
         <Router>
@@ -30,7 +45,7 @@ export default (props) => {
                                 <Link to="/ourstory" className="homeNavTab">Our Difference</Link>
                             </li>
                             <li>
-                                <Link to="/login" className="homeNavTab">Login</Link>
+                                <Link onClick={openLoginHandler} className="homeNavTab">Login</Link>
                             </li>
                             <li>
                                 <Link to="/join" className="homeNavTab">Sign Up</Link>
@@ -38,6 +53,12 @@ export default (props) => {
                         </ul>
                         </nav>
             </header>
+        <Dialog onClose={closeLoginHandler} open={open} fullWidth="true" maxWidth="sm">
+        <DialogContent dividers>
+          <Login/>
+        </DialogContent>
+        
+      </Dialog>
             
             <Switch>
       

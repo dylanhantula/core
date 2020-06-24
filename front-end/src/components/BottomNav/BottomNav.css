@@ -54,18 +54,18 @@
     padding-top: 50px;
 }
 
-a:link {
+.SocialMediaLinks div a:link {
     color: black;
 }
 
-a:visited {
+.SocialMediaLinks div a:visited {
     color: black;
 }
 
-a:active {
+.SocialMediaLinks div a:active {
     color: black;
 }
 
-a:hover {
+.SocialMediaLinks div a:hover {
     color:darkgreen;
 }
