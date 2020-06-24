@@ -1,8 +1,8 @@
 .ThreeReasonsTitle {
     text-align: center;
-    margin: 150px 400px 25px;
+    margin: 9.3rem 25rem 1.5rem;
     border-bottom: 3px solid lightgray;
-    padding-bottom: 30px;
+    padding-bottom: 1.8rem;
 }
 
 .ThreeReasonsPanels {
@@ -12,8 +12,8 @@
 .HIWHeader {
     font-size: large;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    padding-top: 20px;
-    padding-bottom: 2px;
+    padding-top: 1.25rem;
+    padding-bottom: 0.1rem;
     color: black;
 
 }
@@ -21,5 +21,5 @@
 .HIWCaption {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: black;
-    padding-top: 10px;
+    padding-top: 0.75rem;
 }

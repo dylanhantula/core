@@ -16,16 +16,16 @@ const OnlyPlatform = props => {
 
     return (
         <Paper elevation={10}>
-        <div style={{border: '40px solid darkseagreen', marginTop: '40px', padding: '30px'}}>
+        <div style={{border: '2.5rem solid darkseagreen', marginTop: '2.5rem', padding: '1.9rem'}}>
             <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: 'x-large', 
             fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'}}>{props.title}</p>
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
                 <p className="paragraphReason">{props.reasonParagraph1} <br></br> <br></br> {props.reasonParagraph2}</p>
                 <ul className="listOfReasons"> 
                     {props.reasonList.map((reason) => {
                         return  <li>
                                     <div style={{display: 'flex',  alignItems: 'center'}}>
-                                        <CheckIcon  style={{paddingRight: '10px', color: green[800]}}/>
+                                        <CheckIcon  style={{paddingRight: '0.7rem', color: green[800]}}/>
                                         <p >{reason}</p>
                                     </div>
                                 </li>;

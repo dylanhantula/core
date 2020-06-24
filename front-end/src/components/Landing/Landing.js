@@ -16,7 +16,7 @@ const Landing = () => {
 
   return (
     <div>
-      <GreenBorderBoxWithForm header="Find a top-level private coach and take your game to the next level." readyToTrain="Ready To Train?" buttonText="Find Your Coach" />
+      <GreenBorderBoxWithForm header="Find a Top-Level Private Coach and Take Your Game to the Next Level." readyToTrain="Ready To Train?" buttonText="Find Your Coach" />
       <HomeHowItWorks/>
       <HomeSeeItInAction />
       <HomeRealResults/>

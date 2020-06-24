@@ -11,13 +11,18 @@ const HomeHowItWorks = () => {
           display: 'flex',
           flexWrap: 'wrap',
           textAlign: 'center',
-          '& > *': {
-            margin: theme.spacing(1),
-            padding: theme.spacing(3),
-            width: theme.spacing(30),
-            height: theme.spacing(25),
-          },
+          
         },
+        paperSettings: {
+            marginLeft: theme.spacing(3),
+            marginRight: theme.spacing(3),
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
+            paddingLeft: theme.spacing(3),
+            paddingRight: theme.spacing(3),
+            width: theme.spacing(28),
+            height: theme.spacing(24),
+          }
       }));
     
       
@@ -30,17 +35,17 @@ const HomeHowItWorks = () => {
                 <div className="HowItWorksPanels">
                     <div style={{display: 'inline-block'}}>
                         <div className={classes.root}>
-                            <Paper elevation={5} > 
+                            <Paper elevation={5} className={classes.paperSettings}> 
                                 <p className="HIWHeader"> Pick Your Coach </p> 
                                 <p className="HIWCaption"> Decide which AU coach will help you attain your athletic goals. </p>
                             </Paper>
-                            <ArrowForwardIcon fontSize="small" style={{ color: 'darkslategray'}}/>
-                            <Paper elevation={5}> 
+                            <ArrowForwardIcon fontSize="large" style={{ color: 'darkslategray', paddingTop: '6rem'}}/>
+                            <Paper elevation={5} className={classes.paperSettings}> 
                                 <p className="HIWHeader"> Put In The Work </p> 
                                 <p className="HIWCaption"> Train with your AU coach and capture areas of improvement through our mobile app. </p>
                             </Paper>
-                            <RepeatIcon fontSize='small' style={{ color: 'darkslategray' }}/>
-                            <Paper elevation={5} > 
+                            <RepeatIcon fontSize="large" style={{ color: 'darkslategray', paddingTop: '6rem'}}/>
+                            <Paper elevation={5} className={classes.paperSettings}> 
                                 <p className="HIWHeader"> Stay Engaged At Home </p> 
                                 <p className="HIWCaption"> Recieve feedback from your AU coach and follow their suggested training plan through our mobile app. </p>
                             </Paper>

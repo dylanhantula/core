@@ -10,7 +10,7 @@
 .AULogo {
     text-align: center;
     padding: 8px 20px;
-    width: 350px;
+    width: 20rem;
 }
 
 .homeNavHeader {
@@ -22,12 +22,12 @@
 .homeNavTab {
     color: black;
     text-align: center;
-    padding: 20px 25px;
+    padding: 1rem 1.5rem;
     text-decoration: none;
     font-size: medium;
     font-weight: 500;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    border-radius: 25px;
+    border-radius: 2rem;
 }
 
 .homeNavTab:link {

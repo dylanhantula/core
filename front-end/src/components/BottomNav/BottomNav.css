@@ -1,7 +1,8 @@
 .listOfLinksBottom {
     text-align: left;
     list-style-type: none;
-    padding-top: 30px;
+    padding-top: 1.5rem;
+    padding-left: 0px;
 }
 
 .listOfLinksBottom li {

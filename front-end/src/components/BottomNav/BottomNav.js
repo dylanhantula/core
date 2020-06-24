@@ -16,10 +16,10 @@ const BottomNav = ({history}) => {
         root: {
           display: 'flex',
           flexWrap: 'wrap',
+          justifyContent: 'space-evenly',
           '& > *': {
-            marginLeft: theme.spacing(9),
-            marginRight: theme.spacing(9),
-            width: theme.spacing(35),
+            margin: theme.spacing(2),
+            width: theme.spacing(30),
             height: theme.spacing(25)
            },
         },
@@ -37,9 +37,9 @@ const BottomNav = ({history}) => {
       return (
           <Paper elevation={10}>
         <div className='footer' style={{textAlign: 'center', backgroundColor: 'navajowhite', marginTop: '0px', marginBottom: '0px', paddingBottom: '0px'}}>
-            <div style={{display: 'inline-block'}}>
                 <div className={classes.root}>
-                    <img src={logo} alt="Athletes Untapped" />
+                    <img src={logo} alt="Athletes Untapped" style={{width: '16rem'}}/>
+                    <div style={{display: 'flex', justifyContent: 'space-evenly', flexGrow: '4'}}>
                     <ul className="listOfLinksBottom">
                         <li>
                             <Link className="bottomNavTab" onClick={(e) => linkHandler(e, "/")}>Home</Link>
@@ -71,18 +71,18 @@ const BottomNav = ({history}) => {
                             <Link className="bottomNavTab">Site Terms</Link>
                         </li>
                     </ul>
+                    </div>
                     <div>
                         <div className="SocialMediaLinks">
                             <button className="findUs">Find Us in the App Store</button>
-                            <div style= {{paddingTop: '20px'}}>
+                            <div style= {{paddingTop: '1rem'}}>
                                 <a href="http://www.facebook.com"><FacebookIcon fontSize='large' /></a>
-                                <a href="http://www.twitter.com"><TwitterIcon fontSize='large' style={{margin: '0px 20px'}}/></a>
+                                <a href="http://www.twitter.com"><TwitterIcon fontSize='large' style={{margin: '0px 1rem'}}/></a>
                                 <a href="http://www.instagram.com"><InstagramIcon fontSize='large'/></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
         </Paper>
       );

@@ -30,23 +30,23 @@ const ThreeReasons = (props) => {
                     <div style={{display: 'inline-block'}}>
                         <div className={classes.root}>
                             <Paper elevation={0}>
-                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '40px'}}>
-                                    <li><img src={picture} alt="mountain_picture" style={{width: '500px'}}/></li>
-                                    <li style={{paddingLeft: '75px'}}><div style={{marginTop: '40px'}}><p className="HIWHeader"> {props.box1.header} </p> 
+                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '2.5rem'}}>
+                                    <li><img src={picture} alt="mountain_picture" style={{width: '31rem'}}/></li>
+                                    <li style={{paddingLeft: '4.6rem'}}><div style={{marginTop: '2.5rem'}}><p className="HIWHeader"> {props.box1.header} </p> 
                                 <p className="HIWCaption"> {props.box1.caption}</p></div></li>
                                 </ul> 
                             </Paper>
                             <Paper elevation={0}>
-                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '40px'}}>
-                                    <li><img src={picture} alt="mountain_picture" style={{width: '500px'}}/></li>
-                                    <li style={{paddingLeft: '75px'}}><div style={{marginTop: '40px'}}><p className="HIWHeader"> {props.box2.header} </p> 
+                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '2.5rem'}}>
+                                    <li><img src={picture} alt="mountain_picture" style={{width: '31rem'}}/></li>
+                                    <li style={{paddingLeft: '4.6rem'}}><div style={{marginTop: '2.5rem'}}><p className="HIWHeader"> {props.box2.header} </p> 
                                 <p className="HIWCaption"> {props.box2.caption}</p></div></li>
                                 </ul> 
                             </Paper>
                             <Paper elevation={0}>
-                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '40px'}}>
-                                    <li><img src={picture} alt="mountain_picture" style={{width: '500px'}}/></li>
-                                    <li style={{paddingLeft: '75px'}}><div style={{marginTop: '40px'}}><p className="HIWHeader"> {props.box3.header} </p> 
+                                <ul style={{listStyleType: 'none', display: 'flex', justifyContent: 'space-evenly', padding: '0px', marginTop: '2.5rem'}}>
+                                    <li><img src={picture} alt="mountain_picture" style={{width: '31rem'}}/></li>
+                                    <li style={{paddingLeft: '4.6rem'}}><div style={{marginTop: '2.5rem'}}><p className="HIWHeader"> {props.box3.header} </p> 
                                 <p className="HIWCaption"> {props.box3.caption}</p></div></li>
                                 </ul> 
                             </Paper>
