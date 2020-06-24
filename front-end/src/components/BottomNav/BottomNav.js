@@ -39,7 +39,7 @@ const BottomNav = ({history}) => {
         <div className='footer' style={{textAlign: 'center', backgroundColor: 'navajowhite', marginTop: '0px', marginBottom: '0px', paddingBottom: '0px'}}>
                 <div className={classes.root}>
                     <img src={logo} alt="Athletes Untapped" style={{width: '16rem'}}/>
-                    <div style={{display: 'flex', justifyContent: 'space-evenly', flexGrow: '4'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-evenly', flexGrow: '1'}}>
                     <ul className="listOfLinksBottom">
                         <li>
                             <Link className="bottomNavTab" onClick={(e) => linkHandler(e, "/")}>Home</Link>

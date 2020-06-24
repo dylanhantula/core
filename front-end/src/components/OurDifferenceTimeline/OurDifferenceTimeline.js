@@ -14,7 +14,7 @@ import './OurDifferenceTimeline.css';
 const OurDifferenceTimeline = () => {
 
 
-    const timelineItemHeaderStyle = {fontSize: 'large', fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'};
+    const timelineItemHeaderStyle = {fontSize: 'large', fontWeight: 'bold', fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'};
     const timelineItemCaptionStyle = {padding: '0px 2rem', fontSize: 'medium', fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'};
 
     return (
