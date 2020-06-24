@@ -10,10 +10,8 @@ import AthletesAndParents from "../AthletesAndParents/AthletesAndParents";
 import logo from './Athletes-Untapped-Logo-Rectangle.png'
 import './HomeNav.css';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
+
 
 export default (props) => {
 
@@ -46,6 +44,11 @@ export default (props) => {
                             </li>
                             <li>
                                 <Link onClick={openLoginHandler} className="homeNavTab">Login</Link>
+                                <Dialog onClose={closeLoginHandler} open={open} fullWidth="true" maxWidth="sm">
+                                    <DialogContent dividers>
+                                    <Login/>
+                                    </DialogContent>
+                                </Dialog>
                             </li>
                             <li>
                                 <Link to="/join" className="homeNavTab">Sign Up</Link>
@@ -53,15 +56,7 @@ export default (props) => {
                         </ul>
                         </nav>
             </header>
-        <Dialog onClose={closeLoginHandler} open={open} fullWidth="true" maxWidth="sm">
-        <DialogContent dividers>
-          <Login/>
-        </DialogContent>
-        
-      </Dialog>
-            
             <Switch>
-      
                 <Route
                     path={[ "/"]}
                     exact
