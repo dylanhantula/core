@@ -11,18 +11,28 @@ import logo from './Athletes-Untapped-Logo-Rectangle.png'
 import './HomeNav.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import Signup from "../Signup/Signup.js";
 
 
 export default (props) => {
 
-    const [open, setOpen] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false);
+    const [openSignup, setOpenSignup] = useState(false);
 
     const openLoginHandler = () => {
-        setOpen(true);
+        setOpenLogin(true);
     }
 
     const closeLoginHandler = () => {
-        setOpen(false);
+        setOpenLogin(false);
+    }
+
+    const openSignupHandler = () => {
+        setOpenSignup(true);
+    }
+
+    const closeSignupHandler = () => {
+        setOpenSignup(false);
     }
 
     return (
@@ -44,14 +54,19 @@ export default (props) => {
                             </li>
                             <li>
                                 <Link onClick={openLoginHandler} className="homeNavTab">Login</Link>
-                                <Dialog onClose={closeLoginHandler} open={open} fullWidth="true" maxWidth="sm">
+                                <Dialog onClose={closeLoginHandler} open={openLogin} fullWidth="true" maxWidth="sm">
                                     <DialogContent dividers>
-                                    <Login/>
+                                    <Login switch={() => {closeLoginHandler(); openSignupHandler();}}/>
                                     </DialogContent>
                                 </Dialog>
                             </li>
                             <li>
-                                <Link to="/join" className="homeNavTab">Sign Up</Link>
+                                <Link onClick={openSignupHandler} className="homeNavTab">Sign Up</Link>
+                                <Dialog onClose={closeSignupHandler} open={openSignup} fullWidth="true" maxWidth="sm">
+                                    <DialogContent dividers>
+                                    <Signup switch={() => {closeSignupHandler(); openLoginHandler();}} close={closeSignupHandler}/>
+                                    </DialogContent>
+                                </Dialog>
                             </li>
                         </ul>
                         </nav>
@@ -73,9 +88,14 @@ export default (props) => {
                     render={(props) => <Login {...props} />}
                 /> 
                 <Route
-                    path="/join"
+                    path="/join/athlete"
                     exact
-                    render={(props) => <Join {...props} />}
+                    render={(props) => <Join forAthlete={true} />}
+                /> 
+                <Route
+                    path="/join/coach"
+                    exact
+                    render={(props) => <Join forAthlete={false} />}
                 /> 
 
                 <Route

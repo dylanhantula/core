@@ -50,7 +50,7 @@ const LoginInput = withStyles({
 
 })(TextField);
 
-const Login = ({history}) => {
+const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrors] = useState("");
@@ -106,8 +106,8 @@ const Login = ({history}) => {
         />
         <div className="loginButton">
           <button type="submit">Login</button>
-          <p >Forgot Password? <Link>Reset Here</Link></p>
-          <p >Don't have an Account? <Link>Sign Up</Link></p>
+          <p >Forgot Password? <Link className="linkSwitchDialog">Reset Here</Link></p>
+          <p >Don't have an Account? <Link className="linkSwitchDialog" onClick={props.switch}>Sign Up</Link></p>
         </div>
         <span>{error}</span>
       </form>

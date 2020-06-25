@@ -1,21 +1,21 @@
-.loginFormControl {
+.signupControl {
     display: inline;
 }
 
-.loginButton {
+.signupButton {
     text-align: center;
     margin-top: 20px;
     margin-bottom: 30px;
 }
 
-.loginButton button {
+.signupButton button {
     background-color: darkgreen; 
     border: none;
     color: white;
     text-align: center;
     text-decoration: none;
     font-size: 15px;
-    margin: 0px 0px 1rem;
+    margin: 0px 1.5rem 1rem;
     padding: 10px;
     cursor: pointer;
     width: 100%;
@@ -23,35 +23,47 @@
     border-radius: 5px;
   }
 
-.loginButton button:hover {
+.signupButton button:hover {
     background-color: #004d00;  
 }
 
 
-.loginText {
+.signupText {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin-top: 0px;
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
     font-size: xx-large;
     padding: 1rem 0rem;
 }
 
-.AULogoLogin {
+.AULogoSignup {
     width: 300px;
 }
 
-.loginButton p {
+.signupButton p {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: small;
 }
 
-.linkSwitchDialog {
+.signupButton p:first-child:hover {
     color: darkgreen;
     text-decoration: underline;
 }
 
-.linkSwitchDialog:hover {
-    color: green;
-    cursor: pointer;
+.becomeAnAU {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 1rem 0rem;
+    font-size: large;
+
+}
+
+.pSwitchToLogin {
+    color: darkgreen;
     text-decoration: underline;
+}
+
+.pSwitchToLogin:hover {
+    color: green;
+    text-decoration: underline;
+    cursor: pointer;
 }

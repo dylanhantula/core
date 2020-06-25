@@ -3,11 +3,11 @@ import * as firebase from 'firebase/app'
 import { withRouter } from 'react-router-dom';
 import {createUser} from '../../api/api'
 
-const Join = ({history}) => {
+const Join = (props) => {
 
   const [isLoaded, setIsLoaded] = useState(true);
   const [error, setErrors] = useState("");
-  const [athleteView, setAthleteView] = useState(false);
+  const [athleteView, setAthleteView] = useState(props.forAthlete);
   
   // General function for submitting both new coaches and new athletes to backend
   const submit = (vals) => {
