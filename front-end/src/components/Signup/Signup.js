@@ -11,7 +11,8 @@ const Signup = (props) => {
         props.close();
         e.preventDefault();
         props.history.push({
-        pathname: '/join/coach',
+        pathname: '/join',
+        state: {forAthlete: false}
         });
     };
 
@@ -19,7 +20,8 @@ const Signup = (props) => {
         props.close();
         e.preventDefault();
         props.history.push({
-        pathname: '/join/athlete',
+        pathname: '/join',
+        state: {forAthlete: true}
         });
     };
 

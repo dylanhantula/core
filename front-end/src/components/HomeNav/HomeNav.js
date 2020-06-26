@@ -7,7 +7,7 @@ import Join from '../Join/Join';
 import CoachList from '../CoachList/CoachList';
 import DedicatedCoaches from '../DedicatedCoaches/DedicatedCoaches';
 import AthletesAndParents from "../AthletesAndParents/AthletesAndParents";
-import logo from './Athletes-Untapped-Logo-Rectangle.png'
+import logo from './Athletes-Untapped-Logo-Rectangle.png';
 import './HomeNav.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -88,15 +88,11 @@ export default (props) => {
                     render={(props) => <Login {...props} />}
                 /> 
                 <Route
-                    path="/join/athlete"
+                    path="/join"
                     exact
-                    render={(props) => <Join forAthlete={true} />}
+                    render={(props) => <Join {...props} />}
                 /> 
-                <Route
-                    path="/join/coach"
-                    exact
-                    render={(props) => <Join forAthlete={false} />}
-                /> 
+                
 
                 <Route
                     path="/coaches"
