@@ -87,6 +87,10 @@ class Firebase:
 
         raise ValueError("No profile found for given ID")
 
+    def update_profile(self, id, fields):
+        doc_ref = self.db.collection('users').document(id)
+        doc_ref.set(fields, merge=True)
+
     def verify_token_header(self, headers):
         """Verifies a provided authorization header contains a valid JWT.
 

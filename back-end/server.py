@@ -70,6 +70,18 @@ def get_profile(id):
 
     return profile, 200
 
+@app.route("/api/v1/profile/<id>", methods = ['POST'])
+def update_profile(id):
+    fields = request.json
+    id = request.view_args['id']
+    try:
+        database.update_profile(id, fields)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    return {}, 200
+
 # Routes for serving React content
 @app.route("/")
 def index():

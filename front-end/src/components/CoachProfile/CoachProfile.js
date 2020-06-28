@@ -1,9 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../App/App";
+import {updateProfile} from '../../api/api'
+
+const submit = (vals, id) => {
+    updateProfile(vals, id).catch(e => console.log(e));
+}
 
 const CoachProfile = () => {
-    
+
     const {user} = useContext(AuthContext);
+    const [elevPitch, setElevPitch] = useState("");
+    const vals = {
+        "elevatorPitch": elevPitch
+    };
+    
+    const submitPitch = (e) => {
+        e.preventDefault();
+        submit(vals, user.firebaseUser.uid);
+    }
 
     return (
         <div>
@@ -29,6 +43,14 @@ const CoachProfile = () => {
                 </li>
                 <li>
                     Zip Code: {user.profile.zipCode}
+                </li>
+                <li>
+                    Elevator Pitch: <form onSubmit={e => submitPitch(e)}>
+                        <input onChange={e => setElevPitch(e.target.value)}></input>
+                        <button type="submit">Submit Elevator Pitch</button>
+                    </form>
+                    <p>{user.profile.elevatorPitch}</p>
+
                 </li>
             </ul>
         </div>

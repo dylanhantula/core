@@ -55,6 +55,36 @@ export const getProfile = (token, id)=>{
         }); 
 }
 
+export const updateProfile = (vals, id)=>{
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            //"Authorization":'Bearer ' + token 
+        },
+        body: JSON.stringify(vals)
+    };
+    return fetch("/api/v1/profile/"+id, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
 export const getCoaches = (zipCode, radius, sport)=>{
 
     const requestOptions = {

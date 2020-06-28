@@ -176,8 +176,8 @@ const AthleteJoin = (props) => {
   const [privacy, setPrivacy] = useState(false);
   const [parentFirstName, setParentFirstName] = useState("");
   const [parentLastName, setParentLastName] = useState("");
-  const [parent, setParent] = useState(false);
-  const [athlete, setAthlete] = useState(true);
+  const [parent, setParent] = useState(true);
+  const [athlete, setAthlete] = useState(false);
 
 
 
