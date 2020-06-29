@@ -4,6 +4,7 @@ import SignOut from "../SignOut/SignOut.js";
 import CoachHome from '../CoachHome/CoachHome';
 import CoachProfile from '../CoachProfile/CoachProfile';
 import { AuthContext } from "../App/App";
+import './CoachNav.css';
 
 export default (props) => {
     const {user} = useContext(AuthContext);

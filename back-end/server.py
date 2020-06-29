@@ -75,12 +75,12 @@ def update_profile(id):
     fields = request.json
     id = request.view_args['id']
     try:
-        database.update_profile(id, fields)
+        profile = database.update_profile(id, fields)
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
 
-    return {}, 200
+    return profile, 200
 
 # Routes for serving React content
 @app.route("/")
