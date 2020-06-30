@@ -1,0 +1,67 @@
+.coachNavContainerDiv {
+    display: flex;
+    justify-content: space-between;
+    background-color: darkseagreen;
+    align-items: center;
+}
+
+.coachNavGreeting {
+    color: darkslategrey;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    
+}
+
+.coachNavListOfTabs {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.coachNavTab {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.coachNavTab:link {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.coachNavTab:visited {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.coachNavTab:hover {
+    border-bottom: 2px solid darkgreen;
+    color: darkgreen;
+}
+
+.coachNavTab:active {
+    border-bottom: 2px solid darkgreen;
+    color: darkgreen;
+}

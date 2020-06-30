@@ -1,0 +1,60 @@
+.coachProfileHeaderContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.coachProfileHeaderAvatar {
+    height: auto;
+    width: 15rem;
+    margin-right: 3rem;
+}
+
+.coachProfileHeaderDynamicInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.coachProfileHeaderDynamicInfo p:first-child {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: x-large;
+    color: #000;
+}
+
+.coachProfileHeaderDynamicInfo p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+    color: #000;
+    margin: 0.5rem 0rem;
+}
+
+.coachProfileHeaderDynamicInfo textarea {
+    width: 200%;
+    height: 100%;
+    resize: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.coachProfileHeaderDynamicInfo textarea:focus {
+    border: 3px solid darkgreen;
+}
+
+.coachProfileHeaderDynamicInfo p:last-child {
+    color: darkgreen;
+    font-size: small;
+    margin-top: 0px;
+}
+
+.coachProfileHeaderDynamicInfo p:last-child:hover {
+    color: darkgreen;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: small;
+}

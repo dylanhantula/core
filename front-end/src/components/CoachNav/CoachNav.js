@@ -11,20 +11,42 @@ export default (props) => {
 
     return (
         <Router>
-            <ul className="nav">
-                <li>
-                    Current User: {user.profile.firstName} {user.profile.lastName}
-                </li>
-                <li>
-                    <Link to="/">Home</Link>
-                </li>
-                <li>
-                    <Link to="/profile">Profile</Link>
-                </li>
-                <li>
-                    <Link to="/signout">Sign Out</Link>
-                </li>
-            </ul>
+            <div className="coachNavContainerDiv">
+                
+                    <p className="coachNavGreeting">Hi {user.profile.firstName}!</p>
+                 
+                
+                
+                
+                <ul className="coachNavListOfTabs">
+                    <li>
+                        <Link to="/" className="coachNavTab">Dashboard</Link>
+                    </li>
+                    <li>
+                        <Link to="/profile" className="coachNavTab">Profile</Link>
+                    </li>
+                    <li>
+                        <Link to="/inbox" className="coachNavTab">Inbox</Link>
+                    </li>
+                    <li>
+                        <Link to="/clients" className="coachNavTab">Clients</Link>
+                    </li>
+                    <li>
+                        <Link to="/payments" className="coachNavTab">Payments</Link>
+                    </li>
+                    <li>
+                        <Link to="/calender" className="coachNavTab">Calender</Link>
+                    </li>
+                    <li>
+                        <Link to="/account" className="coachNavTab">Account</Link>
+                    </li>
+                    <li>
+                        <Link to="/referrals" className="coachNavTab">Referrals</Link>
+                    </li>
+                    
+                </ul>
+                <Link to="/signout" className="coachNavTab">Sign Out</Link>
+            </div>
             <Switch>
       
                 <Route
