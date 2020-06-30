@@ -35,7 +35,17 @@ const CoachProfileBackground = (props) => {
                     <h1>Athletic Background</h1>
                     <FormControl component="fieldset">
                             <p className="lucidaFont">Highest Playing Level</p>
-                            <RadioGroup aria-label="playingLevel" name="playingLevel">
+                            <RadioGroup 
+                                aria-label="playingLevel" 
+                                name="playingLevel" 
+                                value={props.states["playingExp"]} 
+                                onChange={e => {
+                                    props.stateFunctions["playingExp"](e.target.value); 
+                                    props.setUploadVals({
+                                        ...props.uploadVals,
+                                        "playingExp": e.target.value
+                                    });
+                                }}>
                                 <FormControlLabel value="High School" control={<Radio color="primary"/>} label="High School" classes={{label: styleClasses.label}}/>
                                 <FormControlLabel value="College" control={<Radio color="primary"/>} label="College" classes={{label: styleClasses.label}}/>
                                 <FormControlLabel value="Professional" control={<Radio color="primary"/>} label="Professional" classes={{label: styleClasses.label}}/>
@@ -90,7 +100,17 @@ const CoachProfileBackground = (props) => {
                     <h1>Coaching Background</h1>
                     <FormControl component="fieldset">
                             <p className="lucidaFont">Is coaching your full-time job?</p>
-                            <RadioGroup aria-label="fullTime" name="fullTime">
+                            <RadioGroup 
+                                aria-label="fullTime" 
+                                name="fullTime" 
+                                value={props.states["fullTime"]} 
+                                onChange={e => {
+                                    props.stateFunctions["fullTime"](e.target.value); 
+                                    props.setUploadVals({
+                                        ...props.uploadVals,
+                                        "fullTime": e.target.value
+                                    });
+                                }}>                                
                                 <FormControlLabel value="Yes" control={<Radio color="primary"/>} label="Yes" classes={{label: styleClasses.label}}/>
                                 <FormControlLabel value="No" control={<Radio color="primary"/>} label="No" classes={{label: styleClasses.label}}/>
                             </RadioGroup>

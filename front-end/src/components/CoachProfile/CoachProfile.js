@@ -3,17 +3,22 @@ import { AuthContext } from "../App/App";
 import {updateProfile} from '../../api/api';
 import CoachProfileHeader from "../CoachProfileHeader/CoachProfileHeader";
 import CoachProfileBackground from "../CoachProfileBackground/CoachProfileBackground";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-
-
+function Alert(props) {
+    return <MuiAlert elevation={10} variant="filled" {...props} />;
+  }
+  
 const CoachProfile = () => {
+
     const submit = (vals, id) => {
         updateProfile(vals, id)
             .then(response => {
                 for (const field in response) {
                     setStateFunctions[field](response[field]);
                 }
-                console.log(response);
+                setOpenSnackBar(true);
             })
             .catch(e => console.log(e));
     }
@@ -27,6 +32,9 @@ const CoachProfile = () => {
     const [profileField4, setProfileField4] = useState(user.profile.profileField4);
     const [profileField5, setProfileField5] = useState(user.profile.profileField5);
     const [profileField6, setProfileField6] = useState(user.profile.profileField6);
+    const [openSnackbar, setOpenSnackBar] = useState(false);
+    const [fullTime, setFullTime] = useState(user.profile.fullTime);
+    const [playingExp, setPlayingExp] = useState(user.profile.playingExp);
 
  
     const setStateFunctions = {
@@ -36,7 +44,9 @@ const CoachProfile = () => {
         "profileField3": setProfileField3, 
         "profileField4": setProfileField4, 
         "profileField5": setProfileField5, 
-        "profileField6": setProfileField6 
+        "profileField6": setProfileField6,
+        "playingExp": setPlayingExp,
+        "fullTime": setFullTime
     };
 
     const profileBackgroundStates = {
@@ -45,7 +55,9 @@ const CoachProfile = () => {
         "profileField3": profileField3, 
         "profileField4": profileField4, 
         "profileField5": profileField5, 
-        "profileField6": profileField6 
+        "profileField6": profileField6,
+        "playingExp": playingExp,
+        "fullTime": fullTime 
     };
     
     
@@ -76,6 +88,12 @@ const CoachProfile = () => {
                 setUploadVals={setValues}
                 submit={submitChanges} 
             />
+
+            <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={e => setOpenSnackBar(false)}>
+                <Alert onClose={e => setOpenSnackBar(false)} severity="success">
+                    Saved Successfuly!
+                </Alert>
+            </Snackbar>
             
         </div>
     );
