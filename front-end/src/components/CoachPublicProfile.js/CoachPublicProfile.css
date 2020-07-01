@@ -1,0 +1,154 @@
+.coachProfilePublicHeaderContainer {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0rem 3rem;
+}
+
+.coachProfilePublicHeaderAvatar {
+    height: auto;
+    width: 15rem;
+    margin-right: 3rem;
+}
+
+.coachProfilePublicHeaderDynamicInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.coachProfilePublicHeaderDynamicInfo p:first-child {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: x-large;
+    color: #000;
+}
+
+.coachProfilePublicHeaderDynamicInfo p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+    color: #000;
+    margin: 0.5rem 0rem;
+}
+
+
+.coachProfilePublicHeaderEnd {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    margin-left: 0rem;
+}
+
+.coachProfilePublicHeaderEnd button {
+    margin: 0rem 2rem 0rem 2rem;
+}
+
+.messageCoachButton {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+
+}
+
+.messageCoachButton:hover {
+    background-color: #004d00;  
+}
+
+.bookSessionButton {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border: 1px solid  darkgreen;
+    color: darkgreen;
+    outline: none;
+}
+
+.bookSessionButton:hover {
+    background-color: lightgray;
+}
+
+.coachProfilePublicImageContainer p{
+    margin-top: 2rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.goBackToPrivateView {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.goBackToPrivateView p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: darkgreen;
+    font-size: medium;
+    text-align: right;
+    padding-right: 2rem;
+    padding-top: 2rem;
+    margin: 0px;
+}
+
+.goBackToPrivateView p:hover {
+    color: darkgreen;
+    font-size: medium;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.goBackToPrivateView {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+.coachProfilePublicBackground {
+    padding: 1rem 3rem;
+    border: 50px solid darkseagreen;
+}
+
+
+.coachProfilePublicBackgroundAthleticHeader {
+    text-align: center;
+}
+
+.coachProfilePublicBackgroundAthleticHeader p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: large;
+    padding: 2rem;
+    border-bottom: 1px solid gray;
+}
+
+.coachProfilePublicBackgroundAthleticContent {
+    margin: 0rem 0rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.coachProfilePublicBackgroundAthleticContent div {
+    display: flex;
+    justify-content: flex-start;
+    word-wrap: break-word;
+}
+
+
+.coachProfilePublicBackgroundAthleticContent div p:first-child {
+    width: 200px;
+    margin-right: 50px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    
+}
+
+.coachProfilePublicBackgroundAthleticContent div p:last-child {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;
+
+}
+
+.coachProfilePublicBackgroundAthleticContentButtons {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 3rem 20rem 2rem;
+}

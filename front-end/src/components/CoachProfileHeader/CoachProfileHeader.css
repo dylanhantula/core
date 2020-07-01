@@ -1,7 +1,7 @@
 .coachProfileHeaderContainer {
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin: 1rem 0rem 3rem;
 }
 
 .coachProfileHeaderAvatar {
@@ -57,4 +57,21 @@
     text-decoration: underline;
     cursor: pointer;
     font-size: small;
+}
+
+.viewPublic {
+    color: darkgreen;
+    font-size: medium;
+    text-align: right;
+    padding-right: 2rem;
+    padding-top: 2rem;
+    margin: 0px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.viewPublic:hover {
+    color: darkgreen;
+    font-size: medium;
+    text-decoration: underline;
+    cursor: pointer;
 }

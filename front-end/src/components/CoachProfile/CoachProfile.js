@@ -5,6 +5,7 @@ import CoachProfileHeader from "../CoachProfileHeader/CoachProfileHeader";
 import CoachProfileBackground from "../CoachProfileBackground/CoachProfileBackground";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import CoachPublicProfile from "../CoachPublicProfile.js/CoachPublicProfile";
 
 function Alert(props) {
     return <MuiAlert elevation={10} variant="filled" {...props} />;
@@ -35,6 +36,7 @@ const CoachProfile = () => {
     const [openSnackbar, setOpenSnackBar] = useState(false);
     const [fullTime, setFullTime] = useState(user.profile.fullTime);
     const [playingExp, setPlayingExp] = useState(user.profile.playingExp);
+    const [viewPublic, setViewPublic] = useState(false);
 
  
     const setStateFunctions = {
@@ -66,10 +68,25 @@ const CoachProfile = () => {
         submit(values, user.firebaseUser.uid);
     }
 
-    return (
-        <div>
-            <h1>Coach Profile</h1>
-            <CoachProfileHeader 
+    let profileToDisplay;
+    if (viewPublic) {
+        profileToDisplay = 
+        (<div>
+            <CoachPublicProfile
+                public={viewPublic}
+                setPublic={setViewPublic}
+                firstName={user.profile.firstName} 
+                lastName={user.profile.lastName} 
+                zipCode={user.profile.zipCode}
+                sport={user.profile.sport}
+                AUScore={user.profile.AUScore}
+                pitch={elevPitch}
+                background={profileBackgroundStates}/>
+        </div>);
+    } else {
+        profileToDisplay = 
+       (<div>
+           <CoachProfileHeader 
                 firstName={user.profile.firstName} 
                 lastName={user.profile.lastName} 
                 zipCode={user.profile.zipCode}
@@ -80,6 +97,8 @@ const CoachProfile = () => {
                 pitch={elevPitch}
                 setUploadVals={setValues}
                 submit={submitChanges} 
+                public={viewPublic}
+                setPublic={setViewPublic}
             />
             <CoachProfileBackground 
                 stateFunctions={setStateFunctions}
@@ -94,7 +113,12 @@ const CoachProfile = () => {
                     Saved Successfuly!
                 </Alert>
             </Snackbar>
-            
+        </div>);
+    }
+
+    return (
+        <div>
+        {profileToDisplay}
         </div>
     );
 };
