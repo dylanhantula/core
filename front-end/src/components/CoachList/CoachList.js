@@ -2,14 +2,25 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from 'react-router-dom';
 import * as qs from 'query-string';
 import {getCoaches} from '../../api/api'
+import './CoachList.css';
+import BottomNav from "../BottomNav/BottomNav";
+import CoachListPanel from "../CoachListPanel/CoachListPanel";
+import CoachPublicProfile from "../CoachPublicProfile.js/CoachPublicProfile";
 
 const CoachList = ( props) => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     const [error, setError] = useState("");
     const [coaches, setCoaches] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-
-    const [queryParams] = useState(qs.parse(props.location.search))
+    const [showCoachProfile, setShowCoachProfile] = useState(false);
+    const [coachToShow, setCoachToShow] = useState({});
+    const [zip, setZip] = useState("");
+    const [sport, setSport] = useState("");
+    const [queryParams, setQueryParams] = useState(qs.parse(props.location.search))
+    
     
 
     useEffect(() => {
@@ -43,27 +54,74 @@ const CoachList = ( props) => {
         return () => isSubscribed = false
     }, [queryParams]);
 
+    const searchHandler = e => {
+        e.preventDefault();
+        setQueryParams(qs.parse('?zip='+zip+'&sport='+sport+'&radius=5'));
+        
+    };
+
+
+    let screenToDisplay;
+    const showProfileHandler = (coach) => {
+        setShowCoachProfile(true);
+        setCoachToShow(coach);
+    }
+    
+    if (showCoachProfile) {
+        screenToDisplay = 
+            <div>
+                <CoachPublicProfile 
+                public={showCoachProfile}
+                setPublic={setShowCoachProfile}
+                firstName={coachToShow.firstName} 
+                lastName={coachToShow.lastName} 
+                zipCode={coachToShow.zipCode}
+                sport={coachToShow.sport}
+                AUScore={coachToShow.AUScore}
+                pitch={coachToShow.elevPitch}
+                background={{
+                    "profileField1": coachToShow.profileField1, 
+                    "profileField2": coachToShow.profileField2, 
+                    "profileField3": coachToShow.profileField3, 
+                    "profileField4": coachToShow.profileField4, 
+                    "profileField5": coachToShow.profileField5, 
+                    "profileField6": coachToShow.profileField6,
+                    "playingExp": coachToShow.playingExp,
+                    "fullTime": coachToShow.fullTime
+                }}/>
+                <BottomNav/>
+            </div>;
+    } else {
+        screenToDisplay = 
+            <div>
+                <div className="CoachListHeader">
+                    <p>Your Coaches for {queryParams['sport'].slice(0,1).toUpperCase()+queryParams['sport'].slice(1)}</p>
+                    <p>Zip Code: {queryParams['zip']}</p>
+                </div>
+                <div className="CoachListSearch">
+                    <input type="text" name="Sport" placeholder="Sport" onChange={e => setSport(e.target.value)}></input>
+                    <input type="text" name="Zip Code" placeholder="Zip Code" onChange={e => setZip(e.target.value)}></input>
+                    <button className="CoachListButtonSearch" onClick={e => searchHandler(e)}>Search</button>
+                </div>
+                <span>{error}</span>
+                <div className="greenBoxRankingList">
+                {coaches.map((item, i) => (
+                    <CoachListPanel key={i}
+                    coach={item}
+                    onClickViewProfile={showProfileHandler}
+                    />
+                ))}
+                </div>
+                <BottomNav/>
+            </div>;
+    }
+
     if (!isLoaded) {
         return(<div>Loading...</div>)
     } else {
         return (
             <div>
-              <h1>Coaches Near {queryParams['zip']} for {queryParams['sport']}</h1>
-              <span>{error}</span>
-                <div>
-                {coaches.map((item, i) => (
-                     <ul key={i}>
-                         <li>Name: {item.firstName + ' ' + item.lastName}</li>
-                         <li>City: {item.city}</li>
-                         <li>State: {item.state}</li>
-                         <li>Zip Code: {item.zipCode}</li>
-                         <li>Distance: {item.distance} miles</li>
-                         <li>Sport: {item.sport}</li>
-                         <li>Why are they interested in coaching?: {item.whyCoach}</li>
-                         <li>Years of Experience: {item.yearsExp}</li>
-                     </ul>
-                ))}
-                </div>
+              {screenToDisplay}
             </div>
           );
     }

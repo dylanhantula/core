@@ -1,0 +1,75 @@
+.CoachListPanelAvatar {
+    height: auto;
+    width: 10rem;
+}
+
+.CoachListPanelContainer {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: white;
+    margin: 2rem;
+    padding: 2rem
+}
+
+.CoachListPanelBold {
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.CoachListPanelItalic {
+    font-style: italic;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.CoachListPanelNormal {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.CoachListPanelInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.viewProfileButtonCoachListPanel {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    outline: none;
+    margin: 0rem 1rem 0rem 0rem;
+}
+
+.viewProfileButtonCoachListPanel:hover {
+    background-color: #004d00;  
+
+}
+
+.CoachListPanelMoney {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.CoachListPanelMoney div {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.CoachListPanelMoney div button:last-child {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border: 1px solid  darkgreen;
+    color: darkgreen;
+    outline: none;
+    border-radius: 5px;
+    margin: 0rem 0rem 0rem 1rem;
+
+
+}
+
+.CoachListPanelMoney div button:last-child:hover {
+    background-color: lightgray;
+}

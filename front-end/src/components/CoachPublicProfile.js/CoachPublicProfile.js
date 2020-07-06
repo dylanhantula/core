@@ -1,14 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './CoachPublicProfile.css';
 import '../CoachProfileHeader/CoachProfileHeader.css';
 import blank_avatar from '../CoachProfile/avatar.png';
 
 const CoachPublicProfile = (props) => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
     return (
         <div>
             <div>
                 <div className="goBackToPrivateView">
-                    <p onClick={e => props.setPublic(false)} className="viewPrivate">Go Back to Private View</p>
+                    <p onClick={e => props.setPublic(false)} className="viewPrivate">Go Back</p>
                 </div>
                 <div className="coachProfilePublicHeaderContainer">
                     <div className="coachProfilePublicImageContainer">

@@ -1,0 +1,14 @@
+.AUGlobalButton {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    outline: none;
+
+}
+
+.AUGlobalButton:hover {
+    background-color: #004d00;  
+}

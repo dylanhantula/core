@@ -1,0 +1,56 @@
+.greenBoxRankingList {
+    background-color: darkseagreen;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.CoachListHeader {
+    border: 2px solid lightgray;
+    padding: 0rem 3rem;
+    margin: 3rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.CoachListHeader p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+}
+
+.CoachListSearch {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0rem 3rem 0rem 3rem;
+    flex-wrap: wrap;
+}
+
+.CoachListSearch input {
+    margin-right: 3rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    outline: none;
+}
+.CoachListSearch input:focus {
+    border: 2px solid darkgreen;
+}
+
+.CoachListButtonSearch {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    outline: none;
+    height: 40%;
+    padding: .8rem;
+}
+
+.CoachListButtonSearch:hover {
+    background-color: #004d00;  
+
+}
