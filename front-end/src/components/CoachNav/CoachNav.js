@@ -1,13 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Switch, BrowserRouter as Router, Route, Redirect, Link } from "react-router-dom";
 import SignOut from "../SignOut/SignOut.js";
 import CoachHome from '../CoachHome/CoachHome';
 import CoachProfile from '../CoachProfile/CoachProfile';
 import { AuthContext } from "../App/App";
 import './CoachNav.css';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import CoachAccount from "../CoachAccount/CoachAccount.js";
 
 export default (props) => {
     const {user} = useContext(AuthContext);
+
+    const [openAccount, setOpenAccount] = useState(false);
+
 
     return (
         <Router>
@@ -38,7 +44,12 @@ export default (props) => {
                         <Link to="/calender" className="coachNavTab">Calender</Link>
                     </li>
                     <li>
-                        <Link to="/account" className="coachNavTab">Account</Link>
+                        <Link onClick={e => setOpenAccount(true)} className="coachNavTab">Account</Link>
+                        <Dialog onClose={e => setOpenAccount(false)} open={openAccount} fullWidth="true" maxWidth="md">
+                            <DialogContent dividers>
+                                <CoachAccount/>
+                            </DialogContent>
+                        </Dialog>
                     </li>
                     <li>
                         <Link to="/referrals" className="coachNavTab">Referrals</Link>

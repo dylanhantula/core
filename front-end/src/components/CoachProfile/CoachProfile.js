@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../App/App";
-import {updateProfile} from '../../api/api';
+import { updateProfile } from '../../api/api';
 import CoachProfileHeader from "../CoachProfileHeader/CoachProfileHeader";
 import CoachProfileBackground from "../CoachProfileBackground/CoachProfileBackground";
 import Snackbar from '@material-ui/core/Snackbar';

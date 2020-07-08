@@ -6,6 +6,12 @@ import './CoachList.css';
 import BottomNav from "../BottomNav/BottomNav";
 import CoachListPanel from "../CoachListPanel/CoachListPanel";
 import CoachPublicProfile from "../CoachPublicProfile.js/CoachPublicProfile";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={10} variant="filled" {...props} />;
+  }
 
 const CoachList = ( props) => {
     useEffect(() => {
@@ -19,7 +25,9 @@ const CoachList = ( props) => {
     const [coachToShow, setCoachToShow] = useState({});
     const [zip, setZip] = useState("");
     const [sport, setSport] = useState("");
-    const [queryParams, setQueryParams] = useState(qs.parse(props.location.search))
+    const [queryParams, setQueryParams] = useState(qs.parse(props.location.search));
+    const [openSnackbar, setOpenSnackBar] = useState(false);
+
     
     
 
@@ -35,6 +43,7 @@ const CoachList = ( props) => {
 
                 if (res.coaches.length === 0) {
                     setError("No coaches found for the given parameters")
+                    setOpenSnackBar(true);
                 } else {
                     setCoaches(res.coaches)
                 }
@@ -46,6 +55,7 @@ const CoachList = ( props) => {
             if (isSubscribed) {
                 console.log(error)
                 setError(JSON.stringify(error))
+                
                 setIsLoaded(true);
             }
         isSubscribed = false
@@ -103,7 +113,11 @@ const CoachList = ( props) => {
                     <input type="text" name="Zip Code" placeholder="Zip Code" onChange={e => setZip(e.target.value)}></input>
                     <button className="CoachListButtonSearch" onClick={e => searchHandler(e)}>Search</button>
                 </div>
-                <span>{error}</span>
+                <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={e => setOpenSnackBar(false)}>
+                <Alert onClose={e => setOpenSnackBar(false)} severity="error">
+                    {error}
+                </Alert>
+                </Snackbar>
                 <div className="greenBoxRankingList">
                 {coaches.map((item, i) => (
                     <CoachListPanel key={i}
