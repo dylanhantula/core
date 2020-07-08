@@ -26,7 +26,7 @@ const CoachListPanel = (props) => {
             <p className="CoachListPanelNormal">Training Since {2020 - props.coach.yearsExp}</p>
             <div>
                 <button className="viewProfileButtonCoachListPanel">Book a Session</button>
-                <button>Message Coach</button>
+                <button onClick={e => props.onClickMessageCoach(props.coach)}>Message Coach</button>
             </div>
             
         </div>

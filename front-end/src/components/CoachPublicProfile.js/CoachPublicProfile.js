@@ -25,10 +25,10 @@ const CoachPublicProfile = (props) => {
                             <p>{props.AUScore}</p>
                         </div>
                         <p>{props.zipCode}</p>
-                        <p>Private {props.sport} Coach</p>
+                        <p>Private {props.sport.slice(0,1).toUpperCase()+props.sport.slice(1)} Coach</p>
                         <p style={{height: '7rem'}}>{props.pitch}</p>
                         <div className="coachProfilePublicHeaderEnd">
-                        <button className="messageCoachButton">Message Coach</button>
+                        <button className="messageCoachButton" onClick={e => {props.setPublic(false); props.setDisplayMessage(true);}}>Message Coach</button>
                         <button className="bookSessionButton">Book a Session</button>
                         </div>
                     </div>  

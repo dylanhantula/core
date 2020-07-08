@@ -1,0 +1,99 @@
+.AthleteMessageCoachContainer {
+    display: flex;
+    padding: 2rem;
+}
+
+.AthleteMessageCoachMessageContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-right: 5rem;
+    border-right: 2px solid lightgray;
+}
+
+.AthleteMessageCoachAvatar {
+    width: 200px;
+}
+
+.AthleteMessageCoachMessageHeader {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem 0rem 1rem;
+    border-bottom: 2px solid lightgray;
+}
+
+.AthleteMessageCoachMessageHeader div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.AthleteMessageCoachMessageHeader div p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.AthleteMessageCoachMessageBodyTitle {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+    margin: 2rem 0rem;
+}
+
+.AthleteMessageCoachSessionContainer {
+    flex: 1;
+}
+
+.AthleteMessageCoachSessionContainer div {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.AthleteMessageCoachSessionContainer div p {
+    text-align: center;
+    color: darkgreen;
+    text-decoration: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.AthleteMessageCoachSessionContainer div p:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.AthleteMessageCoachMessageContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.AthleteMessageCoachMessageContent textarea {
+    width: 100%;
+    height: 6rem;
+    resize: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    outline: none;
+}
+
+.AthleteMessageCoachMessageContent textarea:focus {
+    border: 3px solid darkgreen;
+}
+
+.AthleteMessageCoachButton {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    outline: none;
+}
+
+.AthleteMessageCoachButton:hover {
+    background-color: #004d00;  
+
+}

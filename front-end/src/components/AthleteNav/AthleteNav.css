@@ -1,0 +1,67 @@
+.athleteNavContainerDiv {
+    display: flex;
+    justify-content: space-between;
+    background-color: darkseagreen;
+    align-items: center;
+}
+
+.athleteNavGreeting {
+    color: darkslategrey;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    
+}
+
+.athleteNavListOfTabs {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.athleteNavTab {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.athleteNavTab:link {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.athleteNavTab:visited {
+    color: darkslategrey;
+    text-align: center;
+    padding: 0.5rem 0rem;
+    margin: 0rem 1rem;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 0rem;
+}
+
+.athleteNavTab:hover {
+    border-bottom: 2px solid darkgreen;
+    color: darkgreen;
+}
+
+.athleteNavTab:active {
+    border-bottom: 2px solid darkgreen;
+    color: darkgreen;
+}

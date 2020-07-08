@@ -57,6 +57,18 @@ def create_user():
     # No body needs to be returned
     return {}, 200
 
+@app.route("/api/v1/message", methods = ['POST'])
+def create_message():
+    message = request.json
+    try:
+        database.create_message(message)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    # No body needs to be returned
+    return {}, 200
+
 @app.route("/api/v1/profile/<id>", methods = ['GET'])
 def get_profile(id):
     

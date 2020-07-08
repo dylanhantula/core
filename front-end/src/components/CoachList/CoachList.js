@@ -8,6 +8,7 @@ import CoachListPanel from "../CoachListPanel/CoachListPanel";
 import CoachPublicProfile from "../CoachPublicProfile.js/CoachPublicProfile";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import AthleteMessageCoach from "../AthleteMessageCoach/AthleteMessageCoach";
 
 function Alert(props) {
     return <MuiAlert elevation={10} variant="filled" {...props} />;
@@ -27,6 +28,7 @@ const CoachList = ( props) => {
     const [sport, setSport] = useState("");
     const [queryParams, setQueryParams] = useState(qs.parse(props.location.search));
     const [openSnackbar, setOpenSnackBar] = useState(false);
+    const [showMessageCoach, setShowMessageCoach] = useState(false);
 
     
     
@@ -45,7 +47,8 @@ const CoachList = ( props) => {
                     setError("No coaches found for the given parameters")
                     setOpenSnackBar(true);
                 } else {
-                    setCoaches(res.coaches)
+                    setCoaches(res.coaches);
+                    console.log(res);
                 }
                 
                 setIsLoaded(true);
@@ -71,36 +74,56 @@ const CoachList = ( props) => {
     };
 
 
-    let screenToDisplay;
+    
     const showProfileHandler = (coach) => {
         setShowCoachProfile(true);
+        setShowMessageCoach(false);
         setCoachToShow(coach);
     }
-    
+    const showMessageCoachHandler = (coach) => {
+        setShowMessageCoach(true);
+        setShowCoachProfile(false);
+        setCoachToShow(coach);
+    }
+
+    let screenToDisplay;
     if (showCoachProfile) {
         screenToDisplay = 
             <div>
                 <CoachPublicProfile 
-                public={showCoachProfile}
-                setPublic={setShowCoachProfile}
-                firstName={coachToShow.firstName} 
-                lastName={coachToShow.lastName} 
-                zipCode={coachToShow.zipCode}
-                sport={coachToShow.sport}
-                AUScore={coachToShow.AUScore}
-                pitch={coachToShow.elevPitch}
-                background={{
-                    "profileField1": coachToShow.profileField1, 
-                    "profileField2": coachToShow.profileField2, 
-                    "profileField3": coachToShow.profileField3, 
-                    "profileField4": coachToShow.profileField4, 
-                    "profileField5": coachToShow.profileField5, 
-                    "profileField6": coachToShow.profileField6,
-                    "playingExp": coachToShow.playingExp,
-                    "fullTime": coachToShow.fullTime
-                }}/>
+                    public={showCoachProfile}
+                    setPublic={setShowCoachProfile}
+                    displayMessage={showMessageCoach}
+                    setDisplayMessage={setShowMessageCoach}
+                    firstName={coachToShow.firstName} 
+                    lastName={coachToShow.lastName} 
+                    zipCode={coachToShow.zipCode}
+                    sport={coachToShow.sport}
+                    AUScore={coachToShow.AUScore}
+                    pitch={coachToShow.elevPitch}
+                    background={{
+                        "profileField1": coachToShow.profileField1, 
+                        "profileField2": coachToShow.profileField2, 
+                        "profileField3": coachToShow.profileField3, 
+                        "profileField4": coachToShow.profileField4, 
+                        "profileField5": coachToShow.profileField5, 
+                        "profileField6": coachToShow.profileField6,
+                        "playingExp": coachToShow.playingExp,
+                        "fullTime": coachToShow.fullTime
+                    }}
+                />
                 <BottomNav/>
             </div>;
+    } else if (showMessageCoach) {
+        screenToDisplay = <div>
+            <AthleteMessageCoach
+                coach={coachToShow}
+                displayMessage={showMessageCoach}
+                setDisplayMessage={setShowMessageCoach}
+                showProfile={showCoachProfile}
+                setShowProfile={setShowCoachProfile}
+            />
+        </div>;
     } else {
         screenToDisplay = 
             <div>
@@ -123,6 +146,7 @@ const CoachList = ( props) => {
                     <CoachListPanel key={i}
                     coach={item}
                     onClickViewProfile={showProfileHandler}
+                    onClickMessageCoach={showMessageCoachHandler}
                     />
                 ))}
                 </div>

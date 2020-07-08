@@ -19,11 +19,7 @@ export default (props) => {
         <Router>
             <div className="coachNavContainerDiv">
                 
-                    <p className="coachNavGreeting">Hi {user.profile.firstName}!</p>
-                 
-                
-                
-                
+                <p className="coachNavGreeting">Hi {user.profile.firstName}!</p>
                 <ul className="coachNavListOfTabs">
                     <li>
                         <Link to="/" className="coachNavTab">Dashboard</Link>
@@ -54,7 +50,6 @@ export default (props) => {
                     <li>
                         <Link to="/referrals" className="coachNavTab">Referrals</Link>
                     </li>
-                    
                 </ul>
                 <Link to="/signout" className="coachNavTab">Sign Out</Link>
             </div>

@@ -17,12 +17,12 @@ const CoachProfileHeader = (props) => {
                         <p>{props.AUScore}</p>
                     </div>
                     <p>{props.zipCode}</p>
-                    <p>Private {props.sport} Coach</p>
+                    <p>Private {props.sport.slice(0,1).toUpperCase()+props.sport.slice(1)} Coach</p>
                     <textarea value={props.pitch} onChange={e => {props.stateFunctions["elevPitch"](e.target.value); props.setUploadVals({
                                 ...props.uploadVals,
                                 "elevPitch": e.target.value
                             });}}></textarea>
-                    <p onClick={e => props.submit(e)}>Save Elevator Pitch</p>
+                    <p  onClick={e => props.submit(e)}>Save Elevator Pitch</p>
                 </div>
             </div>
         </div>

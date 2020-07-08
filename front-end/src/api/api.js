@@ -26,6 +26,37 @@ export const createUser = (vals)=>{
         }); 
 }
 
+export const createMessage = (message) =>{
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message)
+    };
+
+    const url = `/api/v1/message?to=${message.to}&from=${message.from}`
+
+    return fetch(url, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the catch block to hit
+                return Promise.reject(error);
+            }
+            
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
 export const getProfile = (token, id)=>{
     
     const requestOptions = {

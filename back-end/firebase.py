@@ -32,6 +32,11 @@ class Firebase:
         
         self.db.collection('users').document(user_id).set(user)    
 
+    
+    def create_message(self, message):
+        new_message_id = self.db.collection('messages').document().id
+        self.db.collection('messages').document(new_message_id).set(message)
+
     #TODO: this is a slow operation, probably because of the chunking. could possibly
     # be made faster by chaining a new "where" clause for each chunk or for each zip code
     # so only one query needs to be executed
@@ -73,6 +78,7 @@ class Firebase:
                 coach['distance'] = zip_codes_dict[coach['zipCode']]['distance']
                 coach['city'] = zip_codes_dict[coach['zipCode']]['city']
                 coach['state'] = zip_codes_dict[coach['zipCode']]['state']
+                coach['firebaseID'] = document.id
                 coach_list.append(coach)
 
         # Sort list of coaches by distance

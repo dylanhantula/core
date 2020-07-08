@@ -83,7 +83,7 @@ const CoachAccount = (props) => {
                         value={sport} 
                         onChange={e => {
                             setSport(e.target.value); 
-                            setNewVals({...newVals, "sport": e.target.value});
+                            setNewVals({...newVals, "sport": e.target.value.toLowerCase()});
                             }}>
                     </input>
                 </div>
