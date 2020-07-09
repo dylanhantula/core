@@ -83,6 +83,28 @@ class Firebase:
 
         # Sort list of coaches by distance
         return sorted(coach_list, key=itemgetter('distance')) 
+
+    def get_messages(self, id):
+        messages_dict = {}
+        recieved_messages = self.db.collection('messages').where('to', '==', id)
+        sent_messages = self.db.collection('messages').where('from', '==', id)
+        for document in recieved_messages.stream():
+            msg = document.to_dict()
+            if msg['from'] not in messages_dict:
+                messages_dict[msg['from']] = []
+            messages_dict[msg['from']].append(msg)
+
+        for document in sent_messages.stream():
+            msg = document.to_dict()
+            if msg['to'] not in messages_dict:
+                messages_dict[msg['to']] = []
+            messages_dict[msg['to']].append(msg)
+
+        conversations_dict = {}
+        for conversation in messages_dict:
+            messages_dict[conversation] = sorted(messages_dict[conversation], key=lambda message: message['time'])
+            conversations_dict[conversation] = self.db.collection('users').document(conversation).get().to_dict()
+        return messages_dict, conversations_dict
     
     def get_profile(self, id):
         

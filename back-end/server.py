@@ -69,6 +69,18 @@ def create_message():
     # No body needs to be returned
     return {}, 200
 
+@app.route("/api/v1/allmessages/<id>", methods = ['GET'])
+def get_messages(id):
+    
+    id = request.view_args['id']
+    try:
+        messages, conversations = database.get_messages(id)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    return {'messages': messages, 'conversations': conversations}, 200
+
 @app.route("/api/v1/profile/<id>", methods = ['GET'])
 def get_profile(id):
     

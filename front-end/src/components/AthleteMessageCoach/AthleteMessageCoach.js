@@ -16,7 +16,7 @@ function Alert(props) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      backgroundColor: 'lightseagreen',
+      
     },
     heading: {
       fontSize: theme.typography.pxToRem(15),
@@ -42,7 +42,8 @@ const AthleteMessageCoach = (props) => {
         const messageToSend = {
             "to": props.coach.firebaseID,
             "from": user.firebaseUser.uid,
-            "content": messageContent
+            "content": messageContent,
+            "time": Date.now() // number of milliseconds since Jan 1 1970 UTC
         }
         createMessage(messageToSend)
             .then(response => {

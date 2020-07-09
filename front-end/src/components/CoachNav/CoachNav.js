@@ -8,6 +8,7 @@ import './CoachNav.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CoachAccount from "../CoachAccount/CoachAccount.js";
+import CoachInbox from "../CoachInbox/CoachInbox.js";
 
 export default (props) => {
     const {user} = useContext(AuthContext);
@@ -64,6 +65,11 @@ export default (props) => {
                     path="/profile"
                     exact
                     render={(props) => <CoachProfile {...props} />}
+                /> 
+                <Route
+                    path={[ "/inbox"]}
+                    exact
+                    render={(props) => <CoachInbox {...props} />}
                 /> 
                 <Route
                     path="/signout"
