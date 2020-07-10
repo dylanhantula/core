@@ -48,6 +48,7 @@ const AthleteMessageCoach = (props) => {
         createMessage(messageToSend)
             .then(response => {
                 setOpenSnackBar(true);
+                setMessageContent("");
             })
             .catch(e => console.log(e));
     }

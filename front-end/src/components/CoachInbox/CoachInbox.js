@@ -25,15 +25,14 @@ const CoachInbox = (props) => {
     const [messagesEnd, setMessagesEnd] = useState(null);
     
     useEffect(()=> {
-        if(messagesEnd!==null){
+        if (messagesEnd !== null) {
             messagesEnd.scrollIntoView({behavior: 'smooth'})
         }
-        
     }, [currentConv, messages, messagesEnd]);
 
     useEffect(() => {
         getAllMessages(user.firebaseUser.uid);
-    }, [user])
+    }, [user.firebaseUser.uid])
 
     const getAllMessages = (id) => {
         getMessages(id)
