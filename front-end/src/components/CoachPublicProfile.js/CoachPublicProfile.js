@@ -1,12 +1,14 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import './CoachPublicProfile.css';
 import '../CoachProfileHeader/CoachProfileHeader.css';
 import blank_avatar from '../CoachProfile/avatar.png';
 
 const CoachPublicProfile = (props) => {
+    
     useEffect(() => {
         window.scrollTo(0, 0)
       }, [])
+
     return (
         <div>
             <div>
@@ -28,8 +30,9 @@ const CoachPublicProfile = (props) => {
                         <p>Private {props.sport.slice(0,1).toUpperCase()+props.sport.slice(1)} Coach</p>
                         <p style={{height: '7rem'}}>{props.pitch}</p>
                         <div className="coachProfilePublicHeaderEnd">
-                        <button className="messageCoachButton" onClick={e => {props.setPublic(false); props.setDisplayMessage(true);}}>Message Coach</button>
+                        <button className="messageCoachButton" onClick={props.onClickMessage}>Message Coach</button>
                         <button className="bookSessionButton">Book a Session</button>
+                        
                         </div>
                     </div>  
                 </div>          
@@ -86,7 +89,7 @@ const CoachPublicProfile = (props) => {
                     </div>
                 </div>
                 <div className="coachProfilePublicBackgroundAthleticContentButtons">
-                        <button className="messageCoachButton">Message Coach</button>
+                        <button onClick={props.onClickMessage} className="messageCoachButton">Message Coach</button>
                         <button className="bookSessionButton">Book a Session</button>
                 </div>
             </div>

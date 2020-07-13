@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../App/App";
 import { withRouter } from 'react-router-dom';
 import * as qs from 'query-string';
 import {getCoaches} from '../../api/api'
@@ -9,6 +10,10 @@ import CoachPublicProfile from "../CoachPublicProfile.js/CoachPublicProfile";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import AthleteMessageCoach from "../AthleteMessageCoach/AthleteMessageCoach";
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import Signup from "../Signup/Signup.js";
+import Login from '../Login/Login';
 
 function Alert(props) {
     return <MuiAlert elevation={10} variant="filled" {...props} />;
@@ -18,7 +23,8 @@ const CoachList = ( props) => {
     useEffect(() => {
         window.scrollTo(0, 0)
       }, [])
-
+    
+    const {user} = useContext(AuthContext);
     const [error, setError] = useState("");
     const [coaches, setCoaches] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -29,7 +35,47 @@ const CoachList = ( props) => {
     const [queryParams, setQueryParams] = useState(qs.parse(props.location.search));
     const [openSnackbar, setOpenSnackBar] = useState(false);
     const [showMessageCoach, setShowMessageCoach] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
 
+    const openLoginHandler = () => {
+        setShowLogin(true);
+    }
+
+    const closeLoginHandler = () => {
+        setShowLogin(false);
+    }
+
+    const openSignupHandler = () => {
+        setShowSignup(true);
+    }
+
+    const closeSignupHandler = () => {
+        setShowSignup(false);
+    }
+
+    
+    let loginDialog;
+    if (showLogin) {
+        loginDialog = (<Dialog onClose={closeLoginHandler} open={showLogin} fullWidth="true" maxWidth="sm">
+                        <DialogContent dividers>
+                        <Login switch={() => {closeLoginHandler(); openSignupHandler();}}/>
+                        </DialogContent>
+                    </Dialog>);
+    } else {
+        loginDialog = null;
+    }
+
+    let signupDialog;
+    if (showSignup) {
+        signupDialog = (<Dialog onClose={closeSignupHandler} open={showSignup} fullWidth="true" maxWidth="sm">
+                        <DialogContent dividers>
+                        <Signup switch={() => {closeSignupHandler(); openLoginHandler();}} close={closeSignupHandler}/>
+                        </DialogContent>
+                    </Dialog>);
+    } else {
+        signupDialog = null;
+    }
     
     
 
@@ -73,16 +119,21 @@ const CoachList = ( props) => {
         
     };
 
+    const messageButtonHandler = () => {
+        if (user && user.profile && user.profile.profileType === 'athlete') {
+            setShowMessageCoach(true);
+            setShowCoachProfile(false);
+        } else if (user && user.profile && user.profile.profileType === 'coach'){ 
+            // Do nothing
+        } else {
+            setShowLogin(true);
+        }
+    }
 
     
     const showProfileHandler = (coach) => {
         setShowCoachProfile(true);
         setShowMessageCoach(false);
-        setCoachToShow(coach);
-    }
-    const showMessageCoachHandler = (coach) => {
-        setShowMessageCoach(true);
-        setShowCoachProfile(false);
         setCoachToShow(coach);
     }
 
@@ -91,6 +142,7 @@ const CoachList = ( props) => {
         screenToDisplay = 
             <div>
                 <CoachPublicProfile 
+                    onClickMessage={messageButtonHandler}
                     public={showCoachProfile}
                     setPublic={setShowCoachProfile}
                     displayMessage={showMessageCoach}
@@ -112,6 +164,8 @@ const CoachList = ( props) => {
                         "fullTime": coachToShow.fullTime
                     }}
                 />
+                {loginDialog}
+                {signupDialog}
                 <BottomNav/>
             </div>;
     } else if (showMessageCoach) {
@@ -128,7 +182,7 @@ const CoachList = ( props) => {
         screenToDisplay = 
             <div>
                 <div className="CoachListHeader">
-                    <p>Your Coaches for {queryParams['sport'].slice(0,1).toUpperCase()+queryParams['sport'].slice(1)}</p>
+                    {queryParams['sport'] ? <p>Your Coaches for {queryParams['sport'].slice(0,1).toUpperCase()+queryParams['sport'].slice(1)}</p>:null}
                     <p>Zip Code: {queryParams['zip']}</p>
                 </div>
                 <div className="CoachListSearch">
@@ -144,12 +198,19 @@ const CoachList = ( props) => {
                 <div className="greenBoxRankingList">
                 {coaches.map((item, i) => (
                     <CoachListPanel key={i}
-                    coach={item}
-                    onClickViewProfile={showProfileHandler}
-                    onClickMessageCoach={showMessageCoachHandler}
+                        coach={item}
+                        onClickViewProfile={showProfileHandler}
+                        onClickMessageCoach={() => {
+                            messageButtonHandler(); 
+                            if (user && user.profile && user.profile.profileType === 'athlete') {
+                                setCoachToShow(item);
+                            }
+                        }}
                     />
                 ))}
                 </div>
+                {loginDialog}
+                {signupDialog}
                 <BottomNav/>
             </div>;
     }

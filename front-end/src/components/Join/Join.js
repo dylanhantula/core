@@ -376,7 +376,6 @@ const AthleteJoin = (props) => {
         
           
           
-          <hr />
           <div className="joinButtonDiv"> 
           <button type="submit" className="joinButton">Start Training</button>
           </div>
@@ -637,7 +636,6 @@ const CoachJoin = (props) => {
          
           
           
-          <hr />
           <div className="joinButtonDiv"> 
           <button type="submit" className="joinButton">Start Coaching</button>
           </div>

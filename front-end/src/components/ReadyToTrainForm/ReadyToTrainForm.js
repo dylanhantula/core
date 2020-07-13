@@ -22,19 +22,31 @@ const SportZipCodeInput = withStyles({
     root: {
       '& label.Mui-focused': {
         color: 'green',
+        fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif',
+      },
+      '& label': {
+        fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif',
+
       },
       '& .MuiInput-underline:after': {
         borderBottomColor: 'green',
       },
       '& .MuiOutlinedInput-root': {
+        fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif',
         '& fieldset': {
-          borderColor: 'black',
+          borderColor: 'lightslategray',
+          borderRadius: '0px',
+          borderWidth: '1px'
         },
         '&:hover fieldset': {
           borderColor: 'green',
+          borderWidth: '2px'
+
         },
         '&.Mui-focused fieldset': {
           borderColor: 'green',
+          borderWidth: '2px'
+
         },
       },
     },

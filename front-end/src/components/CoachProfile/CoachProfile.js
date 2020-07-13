@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../App/App";
 import { updateProfile } from '../../api/api';
 import CoachProfileHeader from "../CoachProfileHeader/CoachProfileHeader";
@@ -12,6 +12,9 @@ function Alert(props) {
   }
   
 const CoachProfile = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     const submit = (vals, id) => {
         updateProfile(vals, id)

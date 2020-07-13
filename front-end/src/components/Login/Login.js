@@ -5,6 +5,12 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import './Login.css';
 import logo from './Athletes-Untapped-Logo-Rectangle.png';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={10} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +60,8 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrors] = useState("");
+  const [openSnackbar, setOpenSnackBar] = useState(false);
+
 
   const loginStyleClasses = useStyles();
 
@@ -74,6 +82,7 @@ const Login = (props) => {
     })
     .catch(e => {
       setErrors(e.message);
+      setOpenSnackBar(true);
     });
   };
 
@@ -109,7 +118,11 @@ const Login = (props) => {
           <p >Forgot Password? <Link className="linkSwitchDialog">Reset Here</Link></p>
           <p >Don't have an Account? <Link className="linkSwitchDialog" onClick={props.switch}>Sign Up</Link></p>
         </div>
-        <span>{error}</span>
+        <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={e => setOpenSnackBar(false)}>
+          <Alert onClose={e => setOpenSnackBar(false)} severity="error">
+              {error}
+          </Alert>
+        </Snackbar>
       </form>
   );
 };
