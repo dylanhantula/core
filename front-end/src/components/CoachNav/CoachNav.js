@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CoachAccount from "../CoachAccount/CoachAccount.js";
 import CoachInbox from "../CoachInbox/CoachInbox.js";
+import CoachCalendar from "../CoachCalendar/CoachCalendar.js";
 
 export default (props) => {
     const {user} = useContext(AuthContext);
@@ -38,7 +39,7 @@ export default (props) => {
                         <Link to="/payments" className="coachNavTab">Payments</Link>
                     </li>
                     <li>
-                        <Link to="/calender" className="coachNavTab">Calender</Link>
+                        <Link to="/calendar" className="coachNavTab">Calendar</Link>
                     </li>
                     <li>
                         <Link onClick={e => setOpenAccount(true)} className="coachNavTab">Account</Link>
@@ -70,6 +71,11 @@ export default (props) => {
                     path={[ "/inbox"]}
                     exact
                     render={(props) => <CoachInbox {...props} />}
+                /> 
+                <Route
+                    path={[ "/calendar"]}
+                    exact
+                    render={(props) => <CoachCalendar {...props} />}
                 /> 
                 <Route
                     path="/signout"
