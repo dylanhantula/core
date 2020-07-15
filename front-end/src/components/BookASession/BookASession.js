@@ -47,11 +47,15 @@ const BookASession = props => {
     }
 
     const submitEvent = (vals) => {
-        createEvent(vals)
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            createEvent(idToken, vals)
             .then(response => {
                 setOpenSnackBar(true);
             })
             .catch(e => console.log(e));
+        });
+        
     }
 
     return (

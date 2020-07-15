@@ -17,7 +17,9 @@ const CoachProfile = () => {
       }, [])
 
     const submit = (vals, id) => {
-        updateProfile(vals, id)
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            updateProfile(idToken, vals, id)
             .then(response => {
                 for (const field in response) {
                     setStateFunctions[field](response[field]);
@@ -25,6 +27,7 @@ const CoachProfile = () => {
                 setOpenSnackBar(true);
             })
             .catch(e => console.log(e));
+        });
     }
 
     const {user} = useContext(AuthContext);

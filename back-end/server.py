@@ -61,6 +61,7 @@ def create_user():
 def create_event():
     event = request.json
     try:
+        database.verify_token_header(request.headers)
         database.create_event(event)
     except Exception as e:
         print(e)
@@ -69,7 +70,19 @@ def create_event():
     # No body needs to be returned
     return {}, 200
 
-@app.route("/api/v1/message", methods = ['POST'])
+@app.route("/api/v1/events/<id>", methods = ['GET'])
+def get_events(id):
+    id = request.view_args['id']
+    try:
+        database.verify_token_header(request.headers)
+        events, events_by_user, clients = database.get_events(id)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    return {'events': events, 'eventsByUser': events_by_user, 'clients': clients}, 200
+
+@app.route("/api/v1/create/message", methods = ['POST'])
 def create_message():
     message = request.json
     try:
@@ -81,11 +94,12 @@ def create_message():
     # No body needs to be returned
     return {}, 200
 
-@app.route("/api/v1/allmessages/<id>", methods = ['GET'])
+@app.route("/api/v1/messages/<id>", methods = ['GET'])
 def get_messages(id):
     
     id = request.view_args['id']
     try:
+        database.verify_token_header(request.headers)
         messages, conversations = database.get_messages(id)
     except Exception as e:
         print(e)
@@ -106,11 +120,12 @@ def get_profile(id):
 
     return profile, 200
 
-@app.route("/api/v1/profile/<id>", methods = ['POST'])
+@app.route("/api/v1/profile/<id>", methods = ['PUT'])
 def update_profile(id):
     fields = request.json
     id = request.view_args['id']
     try:
+        database.verify_token_header(request.headers)
         profile = database.update_profile(id, fields)
     except Exception as e:
         print(e)

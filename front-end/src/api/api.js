@@ -26,17 +26,16 @@ export const createUser = (vals)=>{
         }); 
 }
 
-export const createEvent = (event) =>{
+export const createEvent = (token, event) =>{
     
     const requestOptions = {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
         },
         body: JSON.stringify(event)
     };
-
-
     return fetch("/api/v1/create/event", requestOptions)
         .then(async response => {
             const data = await response.json();
@@ -56,6 +55,35 @@ export const createEvent = (event) =>{
         }); 
 }
 
+export const getEvents = (token, id) =>{
+    
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+    };
+    return fetch("/api/v1/events/"+id, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
 export const createMessage = (message) =>{
     
     const requestOptions = {
@@ -66,9 +94,7 @@ export const createMessage = (message) =>{
         body: JSON.stringify(message)
     };
 
-    const url = `/api/v1/message?to=${message.to}&from=${message.from}`
-
-    return fetch(url, requestOptions)
+    return fetch("/api/v1/create/message", requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -87,15 +113,16 @@ export const createMessage = (message) =>{
         }); 
 }
 
-export const getMessages = (id) =>{
+export const getMessages = (token, id) =>{
     
     const requestOptions = {
         method: 'GET',
         headers: { 
             'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
         },
     };
-    return fetch("/api/v1/allmessages/"+id, requestOptions)
+    return fetch("/api/v1/messages/"+id, requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -144,13 +171,13 @@ export const getProfile = (token, id)=>{
         }); 
 }
 
-export const updateProfile = (vals, id)=>{
+export const updateProfile = (token, vals, id)=>{
     
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: { 
             'Content-Type': 'application/json',
-            //"Authorization":'Bearer ' + token 
+            "Authorization":'Bearer ' + token 
         },
         body: JSON.stringify(vals)
     };

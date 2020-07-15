@@ -109,6 +109,20 @@ class Firebase:
             messages_dict[conversation] = sorted(messages_dict[conversation], key=lambda message: message['time'])
             conversations_dict[conversation] = self.db.collection('users').document(conversation).get().to_dict()
         return messages_dict, conversations_dict
+
+    def get_events(self, id):
+        events_by_user = {}
+        events = []
+        clients = {}
+        all_events = self.db.collection('events').where('coach', '==', id)
+        for document in all_events.stream():
+            event = document.to_dict()
+            if event['athlete'] not in events_by_user:
+                events_by_user[event['athlete']] = []
+                clients[event['athlete']] = self.db.collection('users').document(event['athlete']).get().to_dict()
+            events_by_user[event['athlete']].append(event)
+            events.append(event)
+        return events, events_by_user, clients
     
     def get_profile(self, id):
         

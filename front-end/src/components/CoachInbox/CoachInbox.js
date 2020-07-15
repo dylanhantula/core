@@ -31,16 +31,27 @@ const CoachInbox = (props) => {
     }, [currentConv, messages, messagesEnd]);
 
     useEffect(() => {
-        getAllMessages(user.firebaseUser.uid);
-    }, [user.firebaseUser.uid])
-
-    const getAllMessages = (id) => {
-        getMessages(id)
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            getMessages(idToken, user.firebaseUser.uid)
             .then(response => {
                 setMessages(response.messages);
                 setConversations(response.conversations);
             })
             .catch(error => console.log(error));
+        });
+    }, [user.firebaseUser])
+
+    const getAllMessages = (id) => {
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            getMessages(idToken, id)
+            .then(response => {
+                setMessages(response.messages);
+                setConversations(response.conversations);
+            })
+            .catch(error => console.log(error));
+        });
     }
 
     const sendMessage = (e, message) => {
