@@ -7,6 +7,7 @@ import { AuthContext } from "../App/App";
 import './AthleteNav.css';
 import AthleteCoaches from "../AthleteCoaches/AthleteCoaches.js";
 import CoachList from '../CoachList/CoachList';
+import BookASession from "../BookASession/BookASession.js";
 
 export default (props) => {
     const {user} = useContext(AuthContext);
@@ -58,6 +59,11 @@ export default (props) => {
                     path="/athletecoaches"
                     exact
                     render={(props) => <AthleteCoaches {...props}/>}
+                /> 
+                <Route
+                    path="/calender"
+                    exact
+                    render={(props) => <BookASession {...props}/>}
                 /> 
                 <Route 
                     path="/coaches"

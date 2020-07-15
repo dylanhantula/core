@@ -36,6 +36,10 @@ class Firebase:
     def create_message(self, message):
         new_message_id = self.db.collection('messages').document().id
         self.db.collection('messages').document(new_message_id).set(message)
+    
+    def create_event(self, event):
+        new_event_id = self.db.collection('events').document().id
+        self.db.collection('events').document(new_event_id).set(event)
 
     #TODO: this is a slow operation, probably because of the chunking. could possibly
     # be made faster by chaining a new "where" clause for each chunk or for each zip code

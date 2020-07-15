@@ -14,6 +14,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Signup from "../Signup/Signup.js";
 import Login from '../Login/Login';
+import BookASession from "../BookASession/BookASession";
 
 function Alert(props) {
     return <MuiAlert elevation={10} variant="filled" {...props} />;
@@ -37,6 +38,7 @@ const CoachList = ( props) => {
     const [showMessageCoach, setShowMessageCoach] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
+    const [showBookSession, setShowBookSession] = useState(false);
 
     const openLoginHandler = () => {
         setShowLogin(true);
@@ -122,6 +124,19 @@ const CoachList = ( props) => {
     const messageButtonHandler = () => {
         if (user && user.profile && user.profile.profileType === 'athlete') {
             setShowMessageCoach(true);
+            setShowBookSession(false);
+            setShowCoachProfile(false);
+        } else if (user && user.profile && user.profile.profileType === 'coach'){ 
+            // Do nothing
+        } else {
+            setShowLogin(true);
+        }
+    }
+
+    const bookSessionHandler = () => {
+        if (user && user.profile && user.profile.profileType === 'athlete') {
+            setShowBookSession(true);
+            setShowMessageCoach(false);
             setShowCoachProfile(false);
         } else if (user && user.profile && user.profile.profileType === 'coach'){ 
             // Do nothing
@@ -134,6 +149,7 @@ const CoachList = ( props) => {
     const showProfileHandler = (coach) => {
         setShowCoachProfile(true);
         setShowMessageCoach(false);
+        setShowBookSession(false);
         setCoachToShow(coach);
     }
 
@@ -143,10 +159,10 @@ const CoachList = ( props) => {
             <div>
                 <CoachPublicProfile 
                     onClickMessage={messageButtonHandler}
+                    onClickBookSession={bookSessionHandler}
                     public={showCoachProfile}
                     setPublic={setShowCoachProfile}
-                    displayMessage={showMessageCoach}
-                    setDisplayMessage={setShowMessageCoach}
+                    
                     firstName={coachToShow.firstName} 
                     lastName={coachToShow.lastName} 
                     zipCode={coachToShow.zipCode}
@@ -178,6 +194,16 @@ const CoachList = ( props) => {
                 setShowProfile={setShowCoachProfile}
             />
         </div>;
+    } else if (showBookSession) {
+        screenToDisplay = <div>
+            <BookASession 
+            coach={coachToShow}
+            showBookSession={showBookSession}
+            setShowBookSession={setShowBookSession}
+            showProfile={showCoachProfile}
+            setShowProfile={setShowCoachProfile}
+            />
+        </div>
     } else {
         screenToDisplay = 
             <div>
@@ -202,6 +228,12 @@ const CoachList = ( props) => {
                         onClickViewProfile={showProfileHandler}
                         onClickMessageCoach={() => {
                             messageButtonHandler(); 
+                            if (user && user.profile && user.profile.profileType === 'athlete') {
+                                setCoachToShow(item);
+                            }
+                        }}
+                        onClickBookSession={() => {
+                            bookSessionHandler(); 
                             if (user && user.profile && user.profile.profileType === 'athlete') {
                                 setCoachToShow(item);
                             }

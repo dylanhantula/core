@@ -31,7 +31,7 @@ const CoachPublicProfile = (props) => {
                         <p style={{height: '7rem'}}>{props.pitch}</p>
                         <div className="coachProfilePublicHeaderEnd">
                         <button className="messageCoachButton" onClick={props.onClickMessage}>Message Coach</button>
-                        <button className="bookSessionButton">Book a Session</button>
+                        <button className="bookSessionButton" onClick={props.onClickBookSession}>Book a Session</button>
                         
                         </div>
                     </div>  
@@ -90,7 +90,7 @@ const CoachPublicProfile = (props) => {
                 </div>
                 <div className="coachProfilePublicBackgroundAthleticContentButtons">
                         <button onClick={props.onClickMessage} className="messageCoachButton">Message Coach</button>
-                        <button className="bookSessionButton">Book a Session</button>
+                        <button className="bookSessionButton" onClick={props.onClickBookSession}>Book a Session</button>
                 </div>
             </div>
         </div>
