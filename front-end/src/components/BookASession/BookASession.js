@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from "../App/App";
-import { createEvent } from '../../api/api';
+import { createPendingEvent } from '../../api/api';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker} from '@material-ui/pickers';
@@ -41,7 +41,8 @@ const BookASession = props => {
             'startTime': startTime,
             'endTime': endTime,
             'athlete': user.firebaseUser.uid,
-            'coach': props.coach.firebaseID
+            'coach': props.coach.firebaseID,
+            'status': "pending"
         };
         submitEvent(eventToSubmit);
     }
@@ -49,7 +50,7 @@ const BookASession = props => {
     const submitEvent = (vals) => {
         user.firebaseUser.getIdToken()
         .then(function(idToken) {
-            createEvent(idToken, vals)
+            createPendingEvent(idToken, vals)
             .then(response => {
                 setOpenSnackBar(true);
             })

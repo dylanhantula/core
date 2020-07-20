@@ -26,7 +26,7 @@ export const createUser = (vals)=>{
         }); 
 }
 
-export const createEvent = (token, event) =>{
+export const createPendingEvent = (token, event) =>{
     
     const requestOptions = {
         method: 'POST',
@@ -36,7 +36,7 @@ export const createEvent = (token, event) =>{
         },
         body: JSON.stringify(event)
     };
-    return fetch("/api/v1/create/event", requestOptions)
+    return fetch("/api/v1/create/event/pending", requestOptions)
         .then(async response => {
             const data = await response.json();
 

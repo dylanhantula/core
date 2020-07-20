@@ -57,12 +57,12 @@ def create_user():
     # No body needs to be returned
     return {}, 200
 
-@app.route("/api/v1/create/event", methods = ['POST'])
-def create_event():
+@app.route("/api/v1/create/event/pending", methods = ['POST'])
+def create_pending_event():
     event = request.json
     try:
         database.verify_token_header(request.headers)
-        database.create_event(event)
+        database.create_pending_event(event)
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
@@ -75,12 +75,18 @@ def get_events(id):
     id = request.view_args['id']
     try:
         database.verify_token_header(request.headers)
-        events, events_by_user, clients = database.get_events(id)
+        events, events_by_user, clients = database.get_events(id, 'events')
+        pending_events, pending_events_by_user, pending_clients = database.get_events(id, 'pending_events')
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
 
-    return {'events': events, 'eventsByUser': events_by_user, 'clients': clients}, 200
+    return {'events': events, 
+            'eventsByUser': events_by_user, 
+            'clients': clients, 
+            'pendingEvents': pending_events, 
+            'pendingEventsByUser': pending_events_by_user, 
+            'pendingClients': pending_clients }, 200
 
 @app.route("/api/v1/create/message", methods = ['POST'])
 def create_message():

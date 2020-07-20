@@ -4,6 +4,7 @@ import { getEvents } from '../../api/api';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
+import CoachCalenderDialog from '../CoachCalenderEvent/CoachCalenderEvent';
 
 
 const localizer = momentLocalizer(moment);
@@ -12,15 +13,18 @@ const CoachCalendar = props => {
   const {user} = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [clients, setClients] = useState({});
+  const [pendingClients, setPendingClients] = useState({});
+  const [showEventDialog, setShowEventDialog] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState({});
 
   useEffect(() => {
     user.firebaseUser.getIdToken()
     .then(function(idToken) {
       getEvents(idToken, user.firebaseUser.uid)
       .then(response => {
-        console.log(response);
-        setEvents(response['events']);
+        setEvents(response['events'].concat(response['pendingEvents']));
         setClients(response['clients']);
+        setPendingClients(response['pending_clients']);
       })
       .catch(e => console.log(e));
     });
@@ -28,22 +32,33 @@ const CoachCalendar = props => {
 
   return (
     <div>
+
+      {showEventDialog ? <CoachCalenderDialog 
+        open={showEventDialog}
+        setOpen={setShowEventDialog}
+        selectedEvent={selectedEvent}
+        name={clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']} />:null}
+
       <div style={{ height: '500pt'}}>
         <Calendar
-          popup
           events={events}
-          
           titleAccessor={event => {
             if (clients[event['athlete']]) {
               return ("1 hr session w/ " + clients[event['athlete']]['firstName'] + ' ' + clients[event['athlete']]['lastName']);
+            } else if (pendingClients[event['athlete']]) {
+              return ("1 hr session w/ " + pendingClients[event['athlete']]['firstName'] + ' ' + pendingClients[event['athlete']]['lastName']);
             } else {
-              return ("1 hr session")
+              return ("1 hr session");
             }
           }}
           startAccessor={event => new Date(event['startTime'])}
           endAccessor={event => new Date(event['endTime'])}
           defaultDate={moment().toDate()}
           localizer={localizer}
+          onSelectEvent={(event) => {
+            setShowEventDialog(true);
+            setSelectedEvent(event);
+          }}
           eventPropGetter={
             (event, start, end, isSelected) => {
               let newStyle = {
@@ -55,8 +70,11 @@ const CoachCalendar = props => {
                 outline: 'none',
               
               };
-              if (isSelected) {
-                newStyle.backgroundColor = "green"
+              
+              if (event['status'] && event['status'] === "pending") {
+                newStyle.backgroundColor = 'lightyellow';
+                newStyle.border = '1px solid orange'
+                newStyle.color = 'black'
               }
               return {
                 className: "",

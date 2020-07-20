@@ -37,9 +37,9 @@ class Firebase:
         new_message_id = self.db.collection('messages').document().id
         self.db.collection('messages').document(new_message_id).set(message)
     
-    def create_event(self, event):
-        new_event_id = self.db.collection('events').document().id
-        self.db.collection('events').document(new_event_id).set(event)
+    def create_pending_event(self, event):
+        new_event_id = self.db.collection('pending_events').document().id
+        self.db.collection('pending_events').document(new_event_id).set(event)
 
     #TODO: this is a slow operation, probably because of the chunking. could possibly
     # be made faster by chaining a new "where" clause for each chunk or for each zip code
@@ -110,13 +110,14 @@ class Firebase:
             conversations_dict[conversation] = self.db.collection('users').document(conversation).get().to_dict()
         return messages_dict, conversations_dict
 
-    def get_events(self, id):
+    def get_events(self, id, collection_name):
         events_by_user = {}
         events = []
         clients = {}
-        all_events = self.db.collection('events').where('coach', '==', id)
+        all_events = self.db.collection(collection_name).where('coach', '==', id)
         for document in all_events.stream():
             event = document.to_dict()
+            event['eventDocID'] = document.id
             if event['athlete'] not in events_by_user:
                 events_by_user[event['athlete']] = []
                 clients[event['athlete']] = self.db.collection('users').document(event['athlete']).get().to_dict()
