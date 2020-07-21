@@ -30,6 +30,8 @@ const BookASession = props => {
     const [openSnackbar, setOpenSnackBar] = useState(false);
 
     const handleDateChange = (date) => {
+        date.setSeconds(0);
+        date.setMilliseconds(0);
         setSelectedDate(date);
     };
 

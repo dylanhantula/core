@@ -1,5 +1,5 @@
-import React from 'react';
-import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -9,8 +9,33 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
-import { green, red } from '@material-ui/core/colors';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker, TimePicker} from '@material-ui/pickers';
 
+
+const buttonStyles = makeStyles({
+    red: {
+      color: 'red',
+      borderColor: 'red',
+      margin: '0rem 0.2rem'
+    },
+    blue: {
+        color: '#0080ff',
+        borderColor: '#0080ff',
+        margin: '0rem 0.2rem'
+    },
+    yellow: {
+        color: '#ffcc00',
+        borderColor: '#ffcc00',
+        margin: '0rem 0.2rem'
+    },
+    green: {
+        color: 'green',
+        borderColor: 'green',
+        margin: '0rem 0.2rem'
+    }
+  });
 
 const styles = (theme) => ({
   root: {
@@ -53,18 +78,19 @@ const DialogActions = withStyles((theme) => ({
     },
 }))(MuiDialogActions);
 
-const buttonTheme = createMuiTheme({
-    palette: {
-      primary: {
-          main: green[700]
-      },
-      secondary: red
-    },
-});
+
+
 
 
 const CoachCalenderDialog = props => {
-    
+    const [editMode, setEditMode] = useState(false);
+    const [timeUpdates, setTimeUpdates] = useState({});
+    const [editStartTime, setEditStartTime] = useState(new Date(props.selectedEvent['startTime']));
+    const [editEndTime, setEditEndTime] = useState(new Date(props.selectedEvent['endTime']));
+
+    const buttonClasses = buttonStyles();
+
+
     const handleClose = () => {
         props.setOpen(false);
     };
@@ -77,6 +103,11 @@ const CoachCalenderDialog = props => {
         props.updateEvent(eventID, updates);
     }
 
+    const updateEventTimeHandler = (e, eventID) => {
+        e.preventDefault();
+        props.updateEvent(eventID, timeUpdates)
+    }
+
     return (
         <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={props.open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose} fullwidth>
@@ -84,39 +115,110 @@ const CoachCalenderDialog = props => {
         </DialogTitle>
         <DialogContent dividers>
             <Typography gutterBottom>
-                {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? <Alert severity="warning">This session is pending until you accept or deny it.</Alert>:null}
-                {!props.selectedEvent['status'] || props.selectedEvent['status'] === "accepted" ? <Alert severity="success">You have accepted this event. It can be canceled below.</Alert>:null}
-                {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ? <Alert severity="error">You have canceled this event. Another session must be scheduled.</Alert>:null}
+                {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? 
+                    <Alert severity="warning">This session is pending until you accept or deny it.</Alert>:null}
+                {!props.selectedEvent['status'] || props.selectedEvent['status'] === "accepted" ? 
+                    <Alert severity="success">You have accepted this event. It can be canceled below.</Alert>:null}
+                {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ?
+                    <Alert severity="error">You have canceled this event. Another session must be scheduled.</Alert>:null}
+            </Typography>
+            <Typography gutterBottom style={{fontSize: 'large'}}>
+                {!editMode ? new Date(props.selectedEvent['startTime']).toDateString():
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                        disableToolbar
+                        variant="inline"
+                        inputVariant="outlined"
+                        value={editStartTime}
+                        onChange={date => {
+                            let newDate = editStartTime;
+                            newDate.setMonth(date.getMonth());
+                            newDate.setDate(date.getDate());
+                            newDate.setFullYear(date.getFullYear());
+                            newDate.setSeconds(0);
+                            newDate.setMilliseconds(0);
+                            setEditStartTime(newDate);
+                            setEditEndTime(new Date(newDate.valueOf() + 3600000))
+                            setTimeUpdates({
+                                ...timeUpdates,
+                                'startTime': newDate.valueOf(),
+                                'endTime': newDate.valueOf() + 3600000
+                            })
+                        }}
+                    />
+                </MuiPickersUtilsProvider>}
             </Typography>
             <Typography gutterBottom>
-                {new Date(props.selectedEvent['startTime']).toDateString()}
+                Start: {!editMode ? new Date(props.selectedEvent['startTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <TimePicker
+                            variant="inline"
+                            value={editStartTime}
+                            minutesStep={5}
+                            onChange={date => {
+                                let newDate = editStartTime;
+                                newDate.setHours(date.getHours());
+                                newDate.setMinutes(date.getMinutes());
+                                newDate.setSeconds(0);
+                                newDate.setMilliseconds(0);
+                                setEditStartTime(newDate);
+                                setEditEndTime(new Date(newDate.valueOf() + 3600000))
+                                setTimeUpdates({
+                                    ...timeUpdates,
+                                    'startTime': newDate.valueOf(),
+                                    'endTime': newDate.valueOf() + 3600000
+                                })
+                            }}
+                        />
+                    </MuiPickersUtilsProvider>}
             </Typography>
             <Typography gutterBottom>
-                Start Time: {new Date(props.selectedEvent['startTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                End: {!editMode ? new Date(props.selectedEvent['endTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <TimePicker
+                            variant="inline"
+                            disabled
+                            value={editEndTime}
+                        />
+                    </MuiPickersUtilsProvider>}
             </Typography>
-            <Typography gutterBottom>
-                End Time: {new Date(props.selectedEvent['endTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-            </Typography>
+            
         </DialogContent>
+        {editMode ? 
+            <DialogActions>
+                <Button 
+                    variant="outlined" 
+                    className={buttonClasses.blue} 
+                    onClick={(e) => updateEventTimeHandler(e, props.selectedEvent['eventDocID'])}>
+                Save </Button>
+            </DialogActions>:
         <DialogActions>
+            
             {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? 
-                <ThemeProvider theme={buttonTheme}>
-                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "accepted")} color="primary">
-                        Accept
-                    </Button>
-                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "denied")} color="secondary">
-                        Deny
-                    </Button>
-                </ThemeProvider>
+                <div>
+                    
+                        <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "accepted")} className={buttonClasses.green}>
+                            Accept
+                        </Button>
+                        <Button variant="outlined" className={buttonClasses.yellow} onClick={e => setEditMode(true)}>
+                            Edit
+                        </Button>
+                        <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "denied")} className={buttonClasses.red}>
+                            Deny
+                        </Button>
+                </div>
                 :
-                <ThemeProvider theme={buttonTheme}>
+                <div>
+                    <Button variant="outlined" className={buttonClasses.yellow} onClick={e => setEditMode(true)}>
+                        Edit
+                    </Button>
                     {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ? null:
-                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "canceled")} color="secondary">
+                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "canceled")} className={buttonClasses.red}>
                     Cancel
                     </Button>}
                 
-            </ThemeProvider>}
-        </DialogActions>
+            </div>}
+        </DialogActions>}
       </Dialog>
     );
 }

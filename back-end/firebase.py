@@ -156,17 +156,30 @@ class Firebase:
     
     def update_event(self, eventID, updates):
         event_ref = self.db.collection('pending_events').document(eventID)
-        if updates['status'] == "canceled":
-            event_ref = self.db.collection('events').document(eventID)
-            mirror_event_ref = self.db.collection('pending_events').document(eventID)
-        event_ref.set(updates, merge=True)
-        if mirror_event_ref.get().exists:
-            mirror_event_ref.set(updates, merge=True)
+        
 
-        if updates['status'] == "accepted":
-            event = event_ref.get().to_dict()
-            event['eventDocID'] = eventID
-            self.create_event(event, updates['status'])
+        if "status" in updates:
+            event_ref.set(updates, merge=True)
+            if updates['status'] == "canceled":
+                actual_event_ref = self.db.collection('events').document(eventID)
+                actual_event_ref.set(updates, merge=True)
+                actual_event_ref.delete()
+            if updates['status'] == "accepted":
+                event = event_ref.get().to_dict()
+                event['eventDocID'] = eventID
+                self.create_event(event, updates['status'])
+        else:
+            pending_double_bookings = self.db.collection('pending_events').where('status', '==', 'pending').where('startTime', '>', updates['startTime'] - 3600000).where('startTime', '<', updates['endTime'])
+            actual_double_bookings = self.db.collection('events').where('startTime', '>', updates['startTime'] - 3600000).where('startTime', '<', updates['endTime'])
+            for doc in pending_double_bookings.stream():
+                raise ValueError("Time slot is already booked. Pick a new time.")
+            for doc in actual_double_bookings.stream():
+                raise ValueError("Time slot is already booked. Pick a new time.")
+            event_ref.set(updates, merge=True)
+            actual_event_ref = self.db.collection('events').document(eventID)
+            if actual_event_ref.get().exists:
+                actual_event_ref.set(updates, merge=True)
+
 
 
     def verify_token_header(self, headers):

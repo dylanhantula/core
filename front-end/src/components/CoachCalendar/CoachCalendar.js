@@ -5,7 +5,8 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
 import CoachCalenderDialog from '../CoachCalenderEvent/CoachCalenderEvent';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 const localizer = momentLocalizer(moment);
 
@@ -16,6 +17,8 @@ const CoachCalendar = props => {
   const [pendingClients, setPendingClients] = useState({});
   const [showEventDialog, setShowEventDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
+  const [openSnackbar, setOpenSnackBar] = useState(false);
+
 
   useEffect(() => {
     user.firebaseUser.getIdToken()
@@ -39,7 +42,9 @@ const CoachCalendar = props => {
       .then(response => {
         window.location.reload(false);
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        setOpenSnackBar(true);
+      });
     });
   }
 
@@ -55,7 +60,11 @@ const CoachCalendar = props => {
           name={clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']}
         />
       :null}
-
+      <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={e => setOpenSnackBar(false)}>
+        <Alert variant="filled" onClose={e => setOpenSnackBar(false)} severity="error">
+            Someone has already reserved/booked this time slot.
+        </Alert>
+      </Snackbar>
       <div style={{ height: '500pt'}}>
         <Calendar
           events={events}
