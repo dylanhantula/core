@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from "../App/App";
-import { createPendingEvent } from '../../api/api';
+import { createEvent } from '../../api/api';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker} from '@material-ui/pickers';
@@ -47,10 +47,10 @@ const BookASession = props => {
         submitEvent(eventToSubmit);
     }
 
-    const submitEvent = (vals) => {
+    const submitEvent = (event) => {
         user.firebaseUser.getIdToken()
         .then(function(idToken) {
-            createPendingEvent(idToken, vals)
+            createEvent(idToken, event, event['status'])
             .then(response => {
                 setOpenSnackBar(true);
             })

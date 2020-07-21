@@ -55,7 +55,9 @@ const DialogActions = withStyles((theme) => ({
 
 const buttonTheme = createMuiTheme({
     palette: {
-      primary: green,
+      primary: {
+          main: green[700]
+      },
       secondary: red
     },
 });
@@ -66,6 +68,15 @@ const CoachCalenderDialog = props => {
     const handleClose = () => {
         props.setOpen(false);
     };
+
+    const updateEventHandler = (e, eventID, newStatus) => {
+        e.preventDefault();
+        const updates = {
+            'status': newStatus
+        };
+        props.updateEvent(eventID, updates);
+    }
+
     return (
         <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={props.open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose} fullwidth>
@@ -74,7 +85,8 @@ const CoachCalenderDialog = props => {
         <DialogContent dividers>
             <Typography gutterBottom>
                 {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? <Alert severity="warning">This session is pending until you accept or deny it.</Alert>:null}
-                {!props.selectedEvent['status'] ? <Alert severity="success">You have accepted this event.</Alert>:null}
+                {!props.selectedEvent['status'] || props.selectedEvent['status'] === "accepted" ? <Alert severity="success">You have accepted this event. It can be canceled below.</Alert>:null}
+                {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ? <Alert severity="error">You have canceled this event. Another session must be scheduled.</Alert>:null}
             </Typography>
             <Typography gutterBottom>
                 {new Date(props.selectedEvent['startTime']).toDateString()}
@@ -89,18 +101,20 @@ const CoachCalenderDialog = props => {
         <DialogActions>
             {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? 
                 <ThemeProvider theme={buttonTheme}>
-                    <Button variant="outlined" onClick={handleClose} color="primary">
+                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "accepted")} color="primary">
                         Accept
                     </Button>
-                    <Button variant="outlined" onClick={handleClose} color="secondary">
+                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "denied")} color="secondary">
                         Deny
                     </Button>
                 </ThemeProvider>
                 :
                 <ThemeProvider theme={buttonTheme}>
-                <Button variant="outlined" onClick={handleClose} color="secondary">
-                    Delete
-                </Button>
+                    {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ? null:
+                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "canceled")} color="secondary">
+                    Cancel
+                    </Button>}
+                
             </ThemeProvider>}
         </DialogActions>
       </Dialog>

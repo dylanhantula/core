@@ -57,12 +57,27 @@ def create_user():
     # No body needs to be returned
     return {}, 200
 
-@app.route("/api/v1/create/event/pending", methods = ['POST'])
-def create_pending_event():
+@app.route("/api/v1/create/event/<status>", methods = ['POST'])
+def create_event(status):
+    status = request.view_args['status']
     event = request.json
     try:
         database.verify_token_header(request.headers)
-        database.create_pending_event(event)
+        database.create_event(event, status)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    # No body needs to be returned
+    return {}, 200
+
+@app.route("/api/v1/update/event/<eventID>", methods = ['PUT'])
+def update_event(eventID):
+    eventID = request.view_args['eventID']
+    updates = request.json
+    try:
+        database.verify_token_header(request.headers)
+        database.update_event(eventID, updates)
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400

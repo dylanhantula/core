@@ -26,7 +26,7 @@ export const createUser = (vals)=>{
         }); 
 }
 
-export const createPendingEvent = (token, event) =>{
+export const createEvent = (token, event, status) =>{
     
     const requestOptions = {
         method: 'POST',
@@ -36,7 +36,38 @@ export const createPendingEvent = (token, event) =>{
         },
         body: JSON.stringify(event)
     };
-    return fetch("/api/v1/create/event/pending", requestOptions)
+    return fetch("/api/v1/create/event/"+status, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the catch block to hit
+                return Promise.reject(error);
+            }
+            
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+
+
+export const updateEvent = (token, eventID, updates) =>{
+    
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+        body: JSON.stringify(updates)
+    };
+    return fetch("/api/v1/update/event/"+eventID, requestOptions)
         .then(async response => {
             const data = await response.json();
 

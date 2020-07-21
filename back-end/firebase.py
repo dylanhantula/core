@@ -37,9 +37,17 @@ class Firebase:
         new_message_id = self.db.collection('messages').document().id
         self.db.collection('messages').document(new_message_id).set(message)
     
-    def create_pending_event(self, event):
-        new_event_id = self.db.collection('pending_events').document().id
-        self.db.collection('pending_events').document(new_event_id).set(event)
+    def create_event(self, event, status):
+        collection_name = "events"
+        if status == "pending":
+            collection_name = "pending_events"
+
+        if "eventDocID" in event:
+            new_event_id = event['eventDocID']
+            del event['eventDocID']
+        else:
+            new_event_id = self.db.collection(collection_name).document().id
+        self.db.collection(collection_name).document(new_event_id).set(event)
 
     #TODO: this is a slow operation, probably because of the chunking. could possibly
     # be made faster by chaining a new "where" clause for each chunk or for each zip code
@@ -114,7 +122,10 @@ class Firebase:
         events_by_user = {}
         events = []
         clients = {}
-        all_events = self.db.collection(collection_name).where('coach', '==', id)
+        if collection_name == "pending_events":
+            all_events = self.db.collection(collection_name).where('coach', '==', id).where('status', '==', 'pending')
+        else:
+            all_events = self.db.collection(collection_name).where('coach', '==', id)
         for document in all_events.stream():
             event = document.to_dict()
             event['eventDocID'] = document.id
@@ -142,6 +153,21 @@ class Firebase:
             return fields
 
         raise ValueError("No profile found for given ID")
+    
+    def update_event(self, eventID, updates):
+        event_ref = self.db.collection('pending_events').document(eventID)
+        if updates['status'] == "canceled":
+            event_ref = self.db.collection('events').document(eventID)
+            mirror_event_ref = self.db.collection('pending_events').document(eventID)
+        event_ref.set(updates, merge=True)
+        if mirror_event_ref.get().exists:
+            mirror_event_ref.set(updates, merge=True)
+
+        if updates['status'] == "accepted":
+            event = event_ref.get().to_dict()
+            event['eventDocID'] = eventID
+            self.create_event(event, updates['status'])
+
 
     def verify_token_header(self, headers):
         """Verifies a provided authorization header contains a valid JWT.

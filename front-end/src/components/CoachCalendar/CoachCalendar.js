@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from "../App/App";
-import { getEvents } from '../../api/api';
+import { getEvents, updateEvent } from '../../api/api';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
@@ -30,14 +30,31 @@ const CoachCalendar = props => {
     });
   }, [user.firebaseUser]);
 
+
+ 
+  const eventActionHandler = (eventID, updates) => {
+    user.firebaseUser.getIdToken()
+    .then(function(idToken) {
+      updateEvent(idToken, eventID, updates)
+      .then(response => {
+        window.location.reload(false);
+      })
+      .catch(e => console.log(e));
+    });
+  }
+
   return (
     <div>
 
-      {showEventDialog ? <CoachCalenderDialog 
-        open={showEventDialog}
-        setOpen={setShowEventDialog}
-        selectedEvent={selectedEvent}
-        name={clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']} />:null}
+      {showEventDialog ? 
+        <CoachCalenderDialog 
+          open={showEventDialog}
+          setOpen={setShowEventDialog}
+          selectedEvent={selectedEvent}
+          updateEvent={eventActionHandler}
+          name={clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']}
+        />
+      :null}
 
       <div style={{ height: '500pt'}}>
         <Calendar
@@ -74,6 +91,10 @@ const CoachCalendar = props => {
               if (event['status'] && event['status'] === "pending") {
                 newStyle.backgroundColor = 'lightyellow';
                 newStyle.border = '1px solid orange'
+                newStyle.color = 'black'
+              } else if (event['status'] && event['status'] === "canceled") {
+                newStyle.backgroundColor = 'lightpink';
+                newStyle.border = '1px solid crimson'
                 newStyle.color = 'black'
               }
               return {
