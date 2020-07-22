@@ -46,6 +46,12 @@ class Firebase:
             new_event_id = event['eventDocID']
             del event['eventDocID']
         else:
+            pending_double_bookings = self.db.collection('pending_events').where('status', '==', 'pending').where('startTime', '>', event['startTime'] - 3600000).where('startTime', '<', event['endTime'])
+            actual_double_bookings = self.db.collection('events').where('startTime', '>', event['startTime'] - 3600000).where('startTime', '<', event['endTime'])
+            for doc in pending_double_bookings.stream():
+                raise ValueError("Time slot is already booked. Pick a new time.")
+            for doc in actual_double_bookings.stream():
+                raise ValueError("Time slot is already booked. Pick a new time.")
             new_event_id = self.db.collection(collection_name).document().id
         self.db.collection(collection_name).document(new_event_id).set(event)
 

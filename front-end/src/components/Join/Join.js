@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as firebase from 'firebase/app'
 import { withRouter } from 'react-router-dom';
 import {createUser} from '../../api/api';
@@ -84,6 +84,10 @@ const textFieldColor="green";
 
 
 const Join = (props) => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const [isLoaded, setIsLoaded] = useState(true);
   const [error, setErrors] = useState("");
