@@ -55,6 +55,35 @@ export const createEvent = (token, event, status) =>{
         }); 
 }
 
+export const createRepeatingEvent = (token, event) =>{
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+        body: JSON.stringify(event)
+    };
+    return fetch("/api/v1/create/event/repeating", requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the catch block to hit
+                return Promise.reject(error);
+            }
+            
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
 
 
 export const updateEvent = (token, eventID, updates) =>{
@@ -86,8 +115,8 @@ export const updateEvent = (token, eventID, updates) =>{
         }); 
 }
 
-export const getEvents = (token, id) =>{
-    
+export const getEvents = (token, id, date)=>{
+
     const requestOptions = {
         method: 'GET',
         headers: { 
@@ -95,7 +124,42 @@ export const getEvents = (token, id) =>{
             "Authorization":'Bearer ' + token 
         },
     };
-    return fetch("/api/v1/events/"+id, requestOptions)
+
+    let url = `/api/v1/events?id=${id}&date=${date}`;
+
+    return fetch(url, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+export const getRepeatingEvents = (token, id, type)=>{
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+    };
+
+    let url = `/api/v1/events/repeating?id=${id}&type=${type}`;
+
+    return fetch(url, requestOptions)
         .then(async response => {
             const data = await response.json();
 

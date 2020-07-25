@@ -1,6 +1,7 @@
 from firebase_admin import auth, credentials, firestore
 import firebase_admin
 from operator import itemgetter
+import time
 
 class Firebase:
     def __init__(self):
@@ -54,6 +55,23 @@ class Firebase:
                 raise ValueError("Time slot is already booked. Pick a new time.")
             new_event_id = self.db.collection(collection_name).document().id
         self.db.collection(collection_name).document(new_event_id).set(event)
+    
+    def create_repeating_event(self, new_event):
+        collection_name = "repeating_events"
+        pending = self.db.collection('pending_events')
+        actual = self.db.collection('events')
+        for doc in pending.stream():
+            event = doc.to_dict()
+            if is_conflicting(new_event, event):
+                raise ValueError("Time slot is already reserved. Pick a new time.")
+        for doc in actual.stream():
+            event = doc.to_dict()
+            if is_conflicting(new_event, event):
+                raise ValueError("Time slot is already reserved. Pick a new time.")
+        new_event_id = self.db.collection(collection_name).document().id
+        self.db.collection(collection_name).document(new_event_id).set(new_event)
+    
+    
 
     #TODO: this is a slow operation, probably because of the chunking. could possibly
     # be made faster by chaining a new "where" clause for each chunk or for each zip code
@@ -124,14 +142,14 @@ class Firebase:
             conversations_dict[conversation] = self.db.collection('users').document(conversation).get().to_dict()
         return messages_dict, conversations_dict
 
-    def get_events(self, id, collection_name):
+    def get_events(self, id, collection_name, date):
         events_by_user = {}
         events = []
         clients = {}
         if collection_name == "pending_events":
-            all_events = self.db.collection(collection_name).where('coach', '==', id).where('status', '==', 'pending')
+            all_events = self.db.collection(collection_name).where('coach', '==', id).where('status', '==', 'pending').where('startTime', '>', date)
         else:
-            all_events = self.db.collection(collection_name).where('coach', '==', id)
+            all_events = self.db.collection(collection_name).where('coach', '==', id).where('startTime', '>', date)
         for document in all_events.stream():
             event = document.to_dict()
             event['eventDocID'] = document.id
@@ -141,6 +159,19 @@ class Firebase:
             events_by_user[event['athlete']].append(event)
             events.append(event)
         return events, events_by_user, clients
+
+    def get_repeating_events(self, id, profileType):
+        events = []
+        clients = {}
+        if profileType == "coach":
+            all_events = self.db.collection("repeating_events").where('coach', '==', id)
+        else:
+            all_events = self.db.collection("repeating_events").where('athlete', '==', id)
+        for document in all_events.stream():
+            event = document.to_dict()
+            event['eventDocID'] = document.id
+            events.append(event)
+        return events
     
     def get_profile(self, id):
         
@@ -227,3 +258,26 @@ def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+def dec_hrs(hours, mins):
+        return hours + (mins/60)
+
+def is_conflicting(new_event, event):
+    if ('startTime' not in event) or ('endTime' not in event):
+        return False
+    event_start_obj = time.localtime(event['startTime']/1000)
+    event_end_obj = time.localtime(event['endTime']/1000)
+    new_event_start_obj = time.localtime(new_event['startTime']/1000)
+    new_event_end_obj = time.localtime(new_event['endTime']/1000)
+    if new_event_start_obj.tm_wday == event_start_obj.tm_wday:
+        event_start = dec_hrs(event_start_obj.tm_hour, event_start_obj.tm_min)
+        event_end = dec_hrs(event_end_obj.tm_hour, event_end_obj.tm_min)
+        new_event_start = dec_hrs(new_event_start_obj.tm_hour, new_event_start_obj.tm_min)
+        new_event_end = dec_hrs(new_event_end_obj.tm_hour, new_event_end_obj.tm_min)
+        if ((event_start < new_event_start <  event_end) or
+            (event_start < new_event_end <  event_end)):
+            return True
+        else:
+            return False
+    else:
+        return False

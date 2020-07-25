@@ -71,6 +71,19 @@ def create_event(status):
     # No body needs to be returned
     return {}, 200
 
+@app.route("/api/v1/create/event/repeating", methods = ['POST'])
+def create_repeating_event():
+    event = request.json
+    try:
+        database.verify_token_header(request.headers)
+        database.create_repeating_event(event)
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+    # No body needs to be returned
+    return {}, 200
+
 @app.route("/api/v1/update/event/<eventID>", methods = ['PUT'])
 def update_event(eventID):
     eventID = request.view_args['eventID']
@@ -85,23 +98,48 @@ def update_event(eventID):
     # No body needs to be returned
     return {}, 200
 
-@app.route("/api/v1/events/<id>", methods = ['GET'])
-def get_events(id):
-    id = request.view_args['id']
+
+
+@app.route("/api/v1/events", methods = ['GET'])
+def get_events():
+
+    coachID = request.args.get('id')
+    date = request.args.get('date')
+
     try:
         database.verify_token_header(request.headers)
-        events, events_by_user, clients = database.get_events(id, 'events')
-        pending_events, pending_events_by_user, pending_clients = database.get_events(id, 'pending_events')
+        events, events_by_user, clients = database.get_events(coachID, 'events', int(date))
+        pending_events, pending_events_by_user, pending_clients = database.get_events(coachID, 'pending_events', int(date))
+
+        return {'events': events, 
+                'eventsByUser': events_by_user, 
+                'clients': clients, 
+                'pendingEvents': pending_events, 
+                'pendingEventsByUser': pending_events_by_user, 
+                'pendingClients': pending_clients}, 200
+        
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
 
-    return {'events': events, 
-            'eventsByUser': events_by_user, 
-            'clients': clients, 
-            'pendingEvents': pending_events, 
-            'pendingEventsByUser': pending_events_by_user, 
-            'pendingClients': pending_clients }, 200
+
+@app.route("/api/v1/events/repeating", methods = ['GET'])
+def get_repeating_events():
+
+    id = request.args.get('id')
+    profileType = request.args.get('type')
+
+    try:
+        database.verify_token_header(request.headers)
+        events = database.get_repeating_events(id, profileType)
+
+        return {'repeating_events': events }, 200
+        
+    except Exception as e:
+        print(e)
+        return {"message":str(e)}, 400
+
+
 
 @app.route("/api/v1/create/message", methods = ['POST'])
 def create_message():

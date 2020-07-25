@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App/App";
-import { createEvent, getEvents } from '../../api/api';
+import { createEvent, getEvents, getRepeatingEvents } from '../../api/api';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker} from '@material-ui/pickers';
@@ -83,6 +83,7 @@ const materialTheme = createMuiTheme({
 
 
 const BookASession = props => {
+    
     const {user} = useContext(AuthContext);
 
     const expansionPanelClasses = useStyles();
@@ -90,34 +91,72 @@ const BookASession = props => {
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [openSnackbar, setOpenSnackBar] = useState(false);
+    const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const [numSessions, setNumSessions] = useState(0);
     const [numAthletes, setNumAthletes] = useState(0);
     const [pricePerSession, ] = useState(75);
     const [discount, ] = useState(0.2);
     const [events, setEvents] = useState([]);
-    const [eventsBeingDisplayed, setEventsBeingDisplayed] = useState(events);
+    const [current, setCurrent] = useState(new Date());
+    const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
+    const [repeatingEvents, setRepeatingEvents] = useState([]);
+    const [tempEvent, setTempEvent] = useState({});
+
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+      }, []);
+
+    
+    useEffect(() => {
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+          getEvents(idToken, props.coach.firebaseID, earliestStartDate.valueOf())
+          .then(response => {
+            setEvents(response['events'].concat(response['pendingEvents']));
+          })
+          .catch(e => console.log(e));
+        });
+    }, [earliestStartDate, props.coach.firebaseID, user.firebaseUser]);
+
 
     useEffect(() => {
         user.firebaseUser.getIdToken()
         .then(function(idToken) {
-            getEvents(idToken, props.coach.firebaseID)
-            .then(response => {
-                setEvents(response['events'].concat(response['pendingEvents']));
-                setEventsBeingDisplayed(response['events'].concat(response['pendingEvents']));
-            })
-            .catch(e => console.log(e));
+          getRepeatingEvents(idToken, user.firebaseUser.uid, 'coach')
+          .then(response => {
+            console.log(response);
+            setRepeatingEvents(response['repeating_events']);
+            
+          })
+          .catch(e => console.log(e));
         });
-    }, [props.coach.firebaseID, user.firebaseUser]);
+      }, [user.firebaseUser]);
 
-    const handleDateChange = (date) => {
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        setSelectedDate(date);
-    };
+
+
+
+    const calenderRangeChangeHandler = (date, view) => {
+        let start, end;
+        if (view === 'day') {
+          start = moment(date).startOf('day').toDate();
+          end = moment(date).endOf('day').toDate();
+        } else if (view === 'month') {
+          start = moment(date).startOf('month').toDate();
+          end = moment(date).endOf('month').toDate();
+        } else if (view === 'week') {
+          start = moment(date).startOf('week').toDate();
+          end = moment(date).endOf('week').toDate();
+        } else if (view === 'agenda') {
+          start = moment(date).startOf('day').toDate();
+          end = moment(date).endOf('day').add(1, 'month').toDate();
+        }
+        console.log(start, end)
+        if (start.valueOf() < earliestStartDate.valueOf()) {
+          setEarliestStartDate(start);
+        }
+      }
+
 
     const reserveHandler = e => {
         e.preventDefault();
@@ -140,9 +179,17 @@ const BookASession = props => {
             .then(response => {
                 setOpenSnackBar(true);
             })
-            .catch(e => console.log(e));
+            .catch(e => {
+                setOpenErrorSnackBar(true);
+            });
         });
         
+    }
+
+    const handleDateChange = (date) => {
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        setSelectedDate(date);
     }
 
     const createTempEvent = (date) => {
@@ -156,7 +203,7 @@ const BookASession = props => {
             'status': "temp",
             
         };
-        setEventsBeingDisplayed(events.concat([newEvent]))
+        setTempEvent(newEvent);
     }
 
     return (
@@ -213,11 +260,11 @@ const BookASession = props => {
                     <p className="BookSessionPaymentInfoTitle">Book Now</p>
                     <p className="BookSessionPaymentInfoText">${pricePerSession}/session</p>
                     <div style={{display: 'flex', alignItems: 'baseline', marginTop: '0.5rem'}}>
-                        <input min="0" onInput="validity.valid||(value='')" type="number" value={numSessions} className="BookSessionPaymentInfoInput" onChange={e => setNumSessions(e.target.value)}/>
+                        <input min="0"  type="number" value={numSessions} className="BookSessionPaymentInfoInput" onChange={e => setNumSessions(e.target.value)}/>
                         <p className="BookSessionPaymentInfoText">Sessions</p>
                     </div>
                     <div style={{display: 'flex', alignItems: 'baseline'}}>
-                        <input min="0" onInput="validity.valid||(value='')" type="number" value={numAthletes} className="BookSessionPaymentInfoInput" onChange={e => setNumAthletes(e.target.value)}/>
+                        <input min="0"  type="number" value={numAthletes} className="BookSessionPaymentInfoInput" onChange={e => setNumAthletes(e.target.value)}/>
                         <p className="BookSessionPaymentInfoText">Athletes</p>
                     </div>
                     <div className="BookSessionPaymentInfoTransactions" style={{marginTop: '1rem'}} >
@@ -242,6 +289,11 @@ const BookASession = props => {
                     Session Reserved!
                 </Alert>
             </Snackbar>
+            <Snackbar open={openErrorSnackbar} autoHideDuration={5000} onClose={e => setOpenErrorSnackBar(false)}>
+                <Alert onClose={e => setOpenErrorSnackBar(false)} severity="error">
+                    That time slot is already booked. Pick a new slot.
+                </Alert>
+            </Snackbar>
 
 
             <div className="BookSessionCalenderView">
@@ -260,11 +312,11 @@ const BookASession = props => {
                                         outline: 'none',
                                     }
                                 }}
-                                onAccept={date => createTempEvent(date)}
+                                onChange={handleDateChange}
                                 showTodayButton
                                 minutesStep={5}
                                 disablePast
-                                onChange={handleDateChange}
+                                onAccept={date => createTempEvent(date)}
                                 animateYearScrolling={false}
                             />
                         </MuiPickersUtilsProvider>
@@ -277,7 +329,7 @@ const BookASession = props => {
 
                 <div style={{ height: '500pt', flexGrow: '2'}}>
                     <Calendar
-                        events={eventsBeingDisplayed}
+                        events={events.concat([tempEvent])}
                         titleAccessor={event => {
                             return ("1 hr session");
                             }
@@ -287,7 +339,20 @@ const BookASession = props => {
                         defaultDate={moment().toDate()}
                         localizer={localizer}
                         view="week"
-                        
+                        onView={(view) => {
+                            console.log('#### onView');
+                            console.log('#### view=', view);
+                            console.log(current)
+                            calenderRangeChangeHandler(current, view);
+                          }}
+                          onNavigate={(date, view) => {
+                            console.log('#### onNavigate');
+                            console.log('#### date=', moment(date).startOf('day').toDate());
+                            console.log('#### view=', view);
+                            setCurrent(date);
+                            calenderRangeChangeHandler(date, view);
+                            
+                          }}
                         eventPropGetter={
                             (event, start, end, isSelected) => {
                             let newStyle = {
