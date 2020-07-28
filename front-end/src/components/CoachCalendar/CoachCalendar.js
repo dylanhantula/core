@@ -1,42 +1,56 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from "../App/App";
-import { makeStyles } from '@material-ui/core/styles';
-import { getEvents, updateEvent, getRepeatingEvents } from '../../api/api';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { getEvents, updateEvent, getRepeatingEvents, updateProfile, getProfile } from '../../api/api';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
 import CoachCalenderDialog from '../CoachCalenderEvent/CoachCalenderEvent';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import Button from '@material-ui/core/Button';
-import './CoachCalender.css';
-import CoachCalenderCreate from '../CoachCalenderCreate/CoachCalenderCreate';
+import './CoachCalendar.css';
+import DateAndTime from '../DateAndTime/DateAndTime';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import { green } from '@material-ui/core/colors';
+import FormControl from '@material-ui/core/FormControl';
+
+const MORNING_MIN = 6;
+const MORNING_MAX = 11;
+const DAYTIME_MIN = MORNING_MAX;
+const DAYTIME_MAX = 17;
+const EVENING_MIN = DAYTIME_MAX;
+const EVENING_MAX = 23;
+const WEEKEND_MIN = MORNING_MIN;
+const WEEKEND_MAX = EVENING_MAX;
 
 
-
-const buttonStyles = makeStyles({
-  red: {
-    color: 'red',
-    borderColor: 'red',
-    margin: '0rem 0.2rem'
+const generalStyles = makeStyles((theme) => ({
+  formControl: {
+      margin: theme.spacing(1),
+      minWidth: '3ch',
   },
-  blue: {
-      color: '#0080ff',
-      borderColor: '#0080ff',
-      margin: '0rem 0.2rem'
+  p: {
+      margin: theme.spacing(3),
+      paddingTop: theme.spacing(1),
+      fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif'
   },
-  yellow: {
-      color: '#ffcc00',
-      borderColor: '#ffcc00',
-      margin: '0rem 0.2rem'
-  },
-  green: {
-      color: 'green',
-      borderColor: 'green',
-      margin: '0rem 0.2rem',
-      border: '1px solid green'
+  label: {
+    fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif',
+    
   }
-});
+}));
+
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: 'lightslategray',
+    '&$checked': {
+      color: green[700],
+    },
+  },
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 const localizer = momentLocalizer(moment);
 
@@ -46,7 +60,7 @@ const CoachCalendar = props => {
 
   const {user} = useContext(AuthContext);
 
-  const buttonClasses = buttonStyles();
+  const generalClasses = generalStyles();
 
   const [events, setEvents] = useState([]);
   const [clients, setClients] = useState({});
@@ -54,10 +68,36 @@ const CoachCalendar = props => {
   const [showEventDialog, setShowEventDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
   const [openSnackbar, setOpenSnackBar] = useState(false);
+  const [snackbarTimeSuccess, setSnackbarTimeSuccess] = useState(false);
+  const [snackbarTimeError, setSnackbarTimeError] = useState(false);
   const [current, setCurrent] = useState(new Date());
   const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
-  const [repeatingEvents, setRepeatingEvents] = useState([]);
-  const [eventsBeingDisplayed, setEventsBeingDisplayed] = useState(events);
+  const [, setRepeatingEvents] = useState([]);
+  const [generalAvailability, setGeneralAvailability] = useState({
+    'daytime': user.profile.generalAvailability.daytime,
+    'mornings': user.profile.generalAvailability.mornings,
+    'evenings': user.profile.generalAvailability.evenings,
+    'weekends': user.profile.generalAvailability.weekends
+  });
+  const [generalTimes, setGeneralTimes] = useState({
+    'daytime': 
+      user.profile.generalAvailability.daytime ? 
+      {'From': new Date(user.profile.daytime.From), 'To': new Date(user.profile.daytime.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'mornings': 
+      user.profile.generalAvailability.mornings ? 
+      {'From': new Date(user.profile.mornings.From), 'To': new Date(user.profile.mornings.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'evenings': 
+      user.profile.generalAvailability.evenings ? 
+      {'From': new Date(user.profile.evenings.From), 'To': new Date(user.profile.evenings.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'weekends': 
+      user.profile.generalAvailability.weekends ? 
+      {'From': new Date(user.profile.weekends.From), 'To': new Date(user.profile.weekends.To)}:
+      {'From': new Date(), 'To': new Date()},
+  });
+  const [profileTimeUpdates, setProfileTimeUpdates] = useState({});
 
 
 
@@ -87,16 +127,66 @@ const CoachCalendar = props => {
     });
   }, [user.firebaseUser]);
 
-  
+  useEffect(() => {
+    user.firebaseUser.getIdToken()
+    .then(function(idToken) {
+      getProfile(idToken, user.firebaseUser.uid)
+      .then(response => {
+        setGeneralAvailability({
+          'daytime': response.generalAvailability.daytime,
+          'mornings': response.generalAvailability.mornings,
+          'evenings': response.generalAvailability.evenings,
+          'weekends': response.generalAvailability.weekends
+        });
+        setGeneralTimes({
+          'daytime': 
+            response.generalAvailability.daytime ? 
+            {'From': new Date(response.daytime.From), 'To': new Date(response.daytime.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'mornings': 
+            response.generalAvailability.mornings ? 
+            {'From': new Date(response.mornings.From), 'To': new Date(response.mornings.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'evenings': 
+            response.generalAvailability.evenings ? 
+            {'From': new Date(response.evenings.From), 'To': new Date(response.evenings.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'weekends': 
+            response.generalAvailability.weekends ? 
+            {'From': new Date(response.weekends.From), 'To': new Date(response.weekends.To)}:
+            {'From': new Date(), 'To': new Date()},
+        });
+      })
+      .catch(e => console.log(e));
+    });
+  }, [user.firebaseUser]);
   
 
-  const addRepeatingEventsInRange = (start, end, view) => {
-    let toAdd = [];
-    for (var i = 0; i < repeatingEvents.length; i++) {
-      if (repeatingEvents[i]['startTime'] > start && repeatingEvents[i]['endTime'] < end) {
-
+  const updateAvailability = e => {
+    e.preventDefault();
+    const allUpdates = {
+      generalAvailability: {...generalAvailability},
+    };
+    for (var slot in generalAvailability) {
+      if (profileTimeUpdates[slot]) {
+        if (profileTimeUpdates[slot]['From'] > profileTimeUpdates[slot]['To']){
+          setSnackbarTimeError(true);
+          return;
+        }
+        allUpdates[slot] = profileTimeUpdates[slot];
       }
+      allUpdates[slot] = generalTimes[slot];
+      allUpdates[slot]['From'] = generalTimes[slot]['From'].valueOf();
+      allUpdates[slot]['To'] = generalTimes[slot]['To'].valueOf();
     }
+    user.firebaseUser.getIdToken()
+    .then(function(idToken) {
+      updateProfile(idToken, allUpdates, user.firebaseUser.uid)
+      .then(response => {
+        setSnackbarTimeSuccess(true);
+      })
+      .catch(e => console.log(e));
+    });
   }
 
 
@@ -152,12 +242,129 @@ const CoachCalendar = props => {
       </Snackbar>
 
 
-      <div>
-        <Button variant="filled" className={buttonClasses.green}>
-            + Create
-        </Button>
-        <CoachCalenderCreate/>
+      <div className="CoachCalenderGeneralAvailability">
+        <p>Add Your General Availability</p>
+        <div className="CoachCalenderGeneralAvailabilityMain">
+          <div>
+            <FormControl component="fieldset" className={generalClasses.formControl}>
+              <FormControlLabel
+                  control={<GreenCheckbox checked={generalAvailability['daytime']} 
+                  onChange={(e)=>{
+                    setGeneralAvailability({
+                      ...generalAvailability,
+                      'daytime': e.target.checked
+                    })
+                  }} 
+                  name="Daytime" />}
+                  label="Daytime" classes={{label: generalClasses.label}}
+              />
+            </FormControl>
+            {generalAvailability['daytime'] ? 
+              <DateAndTime 
+                slot='daytime' 
+                min={DAYTIME_MIN} 
+                max={DAYTIME_MAX} 
+                currentTimes={generalTimes['daytime']}
+                updates={profileTimeUpdates}
+                setUpdates={setProfileTimeUpdates}
+              />:null}
+          </div>
+          <div>
+          <FormControl component="fieldset" className={generalClasses.formControl}>
+              <FormControlLabel
+                  control={<GreenCheckbox checked={generalAvailability['evenings']} 
+                  onChange={(e)=>{
+                    setGeneralAvailability({
+                      ...generalAvailability,
+                      'evenings': e.target.checked
+                    })
+                  }} 
+                  name="Evenings" />}
+                  label="Evenings" classes={{label: generalClasses.label}}
+              />
+            </FormControl>
+            {generalAvailability['evenings'] ? 
+              <DateAndTime 
+                slot='evenings' 
+                min={EVENING_MIN} 
+                max={EVENING_MAX} 
+                currentTimes={generalTimes['evenings']}
+                updates={profileTimeUpdates}
+                setUpdates={setProfileTimeUpdates}
+              />:null}
+          </div>
+          <div>
+          <FormControl component="fieldset" className={generalClasses.formControl}>
+              <FormControlLabel
+                  control={<GreenCheckbox checked={generalAvailability['mornings']} 
+                  onChange={(e)=>{
+                    setGeneralAvailability({
+                      ...generalAvailability,
+                      'mornings': e.target.checked
+                    })
+                  }} 
+                  name="Mornings" />}
+                  label="Mornings" classes={{label: generalClasses.label}}
+              />
+            </FormControl>
+            {generalAvailability['mornings'] ? 
+              <DateAndTime 
+                slot='mornings' 
+                min={MORNING_MIN} 
+                max={MORNING_MAX} 
+                currentTimes={generalTimes['mornings']} 
+                updates={profileTimeUpdates}
+                setUpdates={setProfileTimeUpdates}
+              />:null}
+          </div>
+          <div>
+          <FormControl component="fieldset" className={generalClasses.formControl}>
+              <FormControlLabel
+                  control={<GreenCheckbox checked={generalAvailability['weekends']} 
+                  onChange={(e)=>{
+                    setGeneralAvailability({
+                      ...generalAvailability,
+                      'weekends': e.target.checked
+                    })
+                  }} 
+                  name="Weekends" />}
+                  label="Weekends" classes={{label: generalClasses.label}}
+              />
+            </FormControl>
+            {generalAvailability['weekends'] ? 
+              <DateAndTime 
+                slot='weekends' 
+                min={WEEKEND_MIN} 
+                max={WEEKEND_MAX} 
+                currentTimes={generalTimes['weekends']}
+                updates={profileTimeUpdates}
+                setUpdates={setProfileTimeUpdates}
+              />:null}
+          </div>
+        </div>
+        <div className="CoachCalenderSaveAndUndo">
+          {!generalAvailability['daytime'] && 
+          !generalAvailability['weekends'] && 
+          !generalAvailability['mornings'] && 
+          !generalAvailability['evenings'] ? null:<button className="CoachCalenderSaveButton" onClick={e => updateAvailability(e)}>Save</button>}
+          {!generalAvailability['daytime'] && 
+          !generalAvailability['weekends'] && 
+          !generalAvailability['mornings'] && 
+          !generalAvailability['evenings'] ? null:<button className="CoachCalenderRefreshButton">Refresh</button>}
+        </div>
       </div>
+
+      <Snackbar open={snackbarTimeSuccess} autoHideDuration={5000} onClose={e => setSnackbarTimeSuccess(false)}>
+        <Alert variant="filled" elevation={10} onClose={e => setSnackbarTimeSuccess(false)} severity="success">
+            Availability Updated Successfully!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={snackbarTimeError} autoHideDuration={5000} onClose={e => setSnackbarTimeError(false)}>
+        <Alert variant="filled" elevation={10} onClose={e => setSnackbarTimeError(false)} severity="error">
+            Available times must be chronological and within reasonable limits.
+        </Alert>
+      </Snackbar>
+      
 
       <div style={{ height: '500pt'}}>
         <Calendar

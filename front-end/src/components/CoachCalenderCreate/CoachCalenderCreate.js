@@ -191,6 +191,7 @@ const CoachCalenderCreate = props => {
                     select
                     label="Repeats Weekly On"
                     value={repeatsOnDay}
+                    
                     onChange={(e)=>setRepeatsOnDay(e.target.value)} >
                     <MenuItem value={"Sunday"}>Sunday</MenuItem>
                     <MenuItem value={"Monday"}>Monday</MenuItem>

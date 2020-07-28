@@ -99,7 +99,7 @@ const BookASession = props => {
     const [events, setEvents] = useState([]);
     const [current, setCurrent] = useState(new Date());
     const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
-    const [repeatingEvents, setRepeatingEvents] = useState([]);
+    const [, setRepeatingEvents] = useState([]);
     const [tempEvent, setTempEvent] = useState({});
 
 
