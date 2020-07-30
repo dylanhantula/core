@@ -1,18 +1,12 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from "../App/App";
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, TimePicker} from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { green } from '@material-ui/core/colors';
-import FormControl from '@material-ui/core/FormControl';
-import { createRepeatingEvent } from '../../api/api';
+//import { createRepeatingEvent } from '../../api/api';
+import DateAndTime from '../DateAndTime/DateAndTime';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 
@@ -20,11 +14,10 @@ const textFieldColor="green";
 const textFieldColorNormal="lightslategray";
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: 'max-content',
         display: 'flex',
         '& .MuiTextField-root': {
         margin: theme.spacing(1),
-        minWidth: '20ch',
+        width: '20ch',
         
         '& label.Mui-focused': {
             color: textFieldColor,
@@ -58,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     formControl: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(0),
         minWidth: '3ch',
     },
     p: {
@@ -95,156 +88,125 @@ const buttonStyles = makeStyles({
     }
   });
 
-  const GreenCheckbox = withStyles({
-    root: {
-      color: 'lightslategray',
-      '&$checked': {
-        color: green[700],
-      },
-    },
-    checked: {},
-  })((props) => <Checkbox color="default" {...props} />);
+  
 
 
-const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday', 'Thursday', 'Friday', 'Saturday'];
+// const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const setDayOfWeek = (date, day) => {
-    var currentDay = date.getDay();
-    var distance = day - currentDay;
-    date.setDate(date.getDate() + distance);
-    return date;
-}
+// const setDayOfWeek = (date, day) => {
+//     var currentDay = date.getDay();
+//     var distance = day - currentDay;
+//     date.setDate(date.getDate() + distance);
+//     return date;
+// }
 
 
 
 const CoachCalenderCreate = props => {
-    const {user} = useContext(AuthContext);
-
-    //const [editMode, setEditMode] = useState(false);
-    //const [timeUpdates, setTimeUpdates] = useState({});
-    const [editStartTime, setEditStartTime] = useState(new Date());
-    const [editEndTime, setEditEndTime] = useState(new Date());
-    const [eventType, setEventType] = useState("Block Time Out");
-    const [repeating, setRepeating] = useState(true);
-    const [repeatsOnDay, setRepeatsOnDay] = useState("Sunday")
-
+    
+    // const [editStartTime, ] = useState(new Date());
+    // const [editEndTime, ] = useState(new Date());
+    // const [repeatsOnDay, ] = useState("Sunday")
     const buttonClasses = buttonStyles();
     const styleClasses = useStyles();
 
 
-    const submitRepeatingEventHandler = e => {
-        e.preventDefault();
-        let startTime = setDayOfWeek(editStartTime, daysOfWeek.indexOf(repeatsOnDay));
-        startTime.setHours(editStartTime.getHours());
-        startTime.setMinutes(editStartTime.getMinutes());
-        let endTime = setDayOfWeek(editEndTime, daysOfWeek.indexOf(repeatsOnDay));
-        endTime.setHours(editEndTime.getHours());
-        endTime.setMinutes(editEndTime.getMinutes());
-        let eventToSubmit = {
-            'coach': user.firebaseUser.uid,
-            'startTime': startTime.valueOf(),
-            'endTime': endTime.valueOf(),
-            'status': 'repeating',
-            'dayOfWeek': daysOfWeek.indexOf(repeatsOnDay),
-            'frequency': 'weekly',
-            'notes': ''
-        };
-        submitRepeatingEvent(eventToSubmit);
-    }
+    // const submitRepeatingEventHandler = e => {
+    //     e.preventDefault();
+    //     let startTime = setDayOfWeek(editStartTime, daysOfWeek.indexOf(repeatsOnDay));
+    //     startTime.setHours(editStartTime.getHours());
+    //     startTime.setMinutes(editStartTime.getMinutes());
+    //     let endTime = setDayOfWeek(editEndTime, daysOfWeek.indexOf(repeatsOnDay));
+    //     endTime.setHours(editEndTime.getHours());
+    //     endTime.setMinutes(editEndTime.getMinutes());
+    //     let eventToSubmit = {
+    //         'coach': user.firebaseUser.uid,
+    //         'startTime': startTime.valueOf(),
+    //         'endTime': endTime.valueOf(),
+    //         'status': 'repeating',
+    //         'dayOfWeek': daysOfWeek.indexOf(repeatsOnDay),
+    //         'frequency': 'weekly',
+    //         'notes': ''
+    //     };
+    //     submitRepeatingEvent(eventToSubmit);
+    // }
 
-    const submitRepeatingEvent = event => {
-        user.firebaseUser.getIdToken()
-        .then(function(idToken) {
-            createRepeatingEvent(idToken, event)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-        });
-    }
+    // const submitRepeatingEvent = event => {
+    //     user.firebaseUser.getIdToken()
+    //     .then(function(idToken) {
+    //         createRepeatingEvent(idToken, event)
+    //         .then(response => {
+    //             console.log(response);
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    //     });
+    // }
 
 
     return (
-        <div>   
+        <div style={{margin: '0rem 1rem 1rem 0rem'}}>   
+            <div style={{display: 'flex', justifyContent: 'flex-end', margin: '0rem 0rem 2rem', textAlign: 'right'}}>
+                <CloseIcon className="CalendarCloseButton" onClick={e => props.closeTab(false)}/>
+            </div>
             <form className={styleClasses.root} >
                 <TextField
+                    style={{marginLeft: '0px'}}
                     name="typeOfEvent"
                     variant="outlined"
                     select
                     label="Type of Event"
-                    value={eventType}
-                    onChange={(e)=>setEventType(e.target.value)} >
-                    <MenuItem value={"Block Time Out"}>Block Time Out</MenuItem>
-                    <MenuItem value={"Normal Event"}>Normal Event</MenuItem>
-                </TextField>
-                <FormControl component="fieldset" className={styleClasses.formControl}>
-                    <FormControlLabel
-                        control={<GreenCheckbox checked={repeating} onChange={(e)=>setRepeating(e.target.checked)} name="repeating" />}
-                        label="Repeating" classes={{label: styleClasses.label}}
-                    />
-                 </FormControl>
-                 <TextField
-                    name="repeatsOnDay"
-                    variant="outlined"
-                    select
-                    label="Repeats Weekly On"
-                    value={repeatsOnDay}
-                    
-                    onChange={(e)=>setRepeatsOnDay(e.target.value)} >
-                    <MenuItem value={"Sunday"}>Sunday</MenuItem>
-                    <MenuItem value={"Monday"}>Monday</MenuItem>
-                    <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
-                    <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
-                    <MenuItem value={"Thursday"}>Thursday</MenuItem>
-                    <MenuItem value={"Friday"}>Friday</MenuItem>
-                    <MenuItem value={"Saturday"}>Saturday</MenuItem>
+                    value={props.eventType}
+                    onChange={(e)=>props.setEventType(e.target.value)} >
+                    <MenuItem value={"Normal Session"}>Normal Session</MenuItem>
+                    <MenuItem value={"Personal"}>Personal</MenuItem>
                 </TextField>
 
-                <Button variant="outlined" className={buttonClasses.green} onClick={e => submitRepeatingEventHandler(e)}>
-                    Set
+                {props.eventType === "Normal Session" ? 
+                <TextField
+                    style={{marginLeft: '0px'}}
+                    name="listOfClients"
+                    variant="outlined"
+                    select
+                    label="Invite Athlete"
+                    value={props.clientToInvite}
+                    onChange={(e)=>props.setClientToInvite(e.target.value)} >
+                    {props.clients.map((client, index) => {
+                        return <MenuItem value={client}>{client}</MenuItem>;
+                    })}
+                </TextField>:null}
+
+                {props.eventType === "Personal" ? 
+                <TextField
+                    style={{marginLeft: '0px'}}
+                    name="eventTitle"
+                    variant="outlined"
+                    label="Event Title"
+                    value={props.eventTitle}
+                    onChange={(e)=>props.setEventTitle(e.target.value)} >
+                    
+                </TextField>:null}
+                
+                
+
+                <DateAndTime 
+                    slot={props.slot} 
+                    min={props.min} 
+                    max={props.max} 
+                    currentTimes={props.currentTimes}
+                    updates={props.updates}
+                    setUpdates={props.setUpdates}
+                    showDatePicker={props.showDatePicker}
+                />
+
+                <div style={{textAlign: 'center', margin: '30px 0rem'}}>
+                <Button variant="outlined" className={buttonClasses.green} onClick={e => props.createEvent(e)}>
+                    Create
                 </Button>
+                </div>
               </form>
             
-            <Typography gutterBottom>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <TimePicker
-                            variant="inline"
-                            value={editStartTime}
-                            minutesStep={5}
-                            inputVariant="outlined"
-                            inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
-                            onChange={date => {
-                                let newDate = editStartTime;
-                                newDate.setHours(date.getHours());
-                                newDate.setMinutes(date.getMinutes());
-                                newDate.setSeconds(0);
-                                newDate.setMilliseconds(0);
-                                setEditStartTime(newDate);                                
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-            </Typography>
-            <Typography gutterBottom>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <TimePicker
-                            variant="inline"
-                            value={editEndTime}
-                            minutesStep={5}
-                            inputVariant="outlined"
-                            inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
-                            onChange={date => {
-                                let newDate = editEndTime;
-                                newDate.setHours(date.getHours());
-                                newDate.setMinutes(date.getMinutes());
-                                newDate.setSeconds(0);
-                                newDate.setMilliseconds(0);
-                                setEditEndTime(newDate);                                
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-            </Typography>
         </div>
     );
 }

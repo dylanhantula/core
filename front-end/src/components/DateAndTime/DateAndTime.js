@@ -1,7 +1,7 @@
 import React from 'react';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, TimePicker} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker} from '@material-ui/pickers';
 import { createMuiTheme, makeStyles } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import Typography from '@material-ui/core/Typography';
@@ -26,8 +26,45 @@ const DateAndTime = props => {
     return (
         <ThemeProvider theme={materialTheme}>
         <div className={containerClass.root}>
+        {props.showDatePicker ? 
             <Typography gutterBottom style={{maxWidth: '20ch'}}>
-                <p style={{fontSize: 'medium'}}>From: </p>
+                <p className="CalendarPFont" style={{fontSize: 'medium', textAlign: 'center'}}>On: </p>
+
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <ThemeProvider theme={materialTheme}>
+                        <DatePicker
+                            disableToolbar
+                            variant="inline"
+                            value={props.currentTimes['From']}
+                            inputVariant="outlined"
+                            inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
+                            onChange={date => {
+                                let newStartDate = props.currentTimes['From'];
+                                newStartDate.setMonth(date.getMonth());
+                                newStartDate.setDate(date.getDate());
+                                newStartDate.setFullYear(date.getFullYear());
+                                newStartDate.setSeconds(0);
+                                newStartDate.setMilliseconds(0);
+                                let newEndDate = props.currentTimes['To'];
+                                newEndDate.setMonth(date.getMonth());
+                                newEndDate.setDate(date.getDate());
+                                newEndDate.setFullYear(date.getFullYear());
+                                newEndDate.setSeconds(0);
+                                newEndDate.setMilliseconds(0);
+                                props.setUpdates({
+                                    ...props.updates,
+                                    [props.slot]: {
+                                        'From': newStartDate,
+                                        'To': newEndDate
+                                    }
+                                });                                
+                            }}
+                        />
+                    </ThemeProvider>
+                </MuiPickersUtilsProvider>
+            </Typography>:null}
+            <Typography gutterBottom style={{maxWidth: '20ch'}}>
+                <p className="CalendarPFont" style={{fontSize: 'medium', textAlign: 'center'}}>From: </p>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <ThemeProvider theme={materialTheme}>
                     <TimePicker
@@ -46,8 +83,8 @@ const DateAndTime = props => {
                             props.setUpdates({
                                 ...props.updates,
                                 [props.slot]: {
-                                    'From': newDate.valueOf(),
-                                    'To': props.currentTimes['To'].valueOf()
+                                    'From': newDate,
+                                    'To': props.currentTimes['To']
                                 }
                             });                                
                         }}
@@ -56,7 +93,7 @@ const DateAndTime = props => {
             </MuiPickersUtilsProvider>
             </Typography>
             <Typography gutterBottom style={{maxWidth: '20ch'}}>
-            <p style={{fontSize: 'medium'}}>To: </p>
+            <p className= "CalendarPFont" style={{fontSize: 'medium', textAlign: 'center'}}>To: </p>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <ThemeProvider theme={materialTheme}>
                     <TimePicker
@@ -75,8 +112,8 @@ const DateAndTime = props => {
                             props.setUpdates({
                                 ...props.updates,
                                 [props.slot]: {
-                                    'From': props.currentTimes['From'].valueOf(),
-                                    'To': newDate.valueOf()
+                                    'From': props.currentTimes['From'],
+                                    'To': newDate
                                 }
                             }); 
                         }}

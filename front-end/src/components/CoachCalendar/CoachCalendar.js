@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from "../App/App";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { getEvents, updateEvent, getRepeatingEvents, updateProfile, getProfile } from '../../api/api';
+import { getEvents, updateEvent, getRepeatingEvents, updateProfile, getProfile, createEvent } from '../../api/api';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
@@ -14,6 +14,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { green } from '@material-ui/core/colors';
 import FormControl from '@material-ui/core/FormControl';
+import CoachCalenderCreate from '../CoachCalenderCreate/CoachCalenderCreate';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const MORNING_MIN = 6;
 const MORNING_MAX = 11;
@@ -64,13 +67,20 @@ const CoachCalendar = props => {
 
   const [events, setEvents] = useState([]);
   const [clients, setClients] = useState({});
+  const [eventType, setEventType] = useState("");
+  const [clientsToDisplay, ] = useState([]);
+  const [clientToInvite, setClientToInvite] = useState("");
   const [pendingClients, setPendingClients] = useState({});
   const [showEventDialog, setShowEventDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [showAvailability, setShowAvailability] = useState(false);
   const [openSnackbar, setOpenSnackBar] = useState(false);
   const [snackbarTimeSuccess, setSnackbarTimeSuccess] = useState(false);
   const [snackbarTimeError, setSnackbarTimeError] = useState(false);
+  const [newEventSnackbarError, setNewEventSnackbarError] = useState(false);
   const [current, setCurrent] = useState(new Date());
+  const [eventTitle, setEventTitle] = useState("");
   const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
   const [, setRepeatingEvents] = useState([]);
   const [generalAvailability, setGeneralAvailability] = useState({
@@ -98,6 +108,12 @@ const CoachCalendar = props => {
       {'From': new Date(), 'To': new Date()},
   });
   const [profileTimeUpdates, setProfileTimeUpdates] = useState({});
+  const [newEventTimes, setNewEventTimes] = useState({
+    'newEvent': {
+      'From': new Date(),
+      'To': new Date()
+    }
+  });
 
 
 
@@ -106,7 +122,7 @@ const CoachCalendar = props => {
     .then(function(idToken) {
       getEvents(idToken, user.firebaseUser.uid, earliestStartDate.valueOf())
       .then(response => {
-        setEvents(response['events'].concat(response['pendingEvents']));
+        setEvents(response['events'].concat(response['pendingEvents'].concat(response['personalEvents'])));
         setClients(response['clients']);
         setPendingClients(response['pending_clients']);
       })
@@ -169,11 +185,13 @@ const CoachCalendar = props => {
     };
     for (var slot in generalAvailability) {
       if (profileTimeUpdates[slot]) {
-        if (profileTimeUpdates[slot]['From'] > profileTimeUpdates[slot]['To']){
+        if (profileTimeUpdates[slot]['From'].valueOf() > profileTimeUpdates[slot]['To'].valueOf()){
           setSnackbarTimeError(true);
           return;
         }
         allUpdates[slot] = profileTimeUpdates[slot];
+        allUpdates[slot]['From'] = profileTimeUpdates[slot]['From'].valueOf();
+        allUpdates[slot]['To'] = profileTimeUpdates[slot]['To'].valueOf();
       }
       allUpdates[slot] = generalTimes[slot];
       allUpdates[slot]['From'] = generalTimes[slot]['From'].valueOf();
@@ -189,6 +207,53 @@ const CoachCalendar = props => {
     });
   }
 
+  const submitNewEvent = e => {
+    e.preventDefault();
+    let eventToSubmit = {};
+    let eventStatus = "";
+    if (eventType === "") {
+      setNewEventSnackbarError(true);
+      return;
+    }
+    if (eventType === "Normal Session" && clientToInvite === "") {
+      setNewEventSnackbarError(true);
+      return;
+    }
+    if (newEventTimes['newEvent']['From'].valueOf() > newEventTimes['newEvent']['To'].valueOf()) {
+      setNewEventSnackbarError(true);
+      return;
+    }
+    if (eventType === "Personal") {
+      eventStatus = "personal";
+      eventToSubmit = {
+        'startTime': newEventTimes['newEvent']['From'].valueOf(),
+        'endTime': newEventTimes['newEvent']['To'].valueOf(),
+        'user': user.firebaseUser.uid,
+        'status': eventStatus,
+        'title': eventTitle
+      }
+    } else if (eventType === "Normal Session") {
+      eventStatus = "pending";
+      eventToSubmit = {
+        'startTime': newEventTimes['newEvent']['From'].valueOf(),
+        'endTime': newEventTimes['newEvent']['To'].valueOf(),
+        'coach': user.firebaseUser.uid,
+        'athlete': null,
+        'status': eventStatus,
+      }
+    }
+    user.firebaseUser.getIdToken()
+    .then(function(idToken) {
+      createEvent(idToken, eventToSubmit, eventStatus)
+      .then(response => {
+        window.location.reload(false);
+      })
+      .catch(e => console.log(e));
+    });
+
+    }
+    
+  
 
   const calenderRangeChangeHandler = (date, view) => {
     let start, end;
@@ -241,9 +306,15 @@ const CoachCalendar = props => {
         </Alert>
       </Snackbar>
 
-
+        
       <div className="CoachCalenderGeneralAvailability">
-        <p>Add Your General Availability</p>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <p style={{marginRight: '0.5rem'}}>Edit General Availability  </p>
+          {showAvailability ? <ExpandLessIcon className="CalendarShowAvailabilityButton" onClick={e => setShowAvailability(false)}/>:
+            <ExpandMoreIcon className="CalendarShowAvailabilityButton" onClick={e => setShowAvailability(true)}/>}
+        </div>
+        
+        {showAvailability ? 
         <div className="CoachCalenderGeneralAvailabilityMain">
           <div>
             <FormControl component="fieldset" className={generalClasses.formControl}>
@@ -267,6 +338,7 @@ const CoachCalendar = props => {
                 currentTimes={generalTimes['daytime']}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
+                showDatePicker={false}
               />:null}
           </div>
           <div>
@@ -291,6 +363,7 @@ const CoachCalendar = props => {
                 currentTimes={generalTimes['evenings']}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
+                showDatePicker={false}
               />:null}
           </div>
           <div>
@@ -315,6 +388,7 @@ const CoachCalendar = props => {
                 currentTimes={generalTimes['mornings']} 
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
+                showDatePicker={false}
               />:null}
           </div>
           <div>
@@ -339,9 +413,11 @@ const CoachCalendar = props => {
                 currentTimes={generalTimes['weekends']}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
+                showDatePicker={false}
               />:null}
           </div>
-        </div>
+        </div>:null}
+        {showAvailability ? 
         <div className="CoachCalenderSaveAndUndo">
           {!generalAvailability['daytime'] && 
           !generalAvailability['weekends'] && 
@@ -351,7 +427,7 @@ const CoachCalendar = props => {
           !generalAvailability['weekends'] && 
           !generalAvailability['mornings'] && 
           !generalAvailability['evenings'] ? null:<button className="CoachCalenderRefreshButton">Refresh</button>}
-        </div>
+        </div>:null}
       </div>
 
       <Snackbar open={snackbarTimeSuccess} autoHideDuration={5000} onClose={e => setSnackbarTimeSuccess(false)}>
@@ -364,70 +440,102 @@ const CoachCalendar = props => {
             Available times must be chronological and within reasonable limits.
         </Alert>
       </Snackbar>
+      <Snackbar open={newEventSnackbarError} autoHideDuration={5000} onClose={e => setNewEventSnackbarError(false)}>
+        <Alert variant="filled" elevation={10} onClose={e => setNewEventSnackbarError(false)} severity="error">
+            All fields must be filled and times must be chronological.
+        </Alert>
+      </Snackbar>
       
-
-      <div style={{ height: '500pt'}}>
-        <Calendar
-          events={events}
-          titleAccessor={event => {
-            if (clients[event['athlete']]) {
-              return ("1 hr session w/ " + clients[event['athlete']]['firstName'] + ' ' + clients[event['athlete']]['lastName']);
-            } else if (pendingClients[event['athlete']]) {
-              return ("1 hr session w/ " + pendingClients[event['athlete']]['firstName'] + ' ' + pendingClients[event['athlete']]['lastName']);
-            } else {
-              return ("1 hr session");
-            }
-          }}
-          startAccessor={event => new Date(event['startTime'])}
-          endAccessor={event => new Date(event['endTime'])}
-          defaultDate={moment().toDate()}
-          localizer={localizer}
-          onSelectEvent={(event) => {
-            setShowEventDialog(true);
-            setSelectedEvent(event);
-          }}
-          onView={(view) => {
-            console.log('#### onView');
-            console.log('#### view=', view);
-            console.log(current)
-            calenderRangeChangeHandler(current, view);
-          }}
-          onNavigate={(date, view) => {
-            console.log('#### onNavigate');
-            console.log('#### date=', moment(date).startOf('day').toDate());
-            console.log('#### view=', view);
-            setCurrent(date);
-            calenderRangeChangeHandler(date, view);
-            
-          }}
-          eventPropGetter={
-            (event, start, end, isSelected) => {
-              let newStyle = {
-                backgroundColor: "darkgreen",
-                color: 'white',
-                borderRadius: "0px",
-                border: "none",
-                fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana sans-serif',
-                outline: 'none',
-              
-              };
-              
-              if (event['status'] && event['status'] === "pending") {
-                newStyle.backgroundColor = 'lightyellow';
-                newStyle.border = '1px solid orange'
-                newStyle.color = 'black'
-              } else if (event['status'] && event['status'] === "canceled") {
-                newStyle.backgroundColor = 'lightpink';
-                newStyle.border = '1px solid crimson'
-                newStyle.color = 'black'
+      
+      <div>
+        <button 
+          style={{margin: '1rem'}}
+          className="CoachCalenderRefreshButton" 
+          onClick={e => setShowCreateEvent(true)}>+ Create</button>
+      </div>
+      <div className="CoachCalendarView">
+        {showCreateEvent ? 
+          <CoachCalenderCreate
+            slot='newEvent' 
+            min={0.01} 
+            max={23.99} 
+            currentTimes={newEventTimes['newEvent']}
+            updates={newEventTimes}
+            setUpdates={setNewEventTimes}
+            createEvent={submitNewEvent}
+            clients={clientsToDisplay}
+            clientToInvite={clientToInvite}
+            setClientToInvite={setClientToInvite}
+            eventType={eventType}
+            setEventType={setEventType}
+            eventTitle={eventTitle}
+            setEventTitle={setEventTitle}
+            closeTab={setShowCreateEvent}
+            showDatePicker={true}
+          />
+        :null}        
+        <div style={{ height: '500pt', flexGrow: 2}}>
+          <Calendar
+            events={events}
+            titleAccessor={event => {
+              if (event['user']) {
+                return ("Personal: " + event['title']);
               }
-              return {
-                className: "",
-                style: newStyle
-              };
+              if (clients[event['athlete']]) {
+                return ("1 hr session w/ " + clients[event['athlete']]['firstName'] + ' ' + clients[event['athlete']]['lastName']);
+              } else if (pendingClients[event['athlete']]) {
+                return ("1 hr session w/ " + pendingClients[event['athlete']]['firstName'] + ' ' + pendingClients[event['athlete']]['lastName']);
+              } else {
+                return ("1 hr session");
+              }
+            }}
+            startAccessor={event => new Date(event['startTime'])}
+            endAccessor={event => new Date(event['endTime'])}
+            defaultDate={moment().toDate()}
+            localizer={localizer}
+            onSelectEvent={(event) => {
+              if (event['user']) {
+                return;
+              }
+              setShowEventDialog(true);
+              setSelectedEvent(event);
+            }}
+            onView={(view) => {
+              calenderRangeChangeHandler(current, view);
+            }}
+            onNavigate={(date, view) => {
+              setCurrent(date);
+              calenderRangeChangeHandler(date, view);
+              
+            }}
+            eventPropGetter={
+              (event, start, end, isSelected) => {
+                let newStyle = {
+                  backgroundColor: "darkgreen",
+                  color: 'white',
+                  borderRadius: "0px",
+                  border: "none",
+                  fontFamily: 'Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana sans-serif',
+                  outline: 'none',
+                };
+                
+                if (event['status'] && event['status'] === "pending") {
+                  newStyle.backgroundColor = 'lightyellow';
+                  newStyle.border = '1px solid orange'
+                  newStyle.color = 'black'
+                } else if (event['status'] && event['status'] === "canceled") {
+                  newStyle.backgroundColor = 'lightpink';
+                  newStyle.border = '1px solid crimson'
+                  newStyle.color = 'black'
+                }
+                return {
+                  className: "",
+                  style: newStyle
+                };
+              }
             }
-          }
-        />
+          />
+        </div>
       </div>
     </div>
   );

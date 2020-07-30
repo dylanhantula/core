@@ -1,8 +1,7 @@
 .CoachCalenderGeneralAvailability {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-    min-height: 15rem;
+    padding: 2rem 2rem 0rem 2rem;
     text-align: center;
 }
 
@@ -61,4 +60,32 @@
 }
 .CoachCalenderRefreshButton:hover {
     background-color: whitesmoke;
+}
+
+.CalendarPFont {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.CalendarCloseButton {
+    color: lightslategray;
+}
+
+.CalendarCloseButton:hover {
+    color: darkslategray;
+    cursor: pointer;
+}
+
+.CalendarShowAvailabilityButton {
+    color: black;
+}
+
+.CalendarShowAvailabilityButton:hover {
+    color: darkslategrey;
+    cursor: pointer;
+}
+
+.CoachCalendarView {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
 }

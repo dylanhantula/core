@@ -110,13 +110,14 @@ def get_events():
         database.verify_token_header(request.headers)
         events, events_by_user, clients = database.get_events(coachID, 'events', int(date))
         pending_events, pending_events_by_user, pending_clients = database.get_events(coachID, 'pending_events', int(date))
-
+        personal_events = database.get_events(coachID, 'personal_events', int(date))
         return {'events': events, 
                 'eventsByUser': events_by_user, 
                 'clients': clients, 
                 'pendingEvents': pending_events, 
                 'pendingEventsByUser': pending_events_by_user, 
-                'pendingClients': pending_clients}, 200
+                'pendingClients': pending_clients,
+                'personalEvents': personal_events}, 200
         
     except Exception as e:
         print(e)

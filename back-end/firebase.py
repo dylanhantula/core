@@ -42,6 +42,9 @@ class Firebase:
         collection_name = "events"
         if status == "pending":
             collection_name = "pending_events"
+        
+        if status == "personal":
+            collection_name = "personal_events"
 
         if "eventDocID" in event:
             new_event_id = event['eventDocID']
@@ -54,7 +57,13 @@ class Firebase:
             for doc in actual_double_bookings.stream():
                 raise ValueError("Time slot is already booked. Pick a new time.")
             new_event_id = self.db.collection(collection_name).document().id
-        self.db.collection(collection_name).document(new_event_id).set(event)
+        
+        if collection_name == "personal_events":
+            user_id = event['user']
+            new_event_id = self.db.collection('events').document().id
+            self.db.collection(collection_name).document(user_id).set({new_event_id: event}, merge=True)
+        else:
+            self.db.collection(collection_name).document(new_event_id).set(event)
     
     def create_repeating_event(self, new_event):
         collection_name = "repeating_events"
@@ -146,7 +155,14 @@ class Firebase:
         events_by_user = {}
         events = []
         clients = {}
-        if collection_name == "pending_events":
+        if collection_name == "personal_events":
+            all_events = self.db.collection(collection_name).document(id).get().to_dict()
+            for event_key in all_events:
+                event = all_events[event_key]
+                event['eventDocID'] = event_key
+                events.append(event)
+            return events
+        elif collection_name == "pending_events":
             all_events = self.db.collection(collection_name).where('coach', '==', id).where('status', '==', 'pending').where('startTime', '>', date)
         else:
             all_events = self.db.collection(collection_name).where('coach', '==', id).where('startTime', '>', date)
