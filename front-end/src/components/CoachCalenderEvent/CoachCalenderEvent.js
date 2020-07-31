@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -36,6 +36,14 @@ const buttonStyles = makeStyles({
         margin: '0rem 0.2rem'
     }
   });
+
+  const materialTheme = createMuiTheme({
+    palette: {
+      primary: {
+          main: '#000'
+      }
+    }
+});
 
 const styles = (theme) => ({
   root: {
@@ -98,14 +106,20 @@ const CoachCalenderDialog = props => {
     const updateEventHandler = (e, eventID, newStatus) => {
         e.preventDefault();
         const updates = {
-            'status': newStatus
+            'coachStatus': newStatus
         };
         props.updateEvent(eventID, updates);
     }
 
     const updateEventTimeHandler = (e, eventID) => {
         e.preventDefault();
-        props.updateEvent(eventID, timeUpdates)
+        const updates = {
+            ...timeUpdates,
+            'coachStatus': 'accepted',
+            'athleteStatus': 'pending',
+            'status': 'pending'
+        };
+        props.updateEvent(eventID, updates)
     }
 
     return (
@@ -115,16 +129,30 @@ const CoachCalenderDialog = props => {
         </DialogTitle>
         <DialogContent dividers>
             <Typography gutterBottom>
-                {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? 
-                    <Alert severity="warning">This session is pending until you accept or deny it.</Alert>:null}
-                {!props.selectedEvent['status'] || props.selectedEvent['status'] === "accepted" ? 
-                    <Alert severity="success">You have accepted this event. It can be canceled below.</Alert>:null}
-                {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ?
-                    <Alert severity="error">You have canceled this event. Another session must be scheduled.</Alert>:null}
+                {props.selectedEvent['coachStatus'] === "accepted" && props.selectedEvent['athleteStatus'] === "pending" ? 
+                    <div>
+                        <Alert severity="warning">This event is pending until {props.name} accepts.</Alert>
+                        <Alert severity="success">You have accepted this event.</Alert>
+                    </div>
+                    :null}
+                {props.selectedEvent['coachStatus'] === "pending" && props.selectedEvent['athleteStatus'] === "accepted" ? 
+                    <div>
+                        <Alert severity="warning">Accepting will officially book this event. However, editing will instead require {props.name} to accept the changed time.</Alert>
+                        <Alert severity="success">{props.name} has accepted this event.</Alert>
+                    </div>
+                    :null}
+                
+                {props.selectedEvent['coachStatus'] === "accepted" && props.selectedEvent['athleteStatus'] === "accepted" ? 
+                    <div>
+                        <Alert severity="success">You have accepted this event.</Alert>
+                        <Alert severity="success">{props.name} has accepted this event.</Alert>
+                    </div>
+                    :null}
             </Typography>
             <Typography gutterBottom style={{fontSize: 'large'}}>
                 {!editMode ? new Date(props.selectedEvent['startTime']).toDateString():
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <ThemeProvider theme={materialTheme}>
                     <DatePicker
                         disableToolbar
                         variant="inline"
@@ -146,14 +174,17 @@ const CoachCalenderDialog = props => {
                             })
                         }}
                     />
+                    </ThemeProvider>
                 </MuiPickersUtilsProvider>}
             </Typography>
             <Typography gutterBottom>
                 Start: {!editMode ? new Date(props.selectedEvent['startTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <ThemeProvider theme={materialTheme}>
                         <TimePicker
                             variant="inline"
                             value={editStartTime}
+                            inputVariant="outlined"
                             minutesStep={5}
                             onChange={date => {
                                 let newDate = editStartTime;
@@ -170,16 +201,20 @@ const CoachCalenderDialog = props => {
                                 })
                             }}
                         />
+                        </ThemeProvider>
                     </MuiPickersUtilsProvider>}
             </Typography>
             <Typography gutterBottom>
                 End: {!editMode ? new Date(props.selectedEvent['endTime']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <ThemeProvider theme={materialTheme}>
                         <TimePicker
                             variant="inline"
+                            inputVariant="outlined"
                             disabled
                             value={editEndTime}
                         />
+                        </ThemeProvider>
                     </MuiPickersUtilsProvider>}
             </Typography>
             
@@ -196,7 +231,16 @@ const CoachCalenderDialog = props => {
             
             {props.selectedEvent['status'] && props.selectedEvent['status'] === "pending" ? 
                 <div>
-                    
+                    {props.selectedEvent['coachStatus'] === "accepted" ? 
+                    <div>
+                        <Button variant="outlined" className={buttonClasses.yellow} onClick={e => setEditMode(true)}>
+                            Edit
+                        </Button>
+                        <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "denied")} className={buttonClasses.red}>
+                            Delete
+                        </Button>
+                    </div>:
+                    <div>
                         <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "accepted")} className={buttonClasses.green}>
                             Accept
                         </Button>
@@ -206,17 +250,22 @@ const CoachCalenderDialog = props => {
                         <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "denied")} className={buttonClasses.red}>
                             Deny
                         </Button>
+                    </div>
+                    }
+                      
                 </div>
                 :
                 <div>
-                    <Button variant="outlined" className={buttonClasses.yellow} onClick={e => setEditMode(true)}>
-                        Edit
-                    </Button>
-                    {props.selectedEvent['status'] && props.selectedEvent['status'] === "canceled" ? null:
-                    <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "canceled")} className={buttonClasses.red}>
-                    Cancel
-                    </Button>}
-                
+                    {props.selectedEvent['status'] && props.selectedEvent['status'] === "accepted" ?
+                    <div>
+                        <Button variant="outlined" className={buttonClasses.blue}>
+                            Complete
+                        </Button>
+                        <Button variant="outlined" onClick={(e) => updateEventHandler(e, props.selectedEvent['eventDocID'], "canceled")} className={buttonClasses.red}>
+                            Cancel
+                        </Button>
+                    </div>
+                    :null}
             </div>}
         </DialogActions>}
       </Dialog>

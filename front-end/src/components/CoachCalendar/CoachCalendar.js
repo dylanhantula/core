@@ -18,14 +18,25 @@ import CoachCalenderCreate from '../CoachCalenderCreate/CoachCalenderCreate';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-const MORNING_MIN = 6;
-const MORNING_MAX = 11;
-const DAYTIME_MIN = MORNING_MAX;
-const DAYTIME_MAX = 17;
-const EVENING_MIN = DAYTIME_MAX;
-const EVENING_MAX = 23;
-const WEEKEND_MIN = MORNING_MIN;
-const WEEKEND_MAX = EVENING_MAX;
+const TIME_LIMITS = {
+  'mornings': {
+    'min': 6,
+    'max': 11,
+  },
+  'daytime': {
+    'min': 11,
+    'max': 17,
+  },
+  'evenings': {
+    'min': 17,
+    'max': 23,
+  },
+  'weekends': {
+    'min': 6,
+    'max': 23
+  }
+};
+
 
 
 const generalStyles = makeStyles((theme) => ({
@@ -84,30 +95,47 @@ const CoachCalendar = props => {
   const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
   const [, setRepeatingEvents] = useState([]);
   const [generalAvailability, setGeneralAvailability] = useState({
-    'daytime': user.profile.generalAvailability.daytime,
-    'mornings': user.profile.generalAvailability.mornings,
-    'evenings': user.profile.generalAvailability.evenings,
-    'weekends': user.profile.generalAvailability.weekends
+          'daytime': user.profile.generalAvailability ? user.profile.generalAvailability.daytime:false,
+          'mornings': user.profile.generalAvailability ? user.profile.generalAvailability.mornings:false,
+          'evenings': user.profile.generalAvailability ? user.profile.generalAvailability.evenings:false,
+          'weekends': user.profile.generalAvailability ? user.profile.generalAvailability.weekends:false
   });
   const [generalTimes, setGeneralTimes] = useState({
     'daytime': 
-      user.profile.generalAvailability.daytime ? 
+      user.profile.generalAvailability ? 
       {'From': new Date(user.profile.daytime.From), 'To': new Date(user.profile.daytime.To)}:
       {'From': new Date(), 'To': new Date()},
     'mornings': 
-      user.profile.generalAvailability.mornings ? 
+      user.profile.generalAvailability ? 
       {'From': new Date(user.profile.mornings.From), 'To': new Date(user.profile.mornings.To)}:
       {'From': new Date(), 'To': new Date()},
     'evenings': 
-      user.profile.generalAvailability.evenings ? 
+      user.profile.generalAvailability ? 
       {'From': new Date(user.profile.evenings.From), 'To': new Date(user.profile.evenings.To)}:
       {'From': new Date(), 'To': new Date()},
     'weekends': 
-      user.profile.generalAvailability.weekends ? 
+      user.profile.generalAvailability ? 
       {'From': new Date(user.profile.weekends.From), 'To': new Date(user.profile.weekends.To)}:
       {'From': new Date(), 'To': new Date()},
   });
-  const [profileTimeUpdates, setProfileTimeUpdates] = useState({});
+  const [profileTimeUpdates, setProfileTimeUpdates] = useState({
+    'daytime': 
+      user.profile.generalAvailability ? 
+      {'From': new Date(user.profile.daytime.From), 'To': new Date(user.profile.daytime.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'mornings': 
+      user.profile.generalAvailability ? 
+      {'From': new Date(user.profile.mornings.From), 'To': new Date(user.profile.mornings.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'evenings': 
+      user.profile.generalAvailability ? 
+      {'From': new Date(user.profile.evenings.From), 'To': new Date(user.profile.evenings.To)}:
+      {'From': new Date(), 'To': new Date()},
+    'weekends': 
+      user.profile.generalAvailability ? 
+      {'From': new Date(user.profile.weekends.From), 'To': new Date(user.profile.weekends.To)}:
+      {'From': new Date(), 'To': new Date()},
+  });
   const [newEventTimes, setNewEventTimes] = useState({
     'newEvent': {
       'From': new Date(),
@@ -124,7 +152,8 @@ const CoachCalendar = props => {
       .then(response => {
         setEvents(response['events'].concat(response['pendingEvents'].concat(response['personalEvents'])));
         setClients(response['clients']);
-        setPendingClients(response['pending_clients']);
+        setPendingClients(response['pendingClients']);
+        console.log(response)
       })
       .catch(e => console.log(e));
     });
@@ -177,6 +206,39 @@ const CoachCalendar = props => {
     });
   }, [user.firebaseUser]);
   
+  const getProfileTimes = () => {
+    user.firebaseUser.getIdToken()
+    .then(function(idToken) {
+      getProfile(idToken, user.firebaseUser.uid)
+      .then(response => {
+        setGeneralAvailability({
+          'daytime': response.generalAvailability.daytime,
+          'mornings': response.generalAvailability.mornings,
+          'evenings': response.generalAvailability.evenings,
+          'weekends': response.generalAvailability.weekends
+        });
+        setGeneralTimes({
+          'daytime': 
+            response.generalAvailability.daytime ? 
+            {'From': new Date(response.daytime.From), 'To': new Date(response.daytime.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'mornings': 
+            response.generalAvailability.mornings ? 
+            {'From': new Date(response.mornings.From), 'To': new Date(response.mornings.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'evenings': 
+            response.generalAvailability.evenings ? 
+            {'From': new Date(response.evenings.From), 'To': new Date(response.evenings.To)}:
+            {'From': new Date(), 'To': new Date()},
+          'weekends': 
+            response.generalAvailability.weekends ? 
+            {'From': new Date(response.weekends.From), 'To': new Date(response.weekends.To)}:
+            {'From': new Date(), 'To': new Date()},
+        });
+      })
+      .catch(e => console.log(e));
+    });
+  }
 
   const updateAvailability = e => {
     e.preventDefault();
@@ -187,8 +249,14 @@ const CoachCalendar = props => {
       if (profileTimeUpdates[slot]) {
         if (profileTimeUpdates[slot]['From'].valueOf() > profileTimeUpdates[slot]['To'].valueOf()){
           setSnackbarTimeError(true);
+          getProfileTimes();
           return;
         }
+        // if (((profileTimeUpdates[slot]['From'].getHours() + ((profileTimeUpdates[slot]['From'].getMinutes())/60)) < TIME_LIMITS[slot]['min']) ||
+        //     ((profileTimeUpdates[slot]['To'].getHours() + ((profileTimeUpdates[slot]['To'].getMinutes())/60)) > TIME_LIMITS[slot]['max'])) {
+        //   setSnackbarTimeError(true); //Change to show Dialog that shows min and max times
+        //   return;
+        // }
         allUpdates[slot] = profileTimeUpdates[slot];
         allUpdates[slot]['From'] = profileTimeUpdates[slot]['From'].valueOf();
         allUpdates[slot]['To'] = profileTimeUpdates[slot]['To'].valueOf();
@@ -202,6 +270,7 @@ const CoachCalendar = props => {
       updateProfile(idToken, allUpdates, user.firebaseUser.uid)
       .then(response => {
         setSnackbarTimeSuccess(true);
+        getProfileTimes();
       })
       .catch(e => console.log(e));
     });
@@ -240,6 +309,8 @@ const CoachCalendar = props => {
         'coach': user.firebaseUser.uid,
         'athlete': null,
         'status': eventStatus,
+        'athleteStatus': 'pending',
+        'coachStatus': 'accepted'
       }
     }
     user.firebaseUser.getIdToken()
@@ -297,7 +368,8 @@ const CoachCalendar = props => {
           setOpen={setShowEventDialog}
           selectedEvent={selectedEvent}
           updateEvent={eventActionHandler}
-          name={clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']}
+          name={selectedEvent['status'] === "accepted" ? clients[selectedEvent['athlete']]['firstName'] + ' ' + clients[selectedEvent['athlete']]['lastName']
+              :pendingClients[selectedEvent['athlete']]['firstName'] + ' ' + pendingClients[selectedEvent['athlete']]['lastName']}
         />
       :null}
       <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={e => setOpenSnackBar(false)}>
@@ -310,7 +382,7 @@ const CoachCalendar = props => {
       <div className="CoachCalenderGeneralAvailability">
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <p style={{marginRight: '0.5rem'}}>Edit General Availability  </p>
-          {showAvailability ? <ExpandLessIcon className="CalendarShowAvailabilityButton" onClick={e => setShowAvailability(false)}/>:
+          {showAvailability ? <ExpandLessIcon className="CalendarShowAvailabilityButton" onClick={e => {setShowAvailability(false); getProfileTimes();}}/>:
             <ExpandMoreIcon className="CalendarShowAvailabilityButton" onClick={e => setShowAvailability(true)}/>}
         </div>
         
@@ -333,9 +405,11 @@ const CoachCalendar = props => {
             {generalAvailability['daytime'] ? 
               <DateAndTime 
                 slot='daytime' 
-                min={DAYTIME_MIN} 
-                max={DAYTIME_MAX} 
+                min={TIME_LIMITS['daytime']['min']} 
+                max={TIME_LIMITS['daytime']['max']} 
                 currentTimes={generalTimes['daytime']}
+                allCurrentTimes={generalTimes}
+                setAllCurrentTimes={setGeneralTimes}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
                 showDatePicker={false}
@@ -358,9 +432,11 @@ const CoachCalendar = props => {
             {generalAvailability['evenings'] ? 
               <DateAndTime 
                 slot='evenings' 
-                min={EVENING_MIN} 
-                max={EVENING_MAX} 
+                min={TIME_LIMITS['evenings']['min']} 
+                max={TIME_LIMITS['evenings']['max']} 
                 currentTimes={generalTimes['evenings']}
+                allCurrentTimes={generalTimes}
+                setAllCurrentTimes={setGeneralTimes}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
                 showDatePicker={false}
@@ -383,9 +459,11 @@ const CoachCalendar = props => {
             {generalAvailability['mornings'] ? 
               <DateAndTime 
                 slot='mornings' 
-                min={MORNING_MIN} 
-                max={MORNING_MAX} 
+                min={TIME_LIMITS['mornings']['min']} 
+                max={TIME_LIMITS['mornings']['max']} 
                 currentTimes={generalTimes['mornings']} 
+                allCurrentTimes={generalTimes}
+                setAllCurrentTimes={setGeneralTimes}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
                 showDatePicker={false}
@@ -408,9 +486,11 @@ const CoachCalendar = props => {
             {generalAvailability['weekends'] ? 
               <DateAndTime 
                 slot='weekends' 
-                min={WEEKEND_MIN} 
-                max={WEEKEND_MAX} 
+                min={TIME_LIMITS['weekends']['min']} 
+                max={TIME_LIMITS['weekends']['max']} 
                 currentTimes={generalTimes['weekends']}
+                allCurrentTimes={generalTimes}
+                setAllCurrentTimes={setGeneralTimes}
                 updates={profileTimeUpdates}
                 setUpdates={setProfileTimeUpdates}
                 showDatePicker={false}
@@ -460,6 +540,8 @@ const CoachCalendar = props => {
             min={0.01} 
             max={23.99} 
             currentTimes={newEventTimes['newEvent']}
+            allCurrentTimes={newEventTimes}
+            setAllCurrentTimes={newEventTimes}
             updates={newEventTimes}
             setUpdates={setNewEventTimes}
             createEvent={submitNewEvent}
@@ -480,14 +562,16 @@ const CoachCalendar = props => {
             titleAccessor={event => {
               if (event['user']) {
                 return ("Personal: " + event['title']);
-              }
-              if (clients[event['athlete']]) {
-                return ("1 hr session w/ " + clients[event['athlete']]['firstName'] + ' ' + clients[event['athlete']]['lastName']);
-              } else if (pendingClients[event['athlete']]) {
-                return ("1 hr session w/ " + pendingClients[event['athlete']]['firstName'] + ' ' + pendingClients[event['athlete']]['lastName']);
               } else {
-                return ("1 hr session");
+                if (clients[event['athlete']]) {
+                  return ("1 hr session w/ " + clients[event['athlete']]['firstName'] + ' ' + clients[event['athlete']]['lastName']);
+                } else if (pendingClients[event['athlete']]) {
+                  return ("1 hr session w/ " + pendingClients[event['athlete']]['firstName'] + ' ' + pendingClients[event['athlete']]['lastName']);
+                } else {
+                  return ("1 hr session");
+                }
               }
+              
             }}
             startAccessor={event => new Date(event['startTime'])}
             endAccessor={event => new Date(event['endTime'])}

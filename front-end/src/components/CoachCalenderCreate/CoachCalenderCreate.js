@@ -195,6 +195,8 @@ const CoachCalenderCreate = props => {
                     min={props.min} 
                     max={props.max} 
                     currentTimes={props.currentTimes}
+                    allCurrentTimes={props.generalTimes}
+                    setAllCurrentTimes={props.setGeneralTimes}
                     updates={props.updates}
                     setUpdates={props.setUpdates}
                     showDatePicker={props.showDatePicker}

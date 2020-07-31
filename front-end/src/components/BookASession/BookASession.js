@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App/App";
-import { createEvent, getEvents, getRepeatingEvents } from '../../api/api';
+import { createEvent, getEvents } from '../../api/api';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker} from '@material-ui/pickers';
@@ -99,7 +99,6 @@ const BookASession = props => {
     const [events, setEvents] = useState([]);
     const [current, setCurrent] = useState(new Date());
     const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
-    const [, setRepeatingEvents] = useState([]);
     const [tempEvent, setTempEvent] = useState({});
 
 
@@ -113,25 +112,25 @@ const BookASession = props => {
         .then(function(idToken) {
           getEvents(idToken, props.coach.firebaseID, earliestStartDate.valueOf())
           .then(response => {
-            setEvents(response['events'].concat(response['pendingEvents']));
+            setEvents(response['events'].concat(response['pendingEvents'].concat(response['personalEvents'])));
           })
           .catch(e => console.log(e));
         });
     }, [earliestStartDate, props.coach.firebaseID, user.firebaseUser]);
 
 
-    useEffect(() => {
-        user.firebaseUser.getIdToken()
-        .then(function(idToken) {
-          getRepeatingEvents(idToken, user.firebaseUser.uid, 'coach')
-          .then(response => {
-            console.log(response);
-            setRepeatingEvents(response['repeating_events']);
+    // useEffect(() => {
+    //     user.firebaseUser.getIdToken()
+    //     .then(function(idToken) {
+    //       getRepeatingEvents(idToken, user.firebaseUser.uid, 'coach')
+    //       .then(response => {
+    //         console.log(response);
+    //         setRepeatingEvents(response['repeating_events']);
             
-          })
-          .catch(e => console.log(e));
-        });
-      }, [user.firebaseUser]);
+    //       })
+    //       .catch(e => console.log(e));
+    //     });
+    //   }, [user.firebaseUser]);
 
 
 
@@ -167,7 +166,9 @@ const BookASession = props => {
             'endTime': endTime,
             'athlete': user.firebaseUser.uid,
             'coach': props.coach.firebaseID,
-            'status': "pending",
+            'athleteStatus': 'accepted',
+            'coachStatus': 'pending',
+            'status': 'pending'
         };
         submitEvent(eventToSubmit);
     }
@@ -175,7 +176,7 @@ const BookASession = props => {
     const submitEvent = (event) => {
         user.firebaseUser.getIdToken()
         .then(function(idToken) {
-            createEvent(idToken, event, event['status'])
+            createEvent(idToken, event, 'pending')
             .then(response => {
                 setOpenSnackBar(true);
             })
@@ -201,6 +202,8 @@ const BookASession = props => {
             'athlete': user.firebaseUser.uid,
             'coach': props.coach.firebaseID,
             'status': "temp",
+            'athleteStatus': 'accepted',
+            'coachStatus': 'pending',
             
         };
         setTempEvent(newEvent);
@@ -323,6 +326,15 @@ const BookASession = props => {
                     </ThemeProvider>
                     <div className="BookSessionSchedulerButton">
                         <Button onClick={e => reserveHandler(e)} className={buttonClasses.green}>Reserve</Button>
+                    </div>
+                    <div>
+                        <p className="BookSessionPaymentInfoText" style={{margin: '3rem 0rem 2rem'}}>Coach General Availability</p>
+                        <p className="BookSessionAvailabilityFont" style={{margin: '1rem 0rem'}}>Monday - Friday</p>
+                        <p className="BookSessionAvailabilityFont">Mornings: {new Date(props.coach.mornings.From).toLocaleString('en-US', { hour: 'numeric', hour12: true })}{' - '}{new Date(props.coach.mornings.To).toLocaleString('en-US', { hour: 'numeric', hour12: true })}</p>
+                        <p className="BookSessionAvailabilityFont">Daytime: {new Date(props.coach.daytime.From).toLocaleString('en-US', { hour: 'numeric', hour12: true })}{' - '}{new Date(props.coach.daytime.To).toLocaleString('en-US', { hour: 'numeric', hour12: true })}</p>
+                        <p className="BookSessionAvailabilityFont">Evenings: {new Date(props.coach.evenings.From).toLocaleString('en-US', { hour: 'numeric', hour12: true })}{' - '}{new Date(props.coach.evenings.To).toLocaleString('en-US', { hour: 'numeric', hour12: true })}</p>
+                        <p className="BookSessionAvailabilityFont" style={{margin: '2rem 0rem 1rem'}}>Weekends</p>
+                        <p className="BookSessionAvailabilityFont">{new Date(props.coach.weekends.From).toLocaleString('en-US', { hour: 'numeric', hour12: true })}{' - '}{new Date(props.coach.weekends.To).toLocaleString('en-US', { hour: 'numeric', hour12: true })}</p>
                     </div>
                     
                 </div>

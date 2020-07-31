@@ -209,18 +209,22 @@ class Firebase:
     
     def update_event(self, eventID, updates):
         event_ref = self.db.collection('pending_events').document(eventID)
-        
-
-        if "status" in updates:
+        if "startTime" not in updates:
             event_ref.set(updates, merge=True)
-            if updates['status'] == "canceled":
+            event = event_ref.get().to_dict()
+            if (event['coachStatus'] == "canceled") or (event['athleteStatus'] == "canceled"):
                 actual_event_ref = self.db.collection('events').document(eventID)
                 actual_event_ref.set(updates, merge=True)
+                actual_event_ref.set({'status': "canceled"}, merge=True)
                 actual_event_ref.delete()
-            if updates['status'] == "accepted":
+                event_ref.set({'status': "canceled"}, merge=True)
+            if (event['coachStatus'] == "accepted") and (event['athleteStatus'] == "accepted"):
+                event_ref.set({'status': "accepted"}, merge=True)
                 event = event_ref.get().to_dict()
                 event['eventDocID'] = eventID
-                self.create_event(event, updates['status'])
+                self.create_event(event, "accepted")
+            if (event['coachStatus'] == "denied") or (event['athleteStatus'] == "denied"):
+                event_ref.set({'status': "denied"}, merge=True)
         else:
             pending_double_bookings = self.db.collection('pending_events').where('status', '==', 'pending').where('startTime', '>', updates['startTime'] - 3600000).where('startTime', '<', updates['endTime'])
             actual_double_bookings = self.db.collection('events').where('startTime', '>', updates['startTime'] - 3600000).where('startTime', '<', updates['endTime'])
@@ -230,8 +234,8 @@ class Firebase:
                 raise ValueError("Time slot is already booked. Pick a new time.")
             event_ref.set(updates, merge=True)
             actual_event_ref = self.db.collection('events').document(eventID)
-            if actual_event_ref.get().exists:
-                actual_event_ref.set(updates, merge=True)
+            actual_event_ref.set(updates, merge=True)
+            actual_event_ref.delete()
 
 
 

@@ -38,17 +38,16 @@ const DateAndTime = props => {
                             value={props.currentTimes['From']}
                             inputVariant="outlined"
                             inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
-                            onChange={date => {
-                                let newStartDate = props.currentTimes['From'];
-                                newStartDate.setMonth(date.getMonth());
-                                newStartDate.setDate(date.getDate());
-                                newStartDate.setFullYear(date.getFullYear());
+                            onChange={newStartDate => {
+                                const currentStart = props.currentTimes['From'];
+                                const currentEnd = props.currentTimes['To'];
+                                newStartDate.setHours(currentStart.getHours());
+                                newStartDate.setMinutes(currentStart.getMinutes());
                                 newStartDate.setSeconds(0);
                                 newStartDate.setMilliseconds(0);
-                                let newEndDate = props.currentTimes['To'];
-                                newEndDate.setMonth(date.getMonth());
-                                newEndDate.setDate(date.getDate());
-                                newEndDate.setFullYear(date.getFullYear());
+                                let newEndDate = new Date(newStartDate.valueOf());
+                                newEndDate.setHours(currentEnd.getHours());
+                                newEndDate.setMinutes(currentEnd.getMinutes());
                                 newEndDate.setSeconds(0);
                                 newEndDate.setMilliseconds(0);
                                 props.setUpdates({
@@ -57,8 +56,18 @@ const DateAndTime = props => {
                                         'From': newStartDate,
                                         'To': newEndDate
                                     }
-                                });                                
+                                }); 
+                                if (props.setAllCurrentTimes) {
+                                    props.setAllCurrentTimes({
+                                        ...props.allCurrentTimes,
+                                        [props.slot]: {
+                                            'From': newStartDate,
+                                            'To': newEndDate
+                                        }
+                                    }); 
+                                }                               
                             }}
+                            
                         />
                     </ThemeProvider>
                 </MuiPickersUtilsProvider>
@@ -74,19 +83,28 @@ const DateAndTime = props => {
                         inputVariant="outlined"
                         inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
                         onChange={date => {
-                            let newDate = props.currentTimes['From'];
-                            newDate.setHours(date.getHours());
-                            newDate.setMinutes(date.getMinutes());
-                            newDate.setSeconds(0);
-                            newDate.setMilliseconds(0);
-                            
+                            const current = props.currentTimes['From'];
+                            date.setFullYear(current.getFullYear());
+                            date.setMonth(current.getMonth());
+                            date.setDate(current.getDate());
+                            date.setSeconds(0);
+                            date.setMilliseconds(0);
                             props.setUpdates({
                                 ...props.updates,
                                 [props.slot]: {
-                                    'From': newDate,
+                                    'From': date,
                                     'To': props.currentTimes['To']
                                 }
-                            });                                
+                            }); 
+                            if (props.setAllCurrentTimes) {
+                                props.setAllCurrentTimes({
+                                    ...props.allCurrentTimes,
+                                    [props.slot]: {
+                                        'From': date,
+                                        'To': props.currentTimes['To']
+                                    }
+                                }); 
+                            }                               
                         }}
                     />
                 </ThemeProvider>
@@ -103,19 +121,28 @@ const DateAndTime = props => {
                         inputVariant="outlined"
                         inputProps={{borderRadius: '0px', borderColor: 'lightslategray'}}
                         onChange={date => {
-                            let newDate = props.currentTimes['To'];
-                            newDate.setHours(date.getHours());
-                            newDate.setMinutes(date.getMinutes());
-                            newDate.setSeconds(0);
-                            newDate.setMilliseconds(0);
-                           
+                            const current = props.currentTimes['To'];
+                            date.setFullYear(current.getFullYear());
+                            date.setMonth(current.getMonth());
+                            date.setDate(current.getDate());
+                            date.setSeconds(0);
+                            date.setMilliseconds(0);
                             props.setUpdates({
                                 ...props.updates,
                                 [props.slot]: {
                                     'From': props.currentTimes['From'],
-                                    'To': newDate
+                                    'To': date
                                 }
                             }); 
+                            if (props.setAllCurrentTimes) {
+                                props.setAllCurrentTimes({
+                                    ...props.allCurrentTimes,
+                                    [props.slot]: {
+                                        'From': props.currentTimes['From'],
+                                        'To': date
+                                    }
+                                }); 
+                            }
                         }}
                     />
                 </ThemeProvider>
