@@ -5,7 +5,11 @@ import firebase_admin
 import sys
 from firebase import Firebase
 from zip_code_api import ZipCodes
+from stripe_api import StripeAPI
 from validate import *
+import json
+import stripe
+stripe.api_key = open("stripe_api_key", "r").read()
 #from flask_api import status
 
 app = Flask(__name__, static_folder="../front-end/build/static", template_folder="../front-end/build")
@@ -42,6 +46,97 @@ def get_coaches():
     except Exception as e:
         print(e)
         return {"message":str(e)}, 400
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/api/v1/create/payment/intent', methods=['POST'])
+def create_payment_intent():
+    data = request.json
+    try:
+        database.verify_token_header(request.headers)
+        athlete_profile = database.get_profile(data['athlete'])
+        intent = stripe.PaymentIntent.create(
+            amount=int(float(data['total'])*100),
+            currency='usd',
+            customer=athlete_profile['stripeID'],
+            setup_future_usage='off_session',
+            metadata={'athlete': data['athlete'], 'coach': data['coach'], 'sessions': data['sessions'], 'total': data['total']}
+        )
+        return {'clientSecret': intent['client_secret']}, 200
+    except Exception as e:
+        return {"message":str(e)}, 400
+
+
+@app.route('/api/v1/create/customer', methods=['POST'])
+def create_customer():
+    data = request.json
+    try:
+        database.verify_token_header(request.headers)
+        customer = stripe.Customer.create(
+            description="Test",
+            name=data['athlete']['firstName'] + data['athlete']['lastName'],
+            email=data['athlete']['email'],
+            metadata={"firebaseID": data['athleteID']}
+        )
+        fields = {
+            'stripeID': customer['id']
+        }
+        profile = database.update_profile(data['athleteID'], fields)
+        return profile, 200
+    except Exception as e:
+        return {"message":str(e)}, 400
+
+
+@app.route('/api/v1/create/payment/method', methods=['POST'])
+def create_payment_method():
+    data = request.json
+    try:
+        database.verify_token_header(request.headers)
+        profile = database.get_profile(data['id'])
+        customer = stripe.Customer.retrieve(profile['stripeID'])
+        intent = stripe.SetupIntent.create(
+            customer=customer['id']
+        )
+        return {'clientSecret': intent['client_secret']}, 200
+    except Exception as e:
+        return {"message":str(e)}, 400
+
+
+@app.route("/api/v1/get/payment/methods/<id>", methods = ['GET'])
+def get_payment_methods(id):
+    id = request.view_args['id']
+    try:
+        database.verify_token_header(request.headers)
+        profile = database.get_profile(id)
+        customer = stripe.Customer.retrieve(profile['stripeID'])
+        response = stripe.PaymentMethod.list(
+            customer=customer['id'],
+            type="card"
+        )
+        payment_methods_list = response['data']
+        updated_profile = database.update_profile(id, {'paymentMethods': payment_methods_list})
+        return {'paymentMethods': payment_methods_list}, 200
+    except Exception as e:
+        return {"message":str(e)}, 400
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/api/v1/join", methods = ['POST'])
 def create_user():
@@ -146,6 +241,7 @@ def get_repeating_events():
 def create_message():
     message = request.json
     try:
+        database.verify_token_header(request.headers)
         database.create_message(message)
     except Exception as e:
         print(e)

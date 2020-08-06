@@ -6,6 +6,7 @@
 
 .CoachAccountImageContainer {
     display: flex;
+    justify-content: center;
 }
 
 .CoachAccountImageContainer img {
@@ -15,13 +16,18 @@
 .CoachAccountTitleContainer {
     display: flex;
     justify-content: center;
+    
+}
+
+.CoachAccountTitleContainer p {
+    padding: 2rem 3rem 2rem;
+    border-bottom: 2px solid lightgray;
+    margin: 0rem 0rem 0rem;
     font-size: x-large;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: darkgreen;
     font-weight: bold;
-    padding: 1rem 0rem .5rem;
-    border-bottom: 2px solid lightgray;
-    margin: 0rem 10rem 1rem;
+    margin: 1rem 0rem;
 }
 
 .CoachAccountContentContainer {
@@ -33,6 +39,7 @@
     display: flex;
     margin: 1rem 5rem 0rem;
     align-items: baseline;
+    justify-content: center;
 }
 
 .CoachAccountContentContainer div p {
@@ -73,11 +80,9 @@
 
 .CoachAccountButtonContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     padding-top: 1rem;
-    margin: 1rem 15rem 0rem;
-    border-top: 2px solid lightgray;
 }
 
 .CoachAccountButtonContainer p {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-
 import * as firebase from "firebase/app";
-
 import { config } from '../../firebase_config.json';
 import {getProfile} from '../../api/api'
 import AthleteApp from "../AthleteApp/AthleteApp";
@@ -90,9 +88,9 @@ function App() {
 
     return (
       <AuthContext.Provider value={{ user, setUser }}>
-        <div className="App">
-            <HomeNav></HomeNav>
-        </div>
+          <div className="App">
+              <HomeNav></HomeNav>
+          </div>
       </AuthContext.Provider>
     );
 

@@ -35,3 +35,7 @@ front-end/src/firebase_config.json
 
 # Sensitive Zip Code API file
 back-end/zip_code_api_key
+
+# Sensitive Stripe API files
+back-end/stripe_api_key
+front-end/src/stripe_api_key.js

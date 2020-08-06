@@ -7,7 +7,7 @@ import { AuthContext } from "../App/App";
 import './AthleteNav.css';
 import AthleteCoaches from "../AthleteCoaches/AthleteCoaches.js";
 import CoachList from '../CoachList/CoachList';
-import BookASession from "../BookASession/BookASession.js";
+import AthleteAccount from '../AthleteAccount/AthleteAccount';
 
 export default (props) => {
     const {user} = useContext(AuthContext);
@@ -60,15 +60,16 @@ export default (props) => {
                     exact
                     render={(props) => <AthleteCoaches {...props}/>}
                 /> 
-                <Route
-                    path="/calender"
-                    exact
-                    render={(props) => <BookASession {...props}/>}
-                /> 
+                
                 <Route 
                     path="/coaches"
                     exact
                     render={(props) => <CoachList {...props} />}
+                /> 
+                <Route 
+                    path="/account"
+                    exact
+                    render={(props) => <AthleteAccount {...props} />}
                 /> 
 
                 {/* Catch all for paths that don't match one of our routes  */}

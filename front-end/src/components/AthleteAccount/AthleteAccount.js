@@ -1,17 +1,17 @@
 import React, { useState, useContext } from 'react';
-import './CoachAccount.css';
-import AULogo from './Athletes-Untapped-Logo-Rectangle.png';
+import AULogo from '../CoachAccount/Athletes-Untapped-Logo-Rectangle.png';
 import { AuthContext } from "../App/App";
 import { updateProfile } from '../../api/api';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import AthletePaymentSettings from '../AthletePaymentSettings/AthletePaymentSettings';
 
 
 function Alert(props) {
     return <MuiAlert elevation={10} variant="filled" {...props} />;
   }
 
-const CoachAccount = (props) => {
+const AthleteAccount = (props) => {
     const {user} = useContext(AuthContext);
 
     const [firstName, setFirstName] = useState(user.profile.firstName);
@@ -20,6 +20,7 @@ const CoachAccount = (props) => {
     const [zipCode, setZipCode] = useState(user.profile.zipCode);
     const [newVals, setNewVals] = useState({});
     const [openSnackbar, setOpenSnackBar] = useState(false);
+    const [showPaymentSettings, setShowPaymentSettings] = useState(false);
 
 
     const setStateFunctions = {
@@ -48,8 +49,12 @@ const CoachAccount = (props) => {
         });
     }
 
-    return (
-        <div className="CoachAccountContainer">
+    let displayToShow;
+    if (showPaymentSettings) {
+        displayToShow = <AthletePaymentSettings setShowPaymentSettings={setShowPaymentSettings}/>
+    } else {
+        displayToShow = (
+            <div className="CoachAccountContainer">
             <div className="CoachAccountImageContainer">
                 <img src={AULogo} alt="Athletes Untapped"></img>
             </div>
@@ -103,7 +108,7 @@ const CoachAccount = (props) => {
                 </div>
             </div>
             <div className="CoachAccountButtonContainer">
-                <p>Go to Payment Settings</p>
+                <p onClick={e => setShowPaymentSettings(true)}>Go to Payment Settings</p>
                 <button onClick={e => submitChanges(e)}>Save</button>
             </div>
             <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={e => setOpenSnackBar(false)}>
@@ -112,7 +117,14 @@ const CoachAccount = (props) => {
                 </Alert>
             </Snackbar>
         </div>
+        );
+    }
+
+    return (
+        <div>
+            {displayToShow}
+        </div>
     );
 }
 
-export default CoachAccount;
+export default AthleteAccount;

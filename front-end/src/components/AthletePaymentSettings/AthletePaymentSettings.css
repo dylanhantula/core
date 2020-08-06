@@ -1,0 +1,103 @@
+.StripeElement {
+    height: 20px;
+    padding: 10px 12px;
+    max-width: 26.5rem;
+    color: black;
+    background-color: white;
+    border: 1.5px solid lightgray;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    outline: none;
+  }
+  
+  .StripeElement--focus {
+    border: 1.5px solid darkgreen;
+  }
+  
+  .StripeElement--invalid {
+    border-color: #fa755a;
+  }
+  
+  .StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+  }
+
+  .AthletePaymentSettingsNameOnCard {
+    width: 40rem;
+    color: black;
+    background-color: white;
+    align-items: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    border: 1.5px solid lightgray;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    outline: none;
+    padding: 10px 12px;
+    font-size: medium;
+    margin: 1.5rem 0rem;
+}
+
+.AthletePaymentSettingsNameOnCard:focus {
+    border: 1.5px solid darkgreen;
+}
+
+.AthletePaymentSettingsAddCard {
+    background-color: darkgreen; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    outline: none;    
+    width: 5rem;
+    height: 2rem;
+    margin: 1.5rem 0rem 1.5rem 11rem;
+    text-align: center;
+    justify-content: center;
+}
+
+.AthletePaymentSettingsAddCard:hover {
+    background-color: #004d00;  
+}
+
+.AthletePaymentSettingsAddCard:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.AthletePaymentSettingsCurrentCardsList {
+    padding: 1rem 2rem;
+    margin: 0rem 0rem;
+}
+
+.AthletePaymentSettingsCurrentCardsList p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.AthletePaymentSettingsCurrentCardsList p:nth-child(2) {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: darkslategray;
+}
+
+.AthletePaymentSettingsCurrentCardsList p:nth-child(3) {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: gray;
+}
+
+.AthletePaymentSettingsCurrentCardsList p:nth-child(4) {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: darkgreen;
+    font-size: small;
+}
+
+.AthletePaymentSettingsCurrentCardsList p:nth-child(4):hover {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: small;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.CardEntryError {
+    margin: 0.1rem 0rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

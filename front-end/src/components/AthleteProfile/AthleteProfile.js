@@ -1,9 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../App/App";
+import { createCustomer } from "../../api/api";
+
+
 
 const AthleteProfile = () => {
     
     const {user} = useContext(AuthContext);
+
+    useEffect(() => {
+        const data = {
+            'athlete': user.profile,
+            'athleteID': user.firebaseUser.uid
+        };
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            createCustomer(idToken, data)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(e => console.log(e));
+        });
+    });
 
     return (
         <div>
@@ -31,6 +49,7 @@ const AthleteProfile = () => {
                     Zip Code: {user.profile.zipCode}
                 </li>
             </ul>
+            
         </div>
     );
 };

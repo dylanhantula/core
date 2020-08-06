@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App/App";
-import { createEvent, getEvents } from '../../api/api';
+import { createEvent, getEvents, createMessage } from '../../api/api';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker} from '@material-ui/pickers';
@@ -19,6 +19,7 @@ import moment from 'moment';
 import "../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { green } from '@material-ui/core/colors';
+import CheckoutForm from '../CheckoutForm/CheckoutForm';
 
 
 
@@ -91,8 +92,10 @@ const BookASession = props => {
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [openSnackbar, setOpenSnackBar] = useState(false);
+    const [messageContent, setMessageContent] = useState("");
+    const [openSnackbarMessage, setOpenSnackBarMessage] = useState(false);
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-    const [numSessions, setNumSessions] = useState(0);
+    const [numSessions, setNumSessions] = useState(1);
     const [numAthletes, setNumAthletes] = useState(0);
     const [pricePerSession, ] = useState(75);
     const [discount, ] = useState(0.2);
@@ -100,6 +103,7 @@ const BookASession = props => {
     const [current, setCurrent] = useState(new Date());
     const [earliestStartDate, setEarliestStartDate] = useState(moment(new Date()).startOf('month').toDate());
     const [tempEvent, setTempEvent] = useState({});
+    const [showReviewAndPay, setShowReviewAndPay] = useState(false);
 
 
     useEffect(() => {
@@ -133,7 +137,23 @@ const BookASession = props => {
     //   }, [user.firebaseUser]);
 
 
-
+    const sendMessage = (coach) => {
+        const messageToSend = {
+            "to": props.coach.firebaseID,
+            "from": user.firebaseUser.uid,
+            "content": messageContent,
+            "time": Date.now() // number of milliseconds since Jan 1 1970 UTC
+        }
+        user.firebaseUser.getIdToken()
+        .then(function(idToken) {
+            createMessage(idToken, messageToSend)
+            .then(response => {
+                setOpenSnackBar(true);
+                setMessageContent("");
+            })
+            .catch(e => console.log(e));
+        });
+    }
 
     const calenderRangeChangeHandler = (date, view) => {
         let start, end;
@@ -179,6 +199,7 @@ const BookASession = props => {
             createEvent(idToken, event, 'pending')
             .then(response => {
                 setOpenSnackBar(true);
+                setShowReviewAndPay(true);
             })
             .catch(e => {
                 setOpenErrorSnackBar(true);
@@ -211,11 +232,17 @@ const BookASession = props => {
 
     return (
         <div style={{margin: '3rem 7rem'}}>
+            {!showReviewAndPay ? 
             <div className="BookSessionGoBack">
                 <KeyboardBackspaceIcon fontSize="small" style={{ color: green[900] }} onClick={e => {props.setShowProfile(true); props.setShowBookSession(false);}}/>
                 <p onClick={e => {props.setShowProfile(true); props.setShowBookSession(false);}}> Go Back to Coach Profile</p>
-            </div>
+            </div>: 
+            <div className="BookSessionGoBack">
+                <KeyboardBackspaceIcon fontSize="small" style={{ color: green[900] }} onClick={e => setShowReviewAndPay(false)}/>
+                <p onClick={e => setShowReviewAndPay(false)}> Go Back</p>
+            </div>}
             <div className="BookSessionCoachMainInfo">
+                {!showReviewAndPay ? 
                 <div className="BookSessionCoachInfoSummary">
                     <div style={{maxWidth: '400px'}}>
                         <img src={AULogo} alt="Athletes Untapped" className="BookSessionAULogo"/>
@@ -258,7 +285,27 @@ const BookASession = props => {
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     </div>
-                </div>
+                </div>:
+                <div className="">
+                    <div style={{maxWidth: '400px'}}>
+                        <img src={AULogo} alt="Athletes Untapped" className="BookSessionAULogo"/>
+                    </div>
+                    <p className="BookSessionCoachInfoSummaryTitle" style={{fontWeight: 'bold', fontSize: 'large'}}>Confirm and Pay</p>
+                    <div className="AthleteMessageCoachMessageContent">
+                        <p className="AthleteMessageCoachMessageBodyTitle">Start Communicating with Coach {props.coach.firstName}</p>
+                        <textarea value={messageContent} onChange={e => setMessageContent(e.target.value)}></textarea>
+                        <button className="AthleteMessageCoachButton" style={{margin: '1rem 0rem'}}onClick={e => sendMessage(props.coach)}>Send Message</button>
+                        <Snackbar open={openSnackbarMessage} autoHideDuration={5000} onClose={e => setOpenSnackBarMessage(false)}>
+                            <Alert onClose={e => setOpenSnackBarMessage(false)} severity="success">
+                                Message Sent!
+                            </Alert>
+                        </Snackbar>
+                    </div>
+                    <p className="BookSessionCoachInfoSummaryTitle" style={{fontWeight: 'bold', fontSize: 'large'}}>Pay Here</p>
+                    <CheckoutForm coach={props.coach} total={pricePerSession * numSessions * (1 - discount)} sessions={numSessions}/>
+                </div>}
+
+                {!showReviewAndPay ? 
                 <div className="BookASessionPaymentInfo">
                     <p className="BookSessionPaymentInfoTitle">Book Now</p>
                     <p className="BookSessionPaymentInfoText">${pricePerSession}/session</p>
@@ -285,7 +332,22 @@ const BookASession = props => {
                     <div className="BookSessionReserveButton">
                     <Button className={buttonClasses.green}>Reserve</Button>
                     </div>
-                </div>
+                </div>: 
+                <div>
+                    <p className="BookSessionPaymentInfoTitle">Coach {props.coach.firstName}</p>
+                    <p className="BookSessionPaymentInfoText">${pricePerSession}/session</p>
+                    <div className="BookSessionPaymentInfoTransactions" style={{marginTop: '1rem'}} >
+                        <p className="BookSessionPaymentInfoText">{numSessions} sessions</p>
+                    </div>
+                    <div className="BookSessionPaymentInfoTransactions" style={{borderBottom: '2px solid lightgray', paddingBottom: '0.5rem'}}> 
+                        <p className="BookSessionPaymentInfoText">{discount * 100}% discount</p>
+                        <p className="BookSessionPaymentInfoText">${pricePerSession * numSessions * discount}</p>
+                    </div>
+                    <div className="BookSessionPaymentInfoTransactions" style={{paddingBottom: '0.5rem'}}> 
+                        <p className="BookSessionPaymentInfoText">Total</p>
+                        <p className="BookSessionPaymentInfoText">${pricePerSession * numSessions * (1 - discount)}</p>
+                    </div>
+                </div>}
             </div>
             <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={e => setOpenSnackBar(false)}>
                 <Alert onClose={e => setOpenSnackBar(false)} severity="success">
@@ -299,8 +361,8 @@ const BookASession = props => {
             </Snackbar>
 
 
+            {!showReviewAndPay ? 
             <div className="BookSessionCalenderView">
-
                 <div className="BookSessionScheduler">
                     <p className="BookSessionPaymentInfoText" style={{marginBottom: '2rem', textAlign: 'center'}}>Reserve Your 1 Hour Session</p>
                     <ThemeProvider theme={materialTheme}>
@@ -399,8 +461,7 @@ const BookASession = props => {
                     />
                 </div>
 
-            </div>
-
+            </div>:null}
         </div>
     );
 }

@@ -55,6 +55,8 @@ export const createEvent = (token, event, status) =>{
         }); 
 }
 
+
+
 export const createRepeatingEvent = (token, event) =>{
     
     const requestOptions = {
@@ -179,12 +181,13 @@ export const getRepeatingEvents = (token, id, type)=>{
         }); 
 }
 
-export const createMessage = (message) =>{
+export const createMessage = (token, message) =>{
     
     const requestOptions = {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
         },
         body: JSON.stringify(message)
     };
@@ -309,6 +312,131 @@ export const getCoaches = (zipCode, radius, sport)=>{
     `/api/v1/coaches?zip=${zipCode}&radius=${radius}`
 
     return fetch(url, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+
+export const createPaymentIntent = (token, items) =>{
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token
+        },
+        body: JSON.stringify(items)
+    };
+
+    return fetch("/api/v1/create/payment/intent", requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+
+
+
+
+
+export const createCustomer = (token, items) =>{
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token
+        },
+        body: JSON.stringify(items)
+    };
+
+    return fetch("/api/v1/create/customer", requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+export const createPaymentMethod = (token, items) =>{
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+        body: JSON.stringify(items)
+    };
+
+    return fetch("/api/v1/create/payment/method", requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // Check for error response
+            if (!response.ok) {
+                // Get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                
+                // Rejecting the promise will force the "catch" block to hit
+                return Promise.reject(error);
+            }
+            
+            return data
+        })
+        .catch(error => {
+            throw error
+        }); 
+}
+
+export const getPaymentMethods = (token, id) =>{
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization":'Bearer ' + token 
+        },
+    };
+
+    return fetch("/api/v1/get/payment/methods/"+id, requestOptions)
         .then(async response => {
             const data = await response.json();
 
