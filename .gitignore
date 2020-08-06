@@ -38,4 +38,4 @@ back-end/zip_code_api_key
 
 # Sensitive Stripe API files
 back-end/stripe_api_key
-front-end/src/stripe_api_key.js
+front-end/src/stripe_api_key.json
