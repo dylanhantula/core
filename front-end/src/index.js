@@ -4,7 +4,7 @@ import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import stripe_api_key from './stripe_api_key.js';
+import stripe_api_key from './stripe_api_key';
 
 const stripePromise = loadStripe(stripe_api_key);
 
