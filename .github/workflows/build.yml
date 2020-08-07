@@ -25,6 +25,16 @@ jobs:
       shell: bash
       env:
         FIREBASE_KEY: ${{secrets.FIREBASE_KEY}}
+        
+   # Add Stripe API keys
+    - run: 'echo "$STRIPE_SECRET_KEY" > back-end/stripe_api_key'
+      shell: bash
+      env:
+        STRIPE_SECRET_KEY: ${{secrets.STRIPE_SECRET_KEY}}
+    - run: 'echo "$STRIPE_PUBLISHABLE_KEY" > front-end/src/stripe_api_key.json'
+      shell: bash
+      env:
+        STRIPE_PUBLISHABLE_KEY: ${{secrets.STRIPE_PUBLISHABLE_KEY}}
     
     # Add zipcodeapi.com key
     - run: 'echo -n "$ZIP_CODE_API_KEY" > back-end/zip_code_api_key'
